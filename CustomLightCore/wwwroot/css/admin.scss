@@ -1,0 +1,96 @@
+* {
+  transition: none;
+}
+textarea {
+  min-height: 20em;
+}
+
+.adminPass {
+  float: right;
+}
+
+.navbar-inverse {
+  background-color: black;
+}
+
+.adminTitle {
+  text-align: right;
+  color: whitesmoke;
+  font-size: 130%;
+}
+
+.adminMenu {
+  background-color: rgba(0, 0, 0, .2);
+  padding: 0;
+}
+
+.adminMenu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 5px 0 0;
+}
+
+.adminMenu ul p {
+  font-weight: bold;
+  padding-left: 5px;
+}
+
+.adminMenu ul li {
+  font-weight: normal;
+  cursor: pointer;
+  padding: 5px 0 5px 10px;
+  transition: all, .15s;
+}
+
+.adminMenu ul li:hover {
+  background-color: #0f0f0f;
+  color: whitesmoke;
+}
+
+.adminMenu a {
+  text-decoration: none;
+  color: #3c3c3c;
+}
+
+.adminActions div:hover {
+  text-shadow: 0 0 5px black;
+  cursor: pointer;
+  transition: all, .15s;
+}
+
+.adminActions div:active {
+  text-shadow: 0 0 1px black;
+}
+
+.preview {
+  max-width: 200px;
+  max-height: 150px;
+}
+
+/*Продукт-Проект*/
+form .btn {
+  margin: 10px 0;
+}
+
+.productEdit,
+.projectEdit {
+  margin: 1% 0;
+  padding: 1%;
+}
+
+.productEdit img,
+.projectEdit img {
+  padding: 5px 0;
+}
+
+.border {
+  border-radius: 10px;
+  border: 2px solid rgba(0, 0, 0, 0);
+  border-bottom-color: darkgreen;
+}
+
+/*/Продукт-Проект*/
+
+/*TinyMCE*/
+
+/*/TinyMCE*/

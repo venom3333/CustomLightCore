@@ -1,0 +1,17 @@
+﻿<!--Левое меню-->
+<div class="rsidebar span_1_of_left col-md-2">
+	<section class="sky-form">
+		<div class="product_right">
+			<h4 class="m_2">Категории</h4>
+			<div class="tab1">
+				@foreach (CustomLightCore.Models.Categories category in ViewBag.Categories)
+				{
+					<a href="/Categories/Details/@category.Id">
+						<p>@category.Name</p>
+					</a>
+				}
+			</div>
+		</div>
+	</section>
+</div>
+<!--/Левое меню-->

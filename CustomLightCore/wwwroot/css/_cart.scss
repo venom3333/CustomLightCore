@@ -1,0 +1,74 @@
+//colors
+$color_alto_approx: rgb(221, 221, 221);
+
+//@extend-elements
+//original selectors
+//.cart-button:hover, .cart-delete-button:hover, .cart-update-button:hover
+%extend_cart {
+  //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+  transition: all, .2s;
+  cursor: pointer;
+  //Instead of the line below you could use @include text-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+  text-shadow: 0 0 5px $black;
+}
+
+
+.cart-button {
+  &:hover {
+    @extend %extend_cart;
+  }
+  &:active {
+    cursor: pointer;
+    //Instead of the line below you could use @include text-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+    text-shadow: 0 0 0 $black;
+  }
+}
+.cart-delete-button {
+  &:hover {
+    @extend %extend_cart;
+  }
+  &:active {
+    cursor: pointer;
+    //Instead of the line below you could use @include text-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+    text-shadow: 0 0 0 $black;
+  }
+}
+.cart-update-button {
+  &:hover {
+    @extend %extend_cart;
+  }
+  &:active {
+    cursor: pointer;
+    //Instead of the line below you could use @include text-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+    text-shadow: 0 0 0 $black;
+  }
+}
+table {
+  th {
+    text-align: center;
+    line-height: 2em;
+  }
+  td {
+    text-align: center;
+  }
+}
+.table {
+  margin-bottom: 0;
+  > thead > tr > th {
+    padding: 0;
+  }
+  > tbody > tr > td {
+    padding: 0;
+  }
+}
+.cart-inner-thead {
+  margin: 0;
+}
+.cart-grand-total {
+  font-weight: bold;
+  font-size: 150%;
+  text-align: right;
+}
+.cart-cell div {
+  border: 1px solid $color_alto_approx;
+}

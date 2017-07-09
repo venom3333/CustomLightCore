@@ -1,0 +1,66 @@
+//colors
+$color_oracle_70_approx: rgba(42, 125, 110, .7);
+
+//@extend-elements
+//original selectors
+//.footer-categories a, .footer-categories h5
+%extend_footer {
+  text-decoration: none;
+  color: $white;
+  text-align: center;
+}
+
+
+.footer {
+  background-color: $color_oracle_70_approx;
+  color: $white;
+  margin-top: 3%;
+  * {
+    //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+    transition: none;
+  }
+}
+.footer-container {
+  width: 100%;
+  .logo {
+    text-align: center;
+  }
+  div {
+    padding-bottom: 5px;
+    margin-bottom: 0;
+  }
+}
+.nav-bottom {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.contacts {
+  text-align: right;
+}
+.footer-categories {
+  a {
+    @extend %extend_footer;
+    &:hover {
+      text-decoration: none;
+      color: $black;
+      background: $white;
+    }
+  }
+  h5 {
+    @extend %extend_footer;
+  }
+  div {
+    padding: 0 5px;
+  }
+}
+.callback-mail-button {
+  margin-bottom: 5px;
+}
+.map {
+  position: relative;
+  top: 5px;
+}
+.m123 {
+  margin: auto;
+}

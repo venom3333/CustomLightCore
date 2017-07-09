@@ -1,0 +1,68 @@
+﻿@model CustomLightCore.Models.Categories
+
+
+@{
+	ViewBag.Title = Model.Name;
+	Layout = "~/Views/_Layouts/_Main.cshtml";
+}
+
+<!--Список товаров категории-->
+<div class="col-md-10 product-model-sec">
+	<h2>@Model.Name</h2>
+	<div class="h-line-reverse clearfix"></div>
+	<p>@Model.ShortDescription</p>
+	<div class="h-line-reverse clearfix"></div>
+	<p>@Model.Description</p>
+	<div class="h-line-reverse clearfix"></div>
+	@foreach (var product in Model.CategoryProduct.Select(prod => prod.Products))
+	{
+		if (product.IsPublished)
+		{
+			<div class="product-grid col-md-3">
+				<a href="/products/Details/@product.Id">
+					<div class="product-img">
+						<img src="@Url.Action("GetProductIcon", "Products", new { Id = product.Id })" class="img-responsive" alt="@product.Name">
+						<div class="b-wrapper">
+						</div>
+					</div>
+					<h4>@product.Name</h4>
+
+					<!--				<div class="product-info simpleCart_shelfItem">-->
+					<!--					<div class="product-info-cust prt_name">-->
+					<!--						<p>-->@product.ShortDescription<!--</p>-->
+					<!--						<div class="clearfix"></div>-->
+					<!--					</div>-->
+					<!--				</div>-->
+				</a>
+			</div>
+		}
+	}
+</div>
+<!--/Список товаров категории-->
+<!--Список относящихся к категории проектов-->
+<div class="col-md-12 product-model-sec">
+	<h3>Проекты с данной категорией</h3>
+	<div class="h-line-reverse clearfix"></div>
+	@foreach (var project in Model.CategoryProject.Select(proj => proj.Projects))
+	{
+		if (project.IsPublished)
+		{
+			<div class="product-grid col-md-3">
+				<a href="/projects/Details/@project.Id">
+					<div class="product-img">
+						<img src="@Url.Action("GetProjectIcon", "Projects", new { Id = project.Id })" class="img-responsive" alt="@project.Name">
+					</div>
+					<h4>@project.Name</h4>
+
+					<!--				<div class="product-info simpleCart_shelfItem">-->
+					<!--					<div class="product-info-cust prt_name">-->
+					<!--						<p>-->@project.ShortDescription<!--</p>-->
+					<!--						<div class="clearfix"></div>-->
+					<!--					</div>-->
+					<!--				</div>-->
+				</a>
+			</div>
+		}
+	}
+	<!--/Список относящихся к категории проектов-->
+</div>

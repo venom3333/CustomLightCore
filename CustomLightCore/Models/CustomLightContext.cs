@@ -6,7 +6,7 @@ namespace CustomLightCore.Models
 {
     public partial class CustomLightContext : DbContext
     {
-        public virtual DbSet<Categories> Categories { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<CategoryProduct> CategoryProduct { get; set; }
         public virtual DbSet<CategoryProject> CategoryProject { get; set; }
         public virtual DbSet<Essentials> Essentials { get; set; }
@@ -30,7 +30,7 @@ namespace CustomLightCore.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Categories>(entity =>
+            modelBuilder.Entity<Category>(entity =>
             {
                 entity.Property(e => e.Created).HasColumnType("datetime");
 

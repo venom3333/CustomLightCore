@@ -13,9 +13,9 @@
 						<div>Наверх</div>
 					</a>
 					<h5>Категории:</h5>
-					@foreach (CustomLightCore.Models.Categories category in ViewBag.Categories)
+					@foreach (CustomLightCore.Models.Category category in ViewBag.Categories)
 					{
-						<a href="/Categories/Details/@category.Id" class="col-md-12">
+						<a href="@Url.Action("Details", "Category", new { Id = category.Id })" class="col-md-12">
 							<div>@category.Name</div>
 						</a>
 					}

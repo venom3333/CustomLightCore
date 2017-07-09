@@ -9,9 +9,9 @@ using CustomLightCore.Models;
 
 namespace CustomLightCore.Controllers
 {
-    public class CategoriesController : BaseController
+    public class CategoryController : BaseController
     {
-		// GET: Categories
+		// GET: Category
 		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 3600)]
 		public async Task<IActionResult> Index()
         {
@@ -37,7 +37,7 @@ ctx.EntityOne
 		  
 		 */
 
-		// GET: Categories/Details/5
+		// GET: Category/Details/5
 		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 3600)]
 		public async Task<IActionResult> Details(int? id)
         {
@@ -64,18 +64,18 @@ ctx.EntityOne
 			return View(categories);
         }
 
-        // GET: Categories/Create
+        // GET: Category/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Categories/Create
+        // POST: Category/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,Created,Updated")] Categories categories)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,Created,Updated")] Category categories)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ ctx.EntityOne
             return View(categories);
         }
 
-        // GET: Categories/Edit/5
+        // GET: Category/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -102,12 +102,12 @@ ctx.EntityOne
             return View(categories);
         }
 
-        // POST: Categories/Edit/5
+        // POST: Category/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,Created,Updated")] Categories categories)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,Created,Updated")] Category categories)
         {
             if (id != categories.Id)
             {
@@ -137,7 +137,7 @@ ctx.EntityOne
             return View(categories);
         }
 
-        // GET: Categories/Delete/5
+        // GET: Category/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -155,7 +155,7 @@ ctx.EntityOne
             return View(categories);
         }
 
-        // POST: Categories/Delete/5
+        // POST: Category/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -174,7 +174,7 @@ ctx.EntityOne
 		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 3600)]
 		public FileContentResult GetCategoryIcon(int? Id)
 		{
-			Categories cat = _context.Categories
+			Category cat = _context.Categories
 				.FirstOrDefault(c => c.Id == Id);
 
 			if (cat.Icon != null)

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace CustomLightCore.Models
 {
-    public partial class Categories
+    public partial class Category
     {
-        public Categories()
+        public Category()
         {
             CategoryProduct = new HashSet<CategoryProduct>();
             CategoryProject = new HashSet<CategoryProject>();

@@ -4,9 +4,9 @@
 		<div class="product_right">
 			<h4 class="m_2">Категории</h4>
 			<div class="tab1">
-				@foreach (CustomLightCore.Models.Categories category in ViewBag.Categories)
+				@foreach (CustomLightCore.Models.Category category in ViewBag.Categories)
 				{
-					<a href="/Categories/Details/@category.Id">
+					<a href="@Url.Action("Details", "Category", new { Id = category.Id })">
 						<p>@category.Name</p>
 					</a>
 				}

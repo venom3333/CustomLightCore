@@ -53,7 +53,7 @@ namespace CustomLightCore
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Categories}/{action=Index}/{id?}");
+                    template: "{controller=Category}/{action=Index}/{id?}");
             });
         }
     }

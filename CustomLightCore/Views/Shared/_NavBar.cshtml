@@ -18,10 +18,10 @@
 					<ul class="dropdown-menu">
 						Категории:
 						<li class="divider"></li>
-						@foreach (CustomLightCore.Models.Categories category in ViewBag.Categories)
+						@foreach (CustomLightCore.Models.Category category in ViewBag.Categories)
 						{
 							<li>
-								<a href="/Categories/Details/@category.Id">
+								<a href="@Url.Action("Details", "Category", new { Id = category.Id })">
 									<p>@category.Name</p>
 								</a>
 							</li>

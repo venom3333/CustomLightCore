@@ -13,7 +13,7 @@ namespace CustomLightCore.Controllers
 
 		public BaseController()
 		{
-			//ViewBag.Categories = _context.Categories.ToList();
+			//ViewBag.Category = _context.Category.ToList();
 			//ViewBag.Projects = _context.Projects.ToList();
 			//ViewBag.Pages = _context.Pages.ToList();
 			//ViewBag.Essentials = _context.Essentials.FirstOrDefault(e => e != null);

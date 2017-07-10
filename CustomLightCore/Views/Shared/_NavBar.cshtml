@@ -33,20 +33,20 @@
 						Реализованные проекты<b class="caret"></b>
 					</a>
 					<ul class="dropdown-menu">
-						@foreach (CustomLightCore.Models.Projects project in ViewBag.Projects)
+						@foreach (CustomLightCore.Models.Project project in ViewBag.Projects)
 						{
 							<li>
-								<a href="/Projects/Details/@project.Id">
+								<a href="@Url.Action("Details", "Projects", new { Id = project.Id})">
 									<p>@project.Name</p>
 								</a>
 							</li>
 						}
 					</ul>
 				</li>
-				@foreach (CustomLightCore.Models.Pages page in ViewBag.Pages)
+				@foreach (CustomLightCore.Models.Page page in ViewBag.Pages)
 				{
 					<li>
-						<a href="/Page/@page.Alias">
+						<a href="@Url.Action("Details", "Pages", new { Id = page.Id})">
 							<p>@page.Name</p>
 						</a>
 					</li>

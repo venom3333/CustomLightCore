@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace CustomLightCore.Models
 {
-    public partial class Projects
+    public partial class Project
     {
-        public Projects()
+        public Project()
         {
             CategoryProject = new HashSet<CategoryProject>();
-            ProjectImages = new HashSet<ProjectImages>();
+            ProjectImages = new HashSet<ProjectImage>();
         }
 
         public int Id { get; set; }
@@ -22,6 +22,6 @@ namespace CustomLightCore.Models
         public DateTime Updated { get; set; }
 
         public virtual ICollection<CategoryProject> CategoryProject { get; set; }
-        public virtual ICollection<ProjectImages> ProjectImages { get; set; }
+        public virtual ICollection<ProjectImage> ProjectImages { get; set; }
     }
 }

@@ -1,67 +1,123 @@
-@model CustomLightCore.Models.Projects
+@model CustomLightCore.Models.Project
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = Model.Name;
     Layout = "~/Views/_Layouts/_Main.cshtml";
 }
 
-<h2>Details</h2>
+<!--Инфо о продукте-->
+<div class="col-md-10 Project-model-sec">
+	<h2 id="ProjectName">@Model.Name</h2>
 
-<div>
-    <h4>Projects</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ShortDescription)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ShortDescription)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Icon)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Icon)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.IconMimeType)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.IconMimeType)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.IsPublished)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.IsPublished)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Created)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Created)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Updated)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Updated)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+	<!--	Не отображается (нужно для корзины)-->
+	@*<div id="ProjectIcon" style="display: none;"><?= $Project['icon'] ?></div>*@
+	<div id="ProjectId" style="display: none;">>@Model.Id</div>
+	<!--	/Не отображается (нужно для корзины)-->
+	<!--Галерея-->
+	<section id="myCarousel" class="carousel slide my-carousel col-md-7">
+		<!-- Indicators -->
+		<ol class="carousel-indicators image-carousel-indicators">
+			@{int counter = 0;
+				foreach (var image in Model.ProjectImages)
+				{
+					<li data-target="#myCarousel" data-slide-to="@(counter = counter + 1);" class="@if (@counter == 1) {<text>myCarousel active</text>} else {<text>myCarousel</text>}">
+						<img src="@Url.Action("GetProjectImage", "Projects", new { ImageId = image.Id })" class="img-responsive" alt="@Model.Name">
+					</li>
+				}
+			}
+		</ol>
+		<!-- Wrapper for Slides -->
+		<div class="carousel-inner">
+			@{counter = 0;
+				foreach (var image in Model.ProjectImages)
+				{
+					@(counter = counter + 1);
+					<div class="@if (@counter == 1) {<text>item active</text>} else {<text>class = item</text>}">
+						<!-- Set the first background image using inline CSS below. -->
+						<div class="fill" style="background-image:url('@Url.Action("GetProjectImage", "Projects", new { ImageId = image.Id })');"></div>
+						<div class="carousel-caption">
+							<h2>Caption 1</h2>
+						</div>
+					</div>
+				}
+			}
+		</div>
+
+		<!-- Controls -->
+		<a class="left carousel-control" href="#myCarousel" data-slide="prev">
+			<span class="icon-prev"></span>
+		</a>
+		<a class="right carousel-control" href="#myCarousel" data-slide="next">
+			<span class="icon-next"></span>
+		</a>
+	</section>
+	<!--/Галерея-->
+	
+	<section class="itemDescription">
+		<p>@Model.Description</p>
+	</section>
+
+	<!--/Инфо о продукте-->
+	@*<script src="~/Content/js/cart.js"></script>*@
+
+
+	@*<h2>Details</h2>
+
+		<div>
+			<h4>Projects</h4>
+			<hr />
+			<dl class="dl-horizontal">
+				<dt>
+					@Html.DisplayNameFor(model => model.Name)
+				</dt>
+				<dd>
+					@Html.DisplayFor(model => model.Name)
+				</dd>
+				<dt>
+					@Html.DisplayNameFor(model => model.Description)
+				</dt>
+				<dd>
+					@Html.DisplayFor(model => model.Description)
+				</dd>
+				<dt>
+					@Html.DisplayNameFor(model => model.ShortDescription)
+				</dt>
+				<dd>
+					@Html.DisplayFor(model => model.ShortDescription)
+				</dd>
+				<dt>
+					@Html.DisplayNameFor(model => model.Icon)
+				</dt>
+				<dd>
+					@Html.DisplayFor(model => model.Icon)
+				</dd>
+				<dt>
+					@Html.DisplayNameFor(model => model.IconMimeType)
+				</dt>
+				<dd>
+					@Html.DisplayFor(model => model.IconMimeType)
+				</dd>
+				<dt>
+					@Html.DisplayNameFor(model => model.IsPublished)
+				</dt>
+				<dd>
+					@Html.DisplayFor(model => model.IsPublished)
+				</dd>
+				<dt>
+					@Html.DisplayNameFor(model => model.Created)
+				</dt>
+				<dd>
+					@Html.DisplayFor(model => model.Created)
+				</dd>
+				<dt>
+					@Html.DisplayNameFor(model => model.Updated)
+				</dt>
+				<dd>
+					@Html.DisplayFor(model => model.Updated)
+				</dd>
+			</dl>
+		</div>
+		<div>
+			<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+			<a asp-action="Index">Back to List</a>
+		</div>*@

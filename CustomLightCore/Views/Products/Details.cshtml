@@ -1,11 +1,94 @@
-@model CustomLightCore.Models.Products
+@model CustomLightCore.Models.Product
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = Model.Name;
     Layout = "~/Views/_Layouts/_Main.cshtml";
 }
 
-<h2>Details</h2>
+
+<!--Инфо о продукте-->
+<div class="col-md-10 product-model-sec">
+	<h2 id="productName">@Model.Name</h2>
+
+	<!--	Не отображается (нужно для корзины)-->
+	@*<div id="productIcon" style="display: none;"><?= $product['icon'] ?></div>*@
+	<div id="productId" style="display: none;">>@Model.Id</div>
+	<!--	/Не отображается (нужно для корзины)-->
+	<!--Галерея-->
+	<section id="myCarousel" class="carousel slide my-carousel col-md-7">
+		<!-- Indicators -->
+		<ol class="carousel-indicators image-carousel-indicators">
+			@{int counter = 0;
+				foreach (var image in Model.ProductImages)
+				{
+					<li data-target="#myCarousel" data-slide-to="@(counter = counter + 1);" class="@if (@counter == 1) {<text>myCarousel active</text>} else {<text>myCarousel</text>}">
+						<img src="@Url.Action("GetProductImage", "Products", new { ImageId = image.Id })" class="img-responsive" alt="@Model.Name">
+					</li>
+				}
+			}
+		</ol>
+		<!-- Wrapper for Slides -->
+		<div class="carousel-inner">
+			@{counter = 0;
+				foreach (var image in Model.ProductImages)
+				{
+					@(counter = counter + 1);
+					<div class="@if (@counter == 1) {<text>item active</text>} else {<text>class = item</text>}">
+						<!-- Set the first background image using inline CSS below. -->
+						<div class="fill" style="background-image:url('@Url.Action("GetProductImage", "Products", new { ImageId = image.Id })');"></div>
+						<div class="carousel-caption">
+							<h2>Caption 1</h2>
+						</div>
+					</div>
+				}
+			}
+		</div>
+
+		<!-- Controls -->
+		<a class="left carousel-control" href="#myCarousel" data-slide="prev">
+			<span class="icon-prev"></span>
+		</a>
+		<a class="right carousel-control" href="#myCarousel" data-slide="next">
+			<span class="icon-next"></span>
+		</a>
+	</section>
+	<!--/Галерея-->
+
+	<section class="itemDescription">
+		<p>@Model.Description</p>
+	</section>
+	<div class="clear"></div>
+
+	<div class="table-responsive">
+		<table class="table table-bordered table-striped table-hover sort_table">
+			<thead>
+				<tr>
+					@foreach (var specificationTitle in Model.ProductType.SpecificationTitles)
+					{
+						<th>@specificationTitle.Name</th>
+					}
+					<th>Цена</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var specification in Model.Specifications)
+				{
+					<tr>
+						@foreach (var specificationVal in specification.SpecificationValues)
+						{
+							<td>@specificationVal.Value</td>
+						}
+						<td>@specification.Price</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</div>
+<!--/Инфо о продукте-->
+@*<script src="~/Content/js/cart.js"></script>*@
+
+@*<h2>Details</h2>
 
 <div>
     <h4>Products</h4>
@@ -70,4 +153,4 @@
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
-</div>
+</div>*@

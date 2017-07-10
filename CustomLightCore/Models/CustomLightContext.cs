@@ -10,17 +10,17 @@ namespace CustomLightCore.Models
         public virtual DbSet<CategoryProduct> CategoryProduct { get; set; }
         public virtual DbSet<CategoryProject> CategoryProject { get; set; }
         public virtual DbSet<Essentials> Essentials { get; set; }
-        public virtual DbSet<Orders> Orders { get; set; }
-        public virtual DbSet<Pages> Pages { get; set; }
-        public virtual DbSet<ProductImages> ProductImages { get; set; }
-        public virtual DbSet<ProductTypes> ProductTypes { get; set; }
-        public virtual DbSet<Products> Products { get; set; }
-        public virtual DbSet<ProjectImages> ProjectImages { get; set; }
-        public virtual DbSet<Projects> Projects { get; set; }
-        public virtual DbSet<Slides> Slides { get; set; }
-        public virtual DbSet<SpecificationTitles> SpecificationTitles { get; set; }
-        public virtual DbSet<SpecificationValues> SpecificationValues { get; set; }
-        public virtual DbSet<Specifications> Specifications { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<Page> Pages { get; set; }
+        public virtual DbSet<ProductImage> ProductImages { get; set; }
+        public virtual DbSet<ProductType> ProductTypes { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<ProjectImage> ProjectImages { get; set; }
+        public virtual DbSet<Project> Projects { get; set; }
+        public virtual DbSet<Slide> Slides { get; set; }
+        public virtual DbSet<SpecificationTitle> SpecificationTitles { get; set; }
+        public virtual DbSet<SpecificationValue> SpecificationValues { get; set; }
+        public virtual DbSet<Specification> Specifications { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -112,14 +112,14 @@ namespace CustomLightCore.Models
                 entity.Property(e => e.Title).IsRequired();
             });
 
-            modelBuilder.Entity<Orders>(entity =>
+            modelBuilder.Entity<Order>(entity =>
             {
                 entity.Property(e => e.Created).HasColumnType("datetime");
 
                 entity.Property(e => e.OrderString).IsRequired();
             });
 
-            modelBuilder.Entity<Pages>(entity =>
+            modelBuilder.Entity<Page>(entity =>
             {
                 entity.Property(e => e.Alias).IsRequired();
 
@@ -130,7 +130,7 @@ namespace CustomLightCore.Models
                 entity.Property(e => e.Updated).HasColumnType("datetime");
             });
 
-            modelBuilder.Entity<ProductImages>(entity =>
+            modelBuilder.Entity<ProductImage>(entity =>
             {
                 entity.HasIndex(e => e.ProductId)
                     .HasName("IX_FK_ProductProductImage");
@@ -145,12 +145,12 @@ namespace CustomLightCore.Models
                     .HasConstraintName("FK_ProductProductImage");
             });
 
-            modelBuilder.Entity<ProductTypes>(entity =>
+            modelBuilder.Entity<ProductType>(entity =>
             {
                 entity.Property(e => e.Name).IsRequired();
             });
 
-            modelBuilder.Entity<Products>(entity =>
+            modelBuilder.Entity<Product>(entity =>
             {
                 entity.HasIndex(e => e.ProductTypeId)
                     .HasName("IX_FK_ProductTypeProduct");
@@ -167,7 +167,7 @@ namespace CustomLightCore.Models
                     .HasConstraintName("FK_ProductTypeProduct");
             });
 
-            modelBuilder.Entity<ProjectImages>(entity =>
+            modelBuilder.Entity<ProjectImage>(entity =>
             {
                 entity.HasIndex(e => e.ProjectId)
                     .HasName("IX_FK_ProjectProjectImage");
@@ -182,7 +182,7 @@ namespace CustomLightCore.Models
                     .HasConstraintName("FK_ProjectProjectImage");
             });
 
-            modelBuilder.Entity<Projects>(entity =>
+            modelBuilder.Entity<Project>(entity =>
             {
                 entity.Property(e => e.Created).HasColumnType("datetime");
 
@@ -191,7 +191,7 @@ namespace CustomLightCore.Models
                 entity.Property(e => e.Updated).HasColumnType("datetime");
             });
 
-            modelBuilder.Entity<Slides>(entity =>
+            modelBuilder.Entity<Slide>(entity =>
             {
                 entity.Property(e => e.Description).IsRequired();
 
@@ -202,7 +202,7 @@ namespace CustomLightCore.Models
                 entity.Property(e => e.Name).IsRequired();
             });
 
-            modelBuilder.Entity<SpecificationTitles>(entity =>
+            modelBuilder.Entity<SpecificationTitle>(entity =>
             {
                 entity.HasIndex(e => e.ProductTypeId)
                     .HasName("IX_FK_ProductTypeSpecificationTitle");
@@ -215,7 +215,7 @@ namespace CustomLightCore.Models
                     .HasConstraintName("FK_ProductTypeSpecificationTitle");
             });
 
-            modelBuilder.Entity<SpecificationValues>(entity =>
+            modelBuilder.Entity<SpecificationValue>(entity =>
             {
                 entity.HasIndex(e => e.SpecificationId)
                     .HasName("IX_FK_SpecificationSpecificationValue");
@@ -237,7 +237,7 @@ namespace CustomLightCore.Models
                     .HasConstraintName("FK_SpecificationTitleSpecificationValue");
             });
 
-            modelBuilder.Entity<Specifications>(entity =>
+            modelBuilder.Entity<Specification>(entity =>
             {
                 entity.HasIndex(e => e.ProductId)
                     .HasName("IX_FK_ProductSpecification");

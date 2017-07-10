@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CustomLightCore.Models
 {
-    public partial class Pages
+    public partial class Page
     {
         public int Id { get; set; }
         public string Alias { get; set; }

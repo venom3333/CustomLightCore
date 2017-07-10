@@ -27,14 +27,22 @@ namespace CustomLightCore.Controllers
             }
 
             var products = await _context.Products
+				.Include(p => p.ProductImages)
+				.Include(p => p.Specifications)
+					.ThenInclude(s=>s.SpecificationValues)
                 .Include(p => p.ProductType)
+					.ThenInclude(pt=>pt.SpecificationTitles)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (products == null)
             {
                 return NotFound();
             }
 
-            return View(products);
+			ViewBag.Categories = await _context.Categories.ToListAsync();
+			ViewBag.Projects = await _context.Projects.ToListAsync();
+			ViewBag.Pages = await _context.Pages.ToListAsync();
+			ViewBag.Essentials = await _context.Essentials.FirstOrDefaultAsync(e => e != null);
+			return View(products);
         }
 
         // GET: Products/Create
@@ -49,7 +57,7 @@ namespace CustomLightCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,IsPublished,Created,Updated,ProductTypeId")] Products products)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,IsPublished,Created,Updated,ProductTypeId")] Product products)
         {
             if (ModelState.IsValid)
             {
@@ -83,7 +91,7 @@ namespace CustomLightCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,IsPublished,Created,Updated,ProductTypeId")] Products products)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,IsPublished,Created,Updated,ProductTypeId")] Product products)
         {
             if (id != products.Id)
             {
@@ -152,12 +160,27 @@ namespace CustomLightCore.Controllers
 		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 3600)]
 		public FileContentResult GetProductIcon(int? Id)
 		{
-			Products prods = _context.Products
+			Product prods = _context.Products
 				.FirstOrDefault(p => p.Id == Id);
 
 			if (prods.Icon != null)
 			{
 				return File(prods.Icon, prods.IconMimeType);
+			}
+			else
+			{
+				return null;
+			}
+		}
+
+		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 3600)]
+		public FileContentResult GetProductImage(int? ImageId)
+		{
+			ProductImage image = _context.ProductImages.FirstOrDefault(i => i.Id == ImageId);
+
+			if (image != null)
+			{
+				return File(image.ImageData, image.ImageMimeType);
 			}
 			else
 			{

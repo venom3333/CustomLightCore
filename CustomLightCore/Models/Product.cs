@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace CustomLightCore.Models
 {
-    public partial class Products
+    public partial class Product
     {
-        public Products()
+        public Product()
         {
             CategoryProduct = new HashSet<CategoryProduct>();
-            ProductImages = new HashSet<ProductImages>();
-            Specifications = new HashSet<Specifications>();
+            ProductImages = new HashSet<ProductImage>();
+            Specifications = new HashSet<Specification>();
         }
 
         public int Id { get; set; }
@@ -24,8 +24,8 @@ namespace CustomLightCore.Models
         public int ProductTypeId { get; set; }
 
         public virtual ICollection<CategoryProduct> CategoryProduct { get; set; }
-        public virtual ICollection<ProductImages> ProductImages { get; set; }
-        public virtual ICollection<Specifications> Specifications { get; set; }
-        public virtual ProductTypes ProductType { get; set; }
+        public virtual ICollection<ProductImage> ProductImages { get; set; }
+        public virtual ICollection<Specification> Specifications { get; set; }
+        public virtual ProductType ProductType { get; set; }
     }
 }

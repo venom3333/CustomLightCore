@@ -9,6 +9,6 @@ namespace CustomLightCore.Models
         public int ProductsId { get; set; }
 
         public virtual Category Categories { get; set; }
-        public virtual Products Products { get; set; }
+        public virtual Product Products { get; set; }
     }
 }

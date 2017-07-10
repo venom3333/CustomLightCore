@@ -3,12 +3,13 @@ using System.Collections.Generic;
 
 namespace CustomLightCore.Models
 {
-    public partial class Slides
+    public partial class ProjectImage
     {
         public int Id { get; set; }
         public byte[] ImageData { get; set; }
         public string ImageMimeType { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public int ProjectId { get; set; }
+
+        public virtual Project Project { get; set; }
     }
 }

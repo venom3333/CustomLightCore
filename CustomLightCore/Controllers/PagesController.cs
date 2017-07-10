@@ -9,15 +9,17 @@ using CustomLightCore.Models;
 
 namespace CustomLightCore.Controllers
 {
-    public class ProjectsController : BaseController
+    public class PagesController : BaseController
     {
-        // GET: Projects
+        // GET: Pages
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Projects.ToListAsync());
+            return View(await _context.Pages.ToListAsync());
         }
 
-        // GET: Projects/Details/5
+		
+
+        // GET: Pages/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -25,9 +27,9 @@ namespace CustomLightCore.Controllers
                 return NotFound();
             }
 
-            var projects = await _context.Projects.Include(proj => proj.ProjectImages)
-                .SingleOrDefaultAsync(m => m.Id == id);
-            if (projects == null)
+            var page = await _context.Pages
+                .SingleOrDefaultAsync(p => p.Id == id);
+            if (page == null)
             {
                 return NotFound();
             }
@@ -36,32 +38,32 @@ namespace CustomLightCore.Controllers
 			ViewBag.Projects = await _context.Projects.ToListAsync();
 			ViewBag.Pages = await _context.Pages.ToListAsync();
 			ViewBag.Essentials = await _context.Essentials.FirstOrDefaultAsync(e => e != null);
-			return View(projects);
+			return View(page);
         }
 
-        // GET: Projects/Create
+        // GET: Pages/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Projects/Create
+        // POST: Pages/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,IsPublished,Created,Updated")] Project projects)
+        public async Task<IActionResult> Create([Bind("Id,Alias,Name,PageContent,Created,Updated")] Page page)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(projects);
+                _context.Add(page);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(projects);
+            return View(page);
         }
 
-        // GET: Projects/Edit/5
+        // GET: Pages/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -69,22 +71,22 @@ namespace CustomLightCore.Controllers
                 return NotFound();
             }
 
-            var projects = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id);
-            if (projects == null)
+            var page = await _context.Pages.SingleOrDefaultAsync(m => m.Id == id);
+            if (page == null)
             {
                 return NotFound();
             }
-            return View(projects);
+            return View(page);
         }
 
-        // POST: Projects/Edit/5
+        // POST: Pages/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,IsPublished,Created,Updated")] Project projects)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Alias,Name,PageContent,Created,Updated")] Page page)
         {
-            if (id != projects.Id)
+            if (id != page.Id)
             {
                 return NotFound();
             }
@@ -93,12 +95,12 @@ namespace CustomLightCore.Controllers
             {
                 try
                 {
-                    _context.Update(projects);
+                    _context.Update(page);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProjectsExists(projects.Id))
+                    if (!PageExists(page.Id))
                     {
                         return NotFound();
                     }
@@ -109,10 +111,10 @@ namespace CustomLightCore.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(projects);
+            return View(page);
         }
 
-        // GET: Projects/Delete/5
+        // GET: Pages/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -120,61 +122,30 @@ namespace CustomLightCore.Controllers
                 return NotFound();
             }
 
-            var projects = await _context.Projects
+            var page = await _context.Pages
                 .SingleOrDefaultAsync(m => m.Id == id);
-            if (projects == null)
+            if (page == null)
             {
                 return NotFound();
             }
 
-            return View(projects);
+            return View(page);
         }
 
-        // POST: Projects/Delete/5
+        // POST: Pages/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var projects = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Projects.Remove(projects);
+            var page = await _context.Pages.SingleOrDefaultAsync(m => m.Id == id);
+            _context.Pages.Remove(page);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool ProjectsExists(int id)
+        private bool PageExists(int id)
         {
-            return _context.Projects.Any(e => e.Id == id);
+            return _context.Pages.Any(e => e.Id == id);
         }
-
-		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 3600)]
-		public FileContentResult GetProjectIcon(int? Id)
-		{
-			Project projs = _context.Projects
-				.FirstOrDefault(p => p.Id == Id);
-
-			if (projs.Icon != null)
-			{
-				return File(projs.Icon, projs.IconMimeType);
-			}
-			else
-			{
-				return null;
-			}
-		}
-
-		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 3600)]
-		public FileContentResult GetProjectImage(int? ImageId)
-		{
-			ProjectImage image = _context.ProjectImages.FirstOrDefault(i => i.Id == ImageId);
-
-			if (image != null)
-			{
-				return File(image.ImageData, image.ImageMimeType);
-			}
-			else
-			{
-				return null;
-			}
-		}
-	}
+    }
 }

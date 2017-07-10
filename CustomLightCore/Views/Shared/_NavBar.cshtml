@@ -21,7 +21,7 @@
 						@foreach (CustomLightCore.Models.Category category in ViewBag.Categories)
 						{
 							<li>
-								<a href="@Url.Action("Details", "Category", new { Id = category.Id })">
+								<a href="@Url.Action("Details", "Categories", new { Id = category.Id })">
 									<p>@category.Name</p>
 								</a>
 							</li>

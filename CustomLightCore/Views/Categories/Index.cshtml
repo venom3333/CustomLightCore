@@ -14,9 +14,9 @@
 		@foreach (var category in Model)
 		{
 			<div class="product-grid col-lg-3 col-md-4 col-sm-6">
-				<a href="@Url.Action("Details", "Category", new { Id = category.Id })">
+				<a href="@Url.Action("Details", "Categories", new { Id = category.Id })">
 					<div class="product-img b-link-stripe b-animate-go  thickbox">
-						<img src="@Url.Action("GetCategoryIcon", "Category", new { Id = category.Id })" class="img-responsive" alt="@category.Name">
+						<img src="@Url.Action("GetCategoryIcon", "Categories", new { Id = category.Id })" class="img-responsive" alt="@category.Name">
 					</div>
 					<h5>@category.Name</h5>
 					@*<p>@category.ShortDescription</p>*@

@@ -6,7 +6,7 @@
 			<div class="tab1">
 				@foreach (CustomLightCore.Models.Category category in ViewBag.Categories)
 				{
-					<a href="@Url.Action("Details", "Category", new { Id = category.Id })">
+					<a href="@Url.Action("Details", "Categories", new { Id = category.Id })">
 						<p>@category.Name</p>
 					</a>
 				}

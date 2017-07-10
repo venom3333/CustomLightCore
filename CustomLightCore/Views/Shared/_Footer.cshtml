@@ -15,7 +15,7 @@
 					<h5>Категории:</h5>
 					@foreach (CustomLightCore.Models.Category category in ViewBag.Categories)
 					{
-						<a href="@Url.Action("Details", "Category", new { Id = category.Id })" class="col-md-12">
+						<a href="@Url.Action("Details", "Categories", new { Id = category.Id })" class="col-md-12">
 							<div>@category.Name</div>
 						</a>
 					}

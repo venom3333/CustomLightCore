@@ -9,9 +9,9 @@ using CustomLightCore.Models;
 
 namespace CustomLightCore.Controllers
 {
-    public class CategoryController : BaseController
+    public class CategoriesController : BaseController
     {
-		// GET: Category
+		// GET: Categories
 		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 3600)]
 		public async Task<IActionResult> Index()
         {
@@ -37,7 +37,7 @@ ctx.EntityOne
 		  
 		 */
 
-		// GET: Category/Details/5
+		// GET: Categories/Details/5
 		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 3600)]
 		public async Task<IActionResult> Details(int? id)
         {
@@ -64,8 +64,8 @@ ctx.EntityOne
 			return View(categories);
         }
 
-        // GET: Category/Create
-        public IActionResult Create()
+		// GET: Categories/Create
+		public IActionResult Create()
         {
             return View();
         }
@@ -86,8 +86,8 @@ ctx.EntityOne
             return View(categories);
         }
 
-        // GET: Category/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+		// GET: Categories/Edit/5
+		public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -102,10 +102,10 @@ ctx.EntityOne
             return View(categories);
         }
 
-        // POST: Category/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+		// POST: Categories/Edit/5
+		// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,Created,Updated")] Category categories)
         {
@@ -137,8 +137,8 @@ ctx.EntityOne
             return View(categories);
         }
 
-        // GET: Category/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+		// GET: Categories/Delete/5
+		public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -155,8 +155,8 @@ ctx.EntityOne
             return View(categories);
         }
 
-        // POST: Category/Delete/5
-        [HttpPost, ActionName("Delete")]
+		// POST: Categories/Delete/5
+		[HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

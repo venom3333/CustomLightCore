@@ -9,14 +9,14 @@ namespace CustomLightCore.Controllers
 {
     public class BaseController : Controller
     {
-		protected CustomLightContext _context = new CustomLightContext();
+		protected CustomLightContext db = new CustomLightContext();
 
 		public BaseController()
 		{
-			//ViewBag.Category = _context.Category.ToList();
-			//ViewBag.Projects = _context.Projects.ToList();
-			//ViewBag.Pages = _context.Pages.ToList();
-			//ViewBag.Essentials = _context.Essentials.FirstOrDefault(e => e != null);
+			//ViewBag.Category = db.Category.ToList();
+			//ViewBag.Projects = db.Projects.ToList();
+			//ViewBag.Pages = db.Pages.ToList();
+			//ViewBag.Essentials = db.Essentials.FirstOrDefault(e => e != null);
 		}
 	}
 }

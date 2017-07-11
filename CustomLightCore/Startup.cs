@@ -47,6 +47,15 @@ namespace CustomLightCore
                 app.UseExceptionHandler("/Home/Error");
             }
 
+			app.UseCookieAuthentication(new CookieAuthenticationOptions
+			{
+				// TODO: Поменять слово "Abrakadabra" на что-то другое
+				AuthenticationScheme = "Abrakadabra",
+				LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login"),
+				AutomaticAuthenticate = true,
+				AutomaticChallenge = true
+			});
+
             app.UseStaticFiles();
 
             app.UseMvc(routes =>

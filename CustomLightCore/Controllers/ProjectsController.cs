@@ -14,7 +14,7 @@ namespace CustomLightCore.Controllers
         // GET: Projects
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Projects.ToListAsync());
+            return View(await db.Projects.ToListAsync());
         }
 
         // GET: Projects/Details/5
@@ -25,17 +25,17 @@ namespace CustomLightCore.Controllers
                 return NotFound();
             }
 
-            var projects = await _context.Projects.Include(proj => proj.ProjectImages)
+            var projects = await db.Projects.Include(proj => proj.ProjectImages)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (projects == null)
             {
                 return NotFound();
             }
 
-			ViewBag.Categories = await _context.Categories.ToListAsync();
-			ViewBag.Projects = await _context.Projects.ToListAsync();
-			ViewBag.Pages = await _context.Pages.ToListAsync();
-			ViewBag.Essentials = await _context.Essentials.FirstOrDefaultAsync(e => e != null);
+			ViewBag.Categories = await db.Categories.ToListAsync();
+			ViewBag.Projects = await db.Projects.ToListAsync();
+			ViewBag.Pages = await db.Pages.ToListAsync();
+			ViewBag.Essentials = await db.Essentials.FirstOrDefaultAsync(e => e != null);
 			return View(projects);
         }
 
@@ -54,8 +54,8 @@ namespace CustomLightCore.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(projects);
-                await _context.SaveChangesAsync();
+                db.Add(projects);
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View(projects);
@@ -69,7 +69,7 @@ namespace CustomLightCore.Controllers
                 return NotFound();
             }
 
-            var projects = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id);
+            var projects = await db.Projects.SingleOrDefaultAsync(m => m.Id == id);
             if (projects == null)
             {
                 return NotFound();
@@ -93,8 +93,8 @@ namespace CustomLightCore.Controllers
             {
                 try
                 {
-                    _context.Update(projects);
-                    await _context.SaveChangesAsync();
+                    db.Update(projects);
+                    await db.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -120,7 +120,7 @@ namespace CustomLightCore.Controllers
                 return NotFound();
             }
 
-            var projects = await _context.Projects
+            var projects = await db.Projects
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (projects == null)
             {
@@ -135,21 +135,21 @@ namespace CustomLightCore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var projects = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Projects.Remove(projects);
-            await _context.SaveChangesAsync();
+            var projects = await db.Projects.SingleOrDefaultAsync(m => m.Id == id);
+            db.Projects.Remove(projects);
+            await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
         private bool ProjectsExists(int id)
         {
-            return _context.Projects.Any(e => e.Id == id);
+            return db.Projects.Any(e => e.Id == id);
         }
 
 		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 3600)]
 		public FileContentResult GetProjectIcon(int? Id)
 		{
-			Project projs = _context.Projects
+			Project projs = db.Projects
 				.FirstOrDefault(p => p.Id == Id);
 
 			if (projs.Icon != null)
@@ -165,7 +165,7 @@ namespace CustomLightCore.Controllers
 		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 3600)]
 		public FileContentResult GetProjectImage(int? ImageId)
 		{
-			ProjectImage image = _context.ProjectImages.FirstOrDefault(i => i.Id == ImageId);
+			ProjectImage image = db.ProjectImages.FirstOrDefault(i => i.Id == ImageId);
 
 			if (image != null)
 			{

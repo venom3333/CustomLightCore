@@ -12,7 +12,7 @@ namespace CustomLightCore.Controllers
 		[ResponseCache(Duration = 3600, Location = ResponseCacheLocation.Any, VaryByHeader = "User-agent")]
 		public FileContentResult GetLogotype(string logoType)
 		{
-			Essentials essential = _context.Essentials
+			Essentials essential = db.Essentials
 				.FirstOrDefault(c => c != null);
 
 			if (essential != null)

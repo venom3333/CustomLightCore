@@ -14,7 +14,7 @@ namespace CustomLightCore.Controllers
         // GET: Pages
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Pages.ToListAsync());
+            return View(await db.Pages.ToListAsync());
         }
 
 		
@@ -27,17 +27,17 @@ namespace CustomLightCore.Controllers
                 return NotFound();
             }
 
-            var page = await _context.Pages
+            var page = await db.Pages
                 .SingleOrDefaultAsync(p => p.Id == id);
             if (page == null)
             {
                 return NotFound();
             }
 
-			ViewBag.Categories = await _context.Categories.ToListAsync();
-			ViewBag.Projects = await _context.Projects.ToListAsync();
-			ViewBag.Pages = await _context.Pages.ToListAsync();
-			ViewBag.Essentials = await _context.Essentials.FirstOrDefaultAsync(e => e != null);
+			ViewBag.Categories = await db.Categories.ToListAsync();
+			ViewBag.Projects = await db.Projects.ToListAsync();
+			ViewBag.Pages = await db.Pages.ToListAsync();
+			ViewBag.Essentials = await db.Essentials.FirstOrDefaultAsync(e => e != null);
 			return View(page);
         }
 
@@ -56,8 +56,8 @@ namespace CustomLightCore.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(page);
-                await _context.SaveChangesAsync();
+                db.Add(page);
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View(page);
@@ -71,7 +71,7 @@ namespace CustomLightCore.Controllers
                 return NotFound();
             }
 
-            var page = await _context.Pages.SingleOrDefaultAsync(m => m.Id == id);
+            var page = await db.Pages.SingleOrDefaultAsync(m => m.Id == id);
             if (page == null)
             {
                 return NotFound();
@@ -95,8 +95,8 @@ namespace CustomLightCore.Controllers
             {
                 try
                 {
-                    _context.Update(page);
-                    await _context.SaveChangesAsync();
+                    db.Update(page);
+                    await db.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -122,7 +122,7 @@ namespace CustomLightCore.Controllers
                 return NotFound();
             }
 
-            var page = await _context.Pages
+            var page = await db.Pages
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (page == null)
             {
@@ -137,15 +137,15 @@ namespace CustomLightCore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var page = await _context.Pages.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Pages.Remove(page);
-            await _context.SaveChangesAsync();
+            var page = await db.Pages.SingleOrDefaultAsync(m => m.Id == id);
+            db.Pages.Remove(page);
+            await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
         private bool PageExists(int id)
         {
-            return _context.Pages.Any(e => e.Id == id);
+            return db.Pages.Any(e => e.Id == id);
         }
     }
 }

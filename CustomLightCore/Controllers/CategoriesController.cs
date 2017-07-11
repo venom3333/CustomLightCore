@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CustomLightCore.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CustomLightCore.Controllers
 {
@@ -15,29 +16,15 @@ namespace CustomLightCore.Controllers
 		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 3600)]
 		public async Task<IActionResult> Index()
         {
-			ViewBag.Categories = await _context.Categories.ToListAsync();
-			ViewBag.Projects = await _context.Projects.ToListAsync();
-			ViewBag.Pages = await _context.Pages.ToListAsync();
-			ViewBag.Essentials = await _context.Essentials.FirstOrDefaultAsync(e => e != null);
-			return View(await _context.Categories.ToListAsync());
+			ViewBag.Categories = await db.Categories.ToListAsync();
+			ViewBag.Projects = await db.Projects.ToListAsync();
+			ViewBag.Pages = await db.Pages.ToListAsync();
+			ViewBag.Essentials = await db.Essentials.FirstOrDefaultAsync(e => e != null);
+			return View(await db.Categories.ToListAsync());
         }
 
-		/*
-		 public async Task<IActionResult> Index()
-{
-    var courses = _context.Courses
-        .Include(c => c.Department)
-        .AsNoTracking();
-    return View(await courses.ToListAsync());
-} 
-ctx.EntityOne
-    .Include(eOne => eOne.EntityTwo)
-    .ThenInclude(eTwo => eTwo.SomeOtherEntity)
-    .Where(entityOne => YourQuery);
-		  
-		 */
-
 		// GET: Categories/Details/5
+		[Authorize]
 		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 3600)]
 		public async Task<IActionResult> Details(int? id)
         {
@@ -46,7 +33,7 @@ ctx.EntityOne
                 return NotFound();
             }
 
-            var categories = await _context.Categories
+            var categories = await db.Categories
 				.Include(cProd => cProd.CategoryProduct)
 					.ThenInclude(prod => prod.Products)
 				.Include(cProj => cProj.CategoryProject)
@@ -57,10 +44,10 @@ ctx.EntityOne
                 return NotFound();
             }
 
-			ViewBag.Categories = await _context.Categories.ToListAsync();
-			ViewBag.Projects = await _context.Projects.ToListAsync();
-			ViewBag.Pages = await _context.Pages.ToListAsync();
-			ViewBag.Essentials = await _context.Essentials.FirstOrDefaultAsync(e => e != null);
+			ViewBag.Categories = await db.Categories.ToListAsync();
+			ViewBag.Projects = await db.Projects.ToListAsync();
+			ViewBag.Pages = await db.Pages.ToListAsync();
+			ViewBag.Essentials = await db.Essentials.FirstOrDefaultAsync(e => e != null);
 			return View(categories);
         }
 
@@ -79,8 +66,8 @@ ctx.EntityOne
         {
             if (ModelState.IsValid)
             {
-                _context.Add(categories);
-                await _context.SaveChangesAsync();
+                db.Add(categories);
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View(categories);
@@ -94,7 +81,7 @@ ctx.EntityOne
                 return NotFound();
             }
 
-            var categories = await _context.Categories.SingleOrDefaultAsync(m => m.Id == id);
+            var categories = await db.Categories.SingleOrDefaultAsync(m => m.Id == id);
             if (categories == null)
             {
                 return NotFound();
@@ -118,8 +105,8 @@ ctx.EntityOne
             {
                 try
                 {
-                    _context.Update(categories);
-                    await _context.SaveChangesAsync();
+                    db.Update(categories);
+                    await db.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -145,7 +132,7 @@ ctx.EntityOne
                 return NotFound();
             }
 
-            var categories = await _context.Categories
+            var categories = await db.Categories
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (categories == null)
             {
@@ -160,21 +147,21 @@ ctx.EntityOne
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var categories = await _context.Categories.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Categories.Remove(categories);
-            await _context.SaveChangesAsync();
+            var categories = await db.Categories.SingleOrDefaultAsync(m => m.Id == id);
+            db.Categories.Remove(categories);
+            await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
         private bool CategoriesExists(int id)
         {
-            return _context.Categories.Any(e => e.Id == id);
+            return db.Categories.Any(e => e.Id == id);
         }
 
 		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 3600)]
 		public FileContentResult GetCategoryIcon(int? Id)
 		{
-			Category cat = _context.Categories
+			Category cat = db.Categories
 				.FirstOrDefault(c => c.Id == Id);
 
 			if (cat.Icon != null)

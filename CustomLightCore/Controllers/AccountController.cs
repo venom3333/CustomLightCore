@@ -7,35 +7,13 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using CustomLightCore.Models;
 using CustomLightCore.ViewModels;
-using System.Security.Cryptography;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using CryptoHelper;
 
 
 namespace CustomLightCore.Controllers
 {
 	public class AccountController : BaseController
 	{
-
-		private string PasswordHash(string password)
-		{
-			string passwordHash = string.Empty;
-
-			// generate a 128-bit salt using a secure PRNG
-			byte[] salt = new byte[128 / 8];
-			using (var rng = RandomNumberGenerator.Create())
-			{
-				rng.GetBytes(salt);
-			}
-
-			passwordHash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-				password: password,
-				salt: salt,
-				prf: KeyDerivationPrf.HMACSHA1,
-				iterationCount: 10000,
-				numBytesRequested: 256 / 8));
-			return passwordHash;
-		}
-
 		[HttpGet]
 		public IActionResult Login()
 		{
@@ -48,11 +26,7 @@ namespace CustomLightCore.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				/////////// Хэширование пароля //////////
-				string modelPasswordHash = PasswordHash(model.Password);
-				/////////////////////////////////////////
-
-				User user = await db.Users.FirstOrDefaultAsync(u => u.Login == model.Login && u.Password == modelPasswordHash);
+				User user = await db.Users.FirstOrDefaultAsync(u => u.Login == model.Login && VerifyPassword(u.Password, model.Password));
 				if (user != null)
 				{
 					await Authenticate(model.Login);
@@ -81,9 +55,9 @@ namespace CustomLightCore.Controllers
 			{
 				// добавляем пользователя в бд
 				/////////// Хэширование пароля //////////
-				string modelPasswordHash = PasswordHash(model.Password);
+				string modelHashedPassword = HashPassword(model.Password);
 				/////////////////////////////////////////
-				db.Users.Add(new User { Login = model.Login, Password = modelPasswordHash });
+				db.Users.Add(new User { Login = model.Login, Password = modelHashedPassword });
 				await db.SaveChangesAsync();
 
 				User user = await db.Users.FirstOrDefaultAsync(u => u.Login == model.Login);
@@ -122,6 +96,18 @@ namespace CustomLightCore.Controllers
 			// TODO: Поменять слово "Abrakadabra" на что-то другое
 			await HttpContext.Authentication.SignOutAsync("Abrakadabra");
 			return RedirectToAction("Login", "Account");
+		}
+
+		// Hash a password
+		public string HashPassword(string password)
+		{
+			return Crypto.HashPassword(password);
+		}
+
+		// Verify the password hash against the given password
+		public bool VerifyPassword(string hash, string password)
+		{
+			return Crypto.VerifyHashedPassword(hash, password);
 		}
 	}
 }

@@ -140,7 +140,7 @@ namespace CustomLightCore.Controllers
             var page = await db.Pages.SingleOrDefaultAsync(m => m.Id == id);
             db.Pages.Remove(page);
             await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("List");
         }
 
         private bool PageExists(int id)

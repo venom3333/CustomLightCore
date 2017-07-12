@@ -6,18 +6,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CustomLightCore.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CustomLightCore.Controllers
 {
     public class PagesController : BaseController
     {
-        // GET: Pages
-        public async Task<IActionResult> Index()
+		// GET: Pages
+		[Authorize]
+		public async Task<IActionResult> List()
         {
             return View(await db.Pages.ToListAsync());
-        }
-
-		
+        }	
 
         // GET: Pages/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -37,7 +37,7 @@ namespace CustomLightCore.Controllers
 			ViewBag.Categories = await db.Categories.ToListAsync();
 			ViewBag.Projects = await db.Projects.ToListAsync();
 			ViewBag.Pages = await db.Pages.ToListAsync();
-			ViewBag.Essentials = await db.Essentials.FirstOrDefaultAsync(e => e != null);
+			ViewBag.Essentials = await db.Essentials.FirstOrDefaultAsync();
 			return View(page);
         }
 
@@ -58,7 +58,7 @@ namespace CustomLightCore.Controllers
             {
                 db.Add(page);
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("List");
             }
             return View(page);
         }
@@ -109,7 +109,7 @@ namespace CustomLightCore.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("List");
             }
             return View(page);
         }

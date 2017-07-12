@@ -6,13 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CustomLightCore.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CustomLightCore.Controllers
 {
     public class ProductsController : BaseController
     {
-        // GET: Products
-        public async Task<IActionResult> Index()
+		// GET: Products
+		[Authorize]
+		public async Task<IActionResult> List()
         {
             var customLightContext = db.Products.Include(p => p.ProductType);
             return View(await customLightContext.ToListAsync());
@@ -41,7 +43,7 @@ namespace CustomLightCore.Controllers
 			ViewBag.Categories = await db.Categories.ToListAsync();
 			ViewBag.Projects = await db.Projects.ToListAsync();
 			ViewBag.Pages = await db.Pages.ToListAsync();
-			ViewBag.Essentials = await db.Essentials.FirstOrDefaultAsync(e => e != null);
+			ViewBag.Essentials = await db.Essentials.FirstOrDefaultAsync();
 			return View(products);
         }
 
@@ -57,16 +59,16 @@ namespace CustomLightCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,IsPublished,Created,Updated,ProductTypeId")] Product products)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,IsPublished,Created,Updated,ProductTypeId")] Product product)
         {
             if (ModelState.IsValid)
             {
-                db.Add(products);
+                db.Add(product);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewData["ProductTypeId"] = new SelectList(db.ProductTypes, "Id", "Name", products.ProductTypeId);
-            return View(products);
+            ViewData["ProductTypeId"] = new SelectList(db.ProductTypes, "Id", "Name", product.ProductTypeId);
+            return View(product);
         }
 
         // GET: Products/Edit/5
@@ -91,9 +93,9 @@ namespace CustomLightCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,IsPublished,Created,Updated,ProductTypeId")] Product products)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,IsPublished,Created,Updated,ProductTypeId")] Product product)
         {
-            if (id != products.Id)
+            if (id != product.Id)
             {
                 return NotFound();
             }
@@ -102,12 +104,12 @@ namespace CustomLightCore.Controllers
             {
                 try
                 {
-                    db.Update(products);
+                    db.Update(product);
                     await db.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductsExists(products.Id))
+                    if (!ProductsExists(product.Id))
                     {
                         return NotFound();
                     }
@@ -118,8 +120,8 @@ namespace CustomLightCore.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            ViewData["ProductTypeId"] = new SelectList(db.ProductTypes, "Id", "Name", products.ProductTypeId);
-            return View(products);
+            ViewData["ProductTypeId"] = new SelectList(db.ProductTypes, "Id", "Name", product.ProductTypeId);
+            return View(product);
         }
 
         // GET: Products/Delete/5
@@ -130,15 +132,15 @@ namespace CustomLightCore.Controllers
                 return NotFound();
             }
 
-            var products = await db.Products
+            var product = await db.Products
                 .Include(p => p.ProductType)
                 .SingleOrDefaultAsync(m => m.Id == id);
-            if (products == null)
+            if (product == null)
             {
                 return NotFound();
             }
 
-            return View(products);
+            return View(product);
         }
 
         // POST: Products/Delete/5
@@ -146,10 +148,10 @@ namespace CustomLightCore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var products = await db.Products.SingleOrDefaultAsync(m => m.Id == id);
-            db.Products.Remove(products);
+            var product = await db.Products.SingleOrDefaultAsync(m => m.Id == id);
+            db.Products.Remove(product);
             await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("List");
         }
 
         private bool ProductsExists(int id)

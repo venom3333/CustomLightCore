@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<meta charset="utf-8">
+	<title>@ViewBag.Title</title>
+
+	<environment names="Development">
+		<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+		<link rel="stylesheet" href="~/css/base.css" />
+		<link href="~/css/admin.css" rel="stylesheet" />
+	</environment>
+	<environment names="Staging,Production">
+		<link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
+			  asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+			  asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+		<link rel="stylesheet" href="~/css/base.min.css" asp-append-version="true" />
+		<link href="~/css/admin.min.css" rel="stylesheet" />
+	</environment>
+
+	<link rel="icon" href="@Url.Content("~/images/favicon.ico")" />
+</head>
+<body>
+	<header>
+		<nav class="navbar navbar-inverse" role="navigation">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="/">Custom Light</a>
+				</div>
+			</div>
+			<!-- /.container-fluid -->
+		</nav>
+	</header>
+	<div>
+		<section class="adminMenu col-md-2">
+			<ul>
+				<li><a asp-controller="Admin" asp-action="Main"><h4>Админка. Главная.</h4></a></li>
+			</ul>
+			<ul>
+				<p>Работа со страницами</p>
+				<a asp-action="List" asp-controller="Pages"><li>Страницы</li></a>
+			</ul>
+			<ul>
+				<p>Работа с базой данных</p>
+				<a asp-action="List" asp-controller="Products"><li>Продукты</li></a>
+				<a asp-action="List" asp-controller="Projects"><li>Проекты</li></a>
+				<a asp-action="List" asp-controller="Categories"><li>Категории</li></a>
+			</ul>
+		</section>
+		<section class="content col-md-10">
+			@RenderBody()
+		</section>
+	</div>
+	<footer></footer>
+
+	<environment names="Development">
+		<script src="~/lib/jquery/dist/jquery.js"></script>
+		<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+		<script src="~/js/site.js" asp-append-version="true"></script>
+	</environment>
+	<environment names="Staging,Production">
+		<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+				asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+				asp-fallback-test="window.jQuery">
+		</script>
+		<script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"
+				asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+				asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
+		</script>
+		<script src="~/js/site.min.js" asp-append-version="true"></script>
+	</environment>
+
+	@RenderSection("scripts", required: false)
+</body>
+</html>

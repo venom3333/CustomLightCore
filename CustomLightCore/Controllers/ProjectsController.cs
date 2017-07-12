@@ -6,13 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CustomLightCore.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CustomLightCore.Controllers
 {
     public class ProjectsController : BaseController
     {
         // GET: Projects
-        public async Task<IActionResult> Index()
+		[Authorize]
+        public async Task<IActionResult> List()
         {
             return View(await db.Projects.ToListAsync());
         }
@@ -35,7 +37,7 @@ namespace CustomLightCore.Controllers
 			ViewBag.Categories = await db.Categories.ToListAsync();
 			ViewBag.Projects = await db.Projects.ToListAsync();
 			ViewBag.Pages = await db.Pages.ToListAsync();
-			ViewBag.Essentials = await db.Essentials.FirstOrDefaultAsync(e => e != null);
+			ViewBag.Essentials = await db.Essentials.FirstOrDefaultAsync();
 			return View(projects);
         }
 

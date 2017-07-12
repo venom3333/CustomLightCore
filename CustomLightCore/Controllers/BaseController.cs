@@ -16,7 +16,7 @@ namespace CustomLightCore.Controllers
 			//ViewBag.Category = db.Category.ToList();
 			//ViewBag.Projects = db.Projects.ToList();
 			//ViewBag.Pages = db.Pages.ToList();
-			//ViewBag.Essentials = db.Essentials.FirstOrDefault(e => e != null);
+			//ViewBag.Essentials = db.Essentials.FirstOrDefault();
 		}
 	}
 }

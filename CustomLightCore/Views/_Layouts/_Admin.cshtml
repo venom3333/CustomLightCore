@@ -38,6 +38,11 @@
 				<li><a asp-controller="Admin" asp-action="Main"><h4>Админка. Главная.</h4></a></li>
 			</ul>
 			<ul>
+				<p>Работа с общей информацией</p>
+				<a asp-action="List" asp-controller="Slides"><li>Слайды</li></a>
+				<a asp-action="List" asp-controller="Essentials"><li>О компании</li></a>
+			</ul>
+			<ul>
 				<p>Работа со страницами</p>
 				<a asp-action="List" asp-controller="Pages"><li>Страницы</li></a>
 			</ul>
@@ -46,6 +51,10 @@
 				<a asp-action="List" asp-controller="Products"><li>Продукты</li></a>
 				<a asp-action="List" asp-controller="Projects"><li>Проекты</li></a>
 				<a asp-action="List" asp-controller="Categories"><li>Категории</li></a>
+			</ul>
+			<ul>
+				<p>Работа с клиентами</p>
+				<a asp-action="List" asp-controller="Orders"><li>Заказы</li></a>
 			</ul>
 		</section>
 		<section class="content col-md-10">

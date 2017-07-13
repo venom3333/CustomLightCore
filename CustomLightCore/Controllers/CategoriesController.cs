@@ -30,7 +30,6 @@ namespace CustomLightCore.Controllers
 		}
 
 		// GET: Categories/Details/5
-		[Authorize]
 		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 3600)]
 		public async Task<IActionResult> Details(int? id)
         {

@@ -47,6 +47,7 @@ namespace CustomLightCore
                 app.UseExceptionHandler("/Home/Error");
             }
 
+			// Аутентификация
 			app.UseCookieAuthentication(new CookieAuthenticationOptions
 			{
 				// TODO: Поменять слово "Abrakadabra" на что-то другое

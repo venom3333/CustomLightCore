@@ -31,7 +31,7 @@ namespace CustomLightCore.Controllers
 				{
 					await Authenticate(model.Login);
 
-					return RedirectToAction("Index", "Categories");
+					return RedirectToAction("Main", "Admin");
 				}
 				else
 				{
@@ -95,7 +95,7 @@ namespace CustomLightCore.Controllers
 		{
 			// TODO: Поменять слово "Abrakadabra" на что-то другое
 			await HttpContext.Authentication.SignOutAsync("Abrakadabra");
-			return RedirectToAction("Login", "Account");
+			return RedirectToAction("Index", "Categories");
 		}
 
 		// Hash a password

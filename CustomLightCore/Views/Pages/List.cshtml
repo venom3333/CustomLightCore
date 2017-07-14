@@ -44,9 +44,9 @@
 					@Html.DisplayFor(modelItem => item.Updated)
 				</td>
 				<td>
-					<a asp-controller="Pages" asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> |
-					<a asp-controller="Pages" asp-action="Details" asp-route-id="@item.Id">Просмотреть</a> |
-					<a asp-controller="Pages" asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+					<a asp-controller="Pages" asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>Редактировать</a> |
+					<a asp-controller="Pages" asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-external-link-square" aria-hidden="true"></i>Просмотреть</a> |
+					<a asp-controller="Pages" asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-times" aria-hidden="true"></i>Удалить</a>
 				</td>
 			</tr>
 }

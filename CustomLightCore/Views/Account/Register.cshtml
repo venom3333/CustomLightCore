@@ -1,16 +1,16 @@
 ﻿@model CustomLightCore.ViewModels.RegisterModel
 
 @{
-    Layout = null;
+	Layout = null;
 }
 
 <!DOCTYPE html>
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
+	<meta name="viewport" content="width=device-width" />
 	<meta charset="utf-8">
-    <title>Register</title>
+	<title>Register</title>
 </head>
 <body>
 	<h2>Регистрация</h2>
@@ -18,20 +18,36 @@
 	<form asp-action="Register" method="post" asp-controller="Account">
 		<div class="validation" asp-validation-summary="ModelOnly"></div>
 		<div>
-			<label asp-for="Login">Введите логин</label>
-			<input type="text" asp-for="Login" />
-			<span asp-validation-for="Login"></span>
+			<label asp-for="UserName">Введите логин</label>
+			<input asp-for="UserName" />
+			<span asp-validation-for="UserName"></span>
 		</div>
 		<div>
 			<label asp-for="Password">Введите пароль</label>
-			<input type="password" asp-for="Password" />
+			<input asp-for="Password" />
 			<span asp-validation-for="Password"></span>
 		</div>
 		<div>
 			<label asp-for="ConfirmPassword">Повторите пароль</label>
-			<input type="password" asp-for="ConfirmPassword" />
+			<input asp-for="ConfirmPassword" />
 			<span asp-validation-for="ConfirmPassword"></span>
 		</div>
+		<div>
+			<label asp-for="Email">Введите email</label>
+			<input asp-for="Email" />
+			<span asp-validation-for="Email"></span>
+		</div>
+		<div>
+			<label asp-for="FullName">Введите полное имя</label>
+			<input asp-for="FullName" />
+			<span asp-validation-for="FullName"></span>
+		</div>
+		<div>
+			<label asp-for="BirthDate">Введите дату рождения</label>
+			<input asp-for="BirthDate" />
+			<span asp-validation-for="BirthDate"></span>
+		</div>
+
 		<div>
 			<input type="submit" value="Регистрация" />
 		</div>

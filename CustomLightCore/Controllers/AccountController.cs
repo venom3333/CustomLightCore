@@ -8,12 +8,23 @@ using System.Security.Claims;
 using CustomLightCore.Models;
 using CustomLightCore.ViewModels;
 using CryptoHelper;
-
+using Microsoft.AspNetCore.Identity;
 
 namespace CustomLightCore.Controllers
 {
 	public class AccountController : BaseController
 	{
+		private readonly UserManager<User> userManager;
+		private readonly SignInManager<User> loginManager;
+		private readonly RoleManager<Role> roleManager;
+
+		public AccountController(UserManager<User> userManager, SignInManager<User> loginManager, RoleManager<Role> roleManager)
+		{
+			this.userManager = userManager;
+			this.loginManager = loginManager;
+			this.roleManager = roleManager;
+		}
+
 		[HttpGet]
 		public IActionResult Login()
 		{
@@ -22,15 +33,14 @@ namespace CustomLightCore.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Login(LoginModel model)
+		public IActionResult Login(LoginModel model)
 		{
 			if (ModelState.IsValid)
 			{
-				User user = await db.Users.FirstOrDefaultAsync(u => u.Login == model.Login && VerifyPassword(u.Password, model.Password));
-				if (user != null)
-				{
-					await Authenticate(model.Login);
+				var result = loginManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false).Result;
 
+				if (result.Succeeded)
+				{
 					return RedirectToAction("Main", "Admin");
 				}
 				else
@@ -53,61 +63,46 @@ namespace CustomLightCore.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				// добавляем пользователя в бд
-				/////////// Хэширование пароля //////////
-				string modelHashedPassword = HashPassword(model.Password);
-				/////////////////////////////////////////
-				db.Users.Add(new User { Login = model.Login, Password = modelHashedPassword });
-				await db.SaveChangesAsync();
-
-				User user = await db.Users.FirstOrDefaultAsync(u => u.Login == model.Login);
-				if (user != null)
+				User user = new User()
 				{
-					await Authenticate(model.Login); // аутентификация
+					UserName = model.UserName,
+					Email = model.Email,
+					FullName = model.FullName,
+					BirthDate = model.BirthDate
+				};
 
-					return RedirectToAction("Index", "Categories");
-				}
-				else
+				IdentityResult result = userManager.CreateAsync(user, model.Password).Result;
+
+				if (result.Succeeded)
 				{
-					ModelState.AddModelError("", "Некорректные логин и(или) пароль!");
+					if (!roleManager.RoleExistsAsync("NormalUser").Result)
+					{
+						Role role = new Role
+						{
+							Name = "NormalUser",
+							Description = "Разрешены обычные операции"
+						};
+
+						IdentityResult roleResult = roleManager.CreateAsync(role).Result;
+
+						if (!roleResult.Succeeded)
+						{
+							ModelState.AddModelError("", "Ошибка при создании роли!");
+							return View(model);
+						}
+					}
+					IdentityResult result1212 = userManager.AddToRoleAsync(user, "NormalUser").Result;
+					return RedirectToAction("Login", "Account");
 				}
 			}
 			return View(model);
 		}
 
-		private async Task Authenticate(string login)
-		{
-			// создаем один claim
-			var claims = new List<Claim>
-			{
-				new Claim(ClaimsIdentity.DefaultNameClaimType, login)
-			};
-
-			// создаем объект ClaimsIdentity
-			ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-
-			// установка аутентификационных куки
-			// TODO: Поменять слово "Abrakadabra" на что-то другое
-			await HttpContext.Authentication.SignInAsync("Abrakadabra", new ClaimsPrincipal(id));
-		}
-
 		public async Task<IActionResult> Logout()
 		{
-			// TODO: Поменять слово "Abrakadabra" на что-то другое
-			await HttpContext.Authentication.SignOutAsync("Abrakadabra");
+			await loginManager.SignOutAsync();
 			return RedirectToAction("Index", "Categories");
 		}
 
-		// Hash a password
-		private string HashPassword(string password)
-		{
-			return Crypto.HashPassword(password);
-		}
-
-		// Verify the password hash against the given password
-		private bool VerifyPassword(string hash, string password)
-		{
-			return Crypto.VerifyHashedPassword(hash, password);
-		}
 	}
 }

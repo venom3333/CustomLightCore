@@ -7,12 +7,15 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using CustomLightCore.Models;
 
 namespace CustomLightCore
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+		private IConfiguration config;
+
+		public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -27,8 +30,15 @@ namespace CustomLightCore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
-            services.AddMvc();
+			// Add framework services.
+			services.AddDbContext<CustomLightContext>();
+			services.AddIdentity<User, Role>()
+				.AddEntityFrameworkStores<CustomLightContext>()
+				.AddDefaultTokenProviders();
+
+			//services.TryAddScoped<IUserClaimsPrincipalFactory<TUser>, UserClaimsPrincipalFactory<TUser, TRole>>();
+			
+			services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,19 +57,20 @@ namespace CustomLightCore
                 app.UseExceptionHandler("/Home/Error");
             }
 
-			// Аутентификация
-			app.UseCookieAuthentication(new CookieAuthenticationOptions
-			{
-				// TODO: Поменять слово "Abrakadabra" на что-то другое
-				AuthenticationScheme = "Abrakadabra",
-				LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login"),
-				AutomaticAuthenticate = true,
-				AutomaticChallenge = true
-			});
-
             app.UseStaticFiles();
 
-            app.UseMvc(routes =>
+			// Аутентификация
+			app.UseIdentity();
+			//app.UseCookieAuthentication(new CookieAuthenticationOptions
+			//{
+			//	// TODO: Поменять слово "Abrakadabra" на что-то другое
+			//	AuthenticationScheme = "Abrakadabra",
+			//	LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login"),
+			//	AutomaticAuthenticate = true,
+			//	AutomaticChallenge = true
+			//});
+
+			app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",

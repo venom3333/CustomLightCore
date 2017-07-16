@@ -9,7 +9,7 @@ namespace CustomLightCore.ViewModels
     public class RegisterModel
     {
 		[Required(ErrorMessage = "Не указан логин!")]
-		public string Login { get; set; }
+		public string UserName { get; set; }
 
 		[Required(ErrorMessage = "Не указан пароль!")]
 		[DataType(DataType.Password)]
@@ -18,5 +18,16 @@ namespace CustomLightCore.ViewModels
 		[DataType(DataType.Password)]
 		[Compare("Password", ErrorMessage = "Пароли не совпадают")]
 		public string ConfirmPassword { get; set; }
+
+		[Required(ErrorMessage = "Не указан email!")]
+		[DataType(DataType.EmailAddress)]
+		public string Email { get; set; }
+
+		[Required(ErrorMessage = "Укажите полное имя!")]
+		public string FullName { get; set; }
+
+		[Required(ErrorMessage = "Укажите дату рождения!")]
+		[DataType(DataType.Date)]
+		public DateTime BirthDate { get; set; }
 	}
 }

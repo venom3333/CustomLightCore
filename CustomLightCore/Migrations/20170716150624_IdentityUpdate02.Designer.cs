@@ -8,9 +8,10 @@ using CustomLightCore.Models;
 namespace CustomLightCore.Migrations
 {
     [DbContext(typeof(CustomLightContext))]
-    partial class CustomLightContextModelSnapshot : ModelSnapshot
+    [Migration("20170716150624_IdentityUpdate02")]
+    partial class IdentityUpdate02
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -476,13 +477,23 @@ namespace CustomLightCore.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserRole<string>", b =>
                 {
-                    b.Property<string>("RoleId");
+                    b.Property<string>("UserId")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<string>("UserId");
+                    b.Property<string>("RoleId")
+                        .IsRequired();
 
-                    b.HasKey("RoleId", "UserId");
+                    b.Property<string>("RoleId1");
 
-                    b.HasIndex("UserId");
+                    b.Property<string>("UserId1");
+
+                    b.HasKey("UserId");
+
+                    b.HasAlternateKey("RoleId");
+
+                    b.HasIndex("RoleId1");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("UserRoles");
                 });
@@ -613,13 +624,11 @@ namespace CustomLightCore.Migrations
                 {
                     b.HasOne("CustomLightCore.Models.Role")
                         .WithMany("Users")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("RoleId1");
 
                     b.HasOne("CustomLightCore.Models.User")
                         .WithMany("Roles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserId1");
                 });
         }
     }

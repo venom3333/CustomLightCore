@@ -8,9 +8,10 @@ using CustomLightCore.Models;
 namespace CustomLightCore.Migrations
 {
     [DbContext(typeof(CustomLightContext))]
-    partial class CustomLightContextModelSnapshot : ModelSnapshot
+    [Migration("20170716145119_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -453,21 +454,18 @@ namespace CustomLightCore.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserLogin<string>", b =>
                 {
-                    b.Property<string>("LoginProvider")
+                    b.Property<string>("UserId")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("LoginProvider");
 
                     b.Property<string>("ProviderDisplayName");
 
                     b.Property<string>("ProviderKey");
 
-                    b.Property<string>("UserId")
-                        .IsRequired();
-
                     b.Property<string>("UserId1");
 
-                    b.HasKey("LoginProvider");
-
-                    b.HasAlternateKey("UserId");
+                    b.HasKey("UserId");
 
                     b.HasIndex("UserId1");
 
@@ -476,11 +474,16 @@ namespace CustomLightCore.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityUserRole<string>", b =>
                 {
-                    b.Property<string>("RoleId");
+                    b.Property<string>("RoleId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("RoleId1");
 
                     b.Property<string>("UserId");
 
-                    b.HasKey("RoleId", "UserId");
+                    b.HasKey("RoleId");
+
+                    b.HasIndex("RoleId1");
 
                     b.HasIndex("UserId");
 
@@ -613,13 +616,11 @@ namespace CustomLightCore.Migrations
                 {
                     b.HasOne("CustomLightCore.Models.Role")
                         .WithMany("Users")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("RoleId1");
 
                     b.HasOne("CustomLightCore.Models.User")
                         .WithMany("Roles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserId");
                 });
         }
     }

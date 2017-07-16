@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using CustomLightCore.Models;
 using CustomLightCore.ViewModels;
-using CryptoHelper;
 using Microsoft.AspNetCore.Identity;
 
 namespace CustomLightCore.Controllers
@@ -59,7 +58,7 @@ namespace CustomLightCore.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Register(RegisterModel model)
+		public IActionResult Register(RegisterModel model)
 		{
 			if (ModelState.IsValid)
 			{

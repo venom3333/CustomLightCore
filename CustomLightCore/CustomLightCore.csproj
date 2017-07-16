@@ -51,7 +51,6 @@
     <Content Include="wwwroot\sass\_send.scss" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CryptoHelper" Version="2.1.1" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="1.1.2" />

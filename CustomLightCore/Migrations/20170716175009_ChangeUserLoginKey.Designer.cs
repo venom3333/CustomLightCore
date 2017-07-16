@@ -8,9 +8,10 @@ using CustomLightCore.Models;
 namespace CustomLightCore.Migrations
 {
     [DbContext(typeof(CustomLightContext))]
-    partial class CustomLightContextModelSnapshot : ModelSnapshot
+    [Migration("20170716175009_ChangeUserLoginKey")]
+    partial class ChangeUserLoginKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")

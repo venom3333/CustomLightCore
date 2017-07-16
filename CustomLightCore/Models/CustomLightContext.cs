@@ -46,8 +46,8 @@ namespace CustomLightCore.Models
 		{
 			modelBuilder.Entity<IdentityUserLogin<string>>(entity =>
 			{
-				entity.HasKey(e => e.UserId);
-				entity.HasKey(e => e.LoginProvider);
+				entity.HasKey(e => new { e.UserId });
+				//entity.HasKey(e => e.LoginProvider);
 			});
 
 			modelBuilder.Entity<IdentityUserRole<string>>(entity =>

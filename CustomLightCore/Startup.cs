@@ -13,7 +13,7 @@ namespace CustomLightCore
 {
     public class Startup
     {
-		private IConfiguration config;
+		//private IConfiguration config;
 
 		public Startup(IHostingEnvironment env)
         {
@@ -35,8 +35,6 @@ namespace CustomLightCore
 			services.AddIdentity<User, Role>()
 				.AddEntityFrameworkStores<CustomLightContext>()
 				.AddDefaultTokenProviders();
-
-			//services.TryAddScoped<IUserClaimsPrincipalFactory<TUser>, UserClaimsPrincipalFactory<TUser, TRole>>();
 			
 			services.AddMvc();
         }
@@ -61,14 +59,6 @@ namespace CustomLightCore
 
 			// Аутентификация
 			app.UseIdentity();
-			//app.UseCookieAuthentication(new CookieAuthenticationOptions
-			//{
-			//	// TODO: Поменять слово "Abrakadabra" на что-то другое
-			//	AuthenticationScheme = "Abrakadabra",
-			//	LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login"),
-			//	AutomaticAuthenticate = true,
-			//	AutomaticChallenge = true
-			//});
 
 			app.UseMvc(routes =>
             {

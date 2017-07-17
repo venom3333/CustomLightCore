@@ -1,77 +1,67 @@
 ﻿@model CustomLightCore.Models.Category
 
 @{
-    ViewData["Title"] = "Edit";
-    Layout = "~/Views/_Layouts/_Admin.cshtml";
+	ViewData["Title"] = "Edit";
+	Layout = "~/Views/_Layouts/_Admin.cshtml";
 }
 
-<h2>Edit</h2>
+<h2>Редактирование</h2>
 
-<form asp-action="Edit">
-    <div class="form-horizontal">
-        <h4>Categories</h4>
-        <hr />
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="Id" />
-        <div class="form-group">
-            <label asp-for="Name" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Description" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <textarea asp-for="Description" class="form-control"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="ShortDescription" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="ShortDescription" class="form-control" />
-                <span asp-validation-for="ShortDescription" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Icon" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Icon" class="form-control" />
-                <span asp-validation-for="Icon" class="text-danger"></span>
-            </div>
-        </div>
-        @*<div class="form-group">
-            <label asp-for="IconMimeType" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="IconMimeType" class="form-control" />
-                <span asp-validation-for="IconMimeType" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Created" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Created" class="form-control" />
-                <span asp-validation-for="Created" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Updated" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Updated" class="form-control" />
-                <span asp-validation-for="Updated" class="text-danger"></span>
-            </div>
-        </div>*@
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Сохранить" class="btn btn-success" />
-            </div>
-        </div>
-    </div>
+<form asp-action="Edit" enctype="multipart/form-data">
+	<div class="form-horizontal">
+		<h4>Категория</h4>
+		<hr />
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+		<input type="hidden" asp-for="Id" />
+		<div class="form-group">
+			<label asp-for="Name" class="col-md-2 control-label"></label>
+			<div class="col-md-10">
+				<input asp-for="Name" class="form-control" />
+				<span asp-validation-for="Name" class="text-danger"></span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label asp-for="Description" class="col-md-2 control-label"></label>
+			<div class="col-md-10">
+				<textarea asp-for="Description" class="form-control"></textarea>
+				<span asp-validation-for="Description" class="text-danger"></span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label asp-for="ShortDescription" class="col-md-2 control-label"></label>
+			<div class="col-md-10">
+				<input asp-for="ShortDescription" class="form-control" />
+				<span asp-validation-for="ShortDescription" class="text-danger"></span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="currentIcon" class="col-md-2 control-label">Текущая иконка</label>
+			<div class="col-md-10">
+				<img name="currentIcon" src="@Url.Action("GetCategoryIcon", "Categories", new { Id = Model.Id })" class="img-responsive" alt="@Model.Name">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="NewIcon" class="col-md-2 control-label"></label>
+			<div class="col-md-10">
+				<input type="file" name="NewIcon" class="form-control" />
+			</div>
+		</div>
+		<div>
+			@* Скрытые поля, для сохранения текущих значений, до редактирования *@
+			<input type="hidden" asp-for="Icon" />
+			<input type="hidden" asp-for="IconMimeType" />
+			<input type="hidden" asp-for="Created" />
+		</div>
+		<div class="form-group">
+			<div class="col-md-offset-2 col-md-10">
+				<input type="submit" value="Сохранить" class="btn btn-success" />
+			</div>
+		</div>
+	</div>
 </form>
 
 <div>
-    <a asp-action="List"><input type="button" class="btn btn-default" value="Вернуться к списку" /></a>
+	<a asp-action="List"><input type="button" class="btn btn-default" value="Вернуться к списку" /></a>
 </div>
 
 <script>
@@ -79,5 +69,5 @@
 </script>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

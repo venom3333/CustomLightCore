@@ -121,23 +121,37 @@ namespace CustomLightCore.Controllers
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[Authorize]
-		public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,Created,Updated")] Category categories)
+		public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,Created")] Category category, [Bind("NewIcon")] IFormFile newIcon)
 		{
-			if (id != categories.Id)
+			if (id != category.Id)
 			{
 				return NotFound();
 			}
 
 			if (ModelState.IsValid)
 			{
+				// »конка
+				if (newIcon != null && newIcon.ContentType.ToLower().StartsWith("image/"))
+				{
+					MemoryStream ms = new MemoryStream();
+					await newIcon.OpenReadStream().CopyToAsync(ms);
+
+					category.Icon = ms.ToArray();
+					category.IconMimeType = newIcon.ContentType;
+				}
+
+				// Datetimes
+				var now = DateTime.Now;
+				category.Updated = now;
+
 				try
 				{
-					db.Update(categories);
+					db.Update(category);
 					await db.SaveChangesAsync();
 				}
 				catch (DbUpdateConcurrencyException)
 				{
-					if (!CategoriesExists(categories.Id))
+					if (!CategoriesExists(category.Id))
 					{
 						return NotFound();
 					}
@@ -148,7 +162,7 @@ namespace CustomLightCore.Controllers
 				}
 				return RedirectToAction("List");
 			}
-			return View(categories);
+			return View(category);
 		}
 
 		// GET: Categories/Delete/5
@@ -188,7 +202,7 @@ namespace CustomLightCore.Controllers
 			return db.Categories.Any(e => e.Id == id);
 		}
 
-		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 3600)]
+		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
 		public FileContentResult GetCategoryIcon(int? Id)
 		{
 			Category cat = db.Categories

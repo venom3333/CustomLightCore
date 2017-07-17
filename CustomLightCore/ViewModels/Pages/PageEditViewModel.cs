@@ -4,10 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using CustomLightCore.Models;
+using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 
 namespace CustomLightCore.ViewModels.Pages
 {
-	public class PageEditViewModel
+	public class PageEditViewModel : PageBaseViewModel
 	{
 
 		public int Id { get; set; }
@@ -28,7 +29,19 @@ namespace CustomLightCore.ViewModels.Pages
 		/// </summary>
 		public static explicit operator PageEditViewModel(Page item)
 		{
-			return new PageEditViewModel();
+			if(item == null)
+			{
+				return null;
+			}
+
+			PageEditViewModel result = new PageEditViewModel
+			{
+				Alias = item.Alias,
+				Id = item.Id,
+				Name = item.Name,
+				PageContent = item.PageContent
+			};
+			return result;
 		}
 
 		/// <summary>
@@ -36,7 +49,18 @@ namespace CustomLightCore.ViewModels.Pages
 		/// </summary>
 		public static explicit operator Page(PageEditViewModel item)
 		{
-			return new Page();
+			Page result = new Page();
+			using (CustomLightContext db = new CustomLightContext())
+			{
+				result = db.Pages.Find(item.Id);
+			}
+
+			result.Name = item.Name;
+			result.Alias = item.Alias;
+			result.PageContent = item.PageContent;
+			result.Updated = DateTime.Now;
+
+			return result;
 		}
 	}
 }

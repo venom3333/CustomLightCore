@@ -12,6 +12,7 @@ namespace CustomLightCore.Controllers
 	{
 		protected CustomLightContext db = new CustomLightContext();
 
+		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
 		protected async Task<bool> CreateViewBag()
 		{
 			ViewBag.Categories = await db.Categories.ToListAsync();

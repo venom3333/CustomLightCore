@@ -19,7 +19,7 @@ namespace CustomLightCore.Controllers
 		//}
 
 		// GET: Categories
-		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 3600)]
+		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
 		public async Task<IActionResult> Index()
 		{
 			await CreateViewBag();
@@ -33,7 +33,7 @@ namespace CustomLightCore.Controllers
 		}
 
 		// GET: Categories/Details/5
-		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 3600)]
+		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
 		public async Task<IActionResult> Details(int? id)
 		{
 			if (id == null)
@@ -79,7 +79,7 @@ namespace CustomLightCore.Controllers
 				{
 					MemoryStream ms = new MemoryStream();
 					await icon.OpenReadStream().CopyToAsync(ms);
-					
+
 					categories.Icon = ms.ToArray();
 					categories.IconMimeType = icon.ContentType;
 				}
@@ -121,37 +121,48 @@ namespace CustomLightCore.Controllers
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[Authorize]
-		public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,Created")] Category category, [Bind("NewIcon")] IFormFile newIcon)
+		public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,ShortDescription")] Category newCategoryData, [Bind("NewIcon")] IFormFile newIcon)
 		{
-			if (id != category.Id)
+			if (id != newCategoryData.Id)
 			{
 				return NotFound();
 			}
 
 			if (ModelState.IsValid)
 			{
+				// Старые данные объекта
+				Category oldCategoryData = await db.Categories.FindAsync(id);
+
+				// Основные данные
+				if (newCategoryData.Name != null)
+				{
+					oldCategoryData.Name = newCategoryData.Name;
+					oldCategoryData.Description = newCategoryData.Description;
+					oldCategoryData.ShortDescription = newCategoryData.ShortDescription;
+				}
+
 				// Иконка
 				if (newIcon != null && newIcon.ContentType.ToLower().StartsWith("image/"))
 				{
 					MemoryStream ms = new MemoryStream();
 					await newIcon.OpenReadStream().CopyToAsync(ms);
 
-					category.Icon = ms.ToArray();
-					category.IconMimeType = newIcon.ContentType;
+					oldCategoryData.Icon = ms.ToArray();
+					oldCategoryData.IconMimeType = newIcon.ContentType;
 				}
 
 				// Datetimes
 				var now = DateTime.Now;
-				category.Updated = now;
+				oldCategoryData.Updated = now;
 
 				try
 				{
-					db.Update(category);
+					db.Update(oldCategoryData);
 					await db.SaveChangesAsync();
 				}
 				catch (DbUpdateConcurrencyException)
 				{
-					if (!CategoriesExists(category.Id))
+					if (!CategoriesExists(newCategoryData.Id))
 					{
 						return NotFound();
 					}
@@ -162,7 +173,7 @@ namespace CustomLightCore.Controllers
 				}
 				return RedirectToAction("List");
 			}
-			return View(category);
+			return View(newCategoryData);
 		}
 
 		// GET: Categories/Delete/5

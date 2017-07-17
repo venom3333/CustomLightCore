@@ -159,7 +159,7 @@ namespace CustomLightCore.Controllers
             return db.Products.Any(e => e.Id == id);
         }
 
-		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 3600)]
+		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
 		public FileContentResult GetProductIcon(int? Id)
 		{
 			Product prods = db.Products
@@ -175,7 +175,7 @@ namespace CustomLightCore.Controllers
 			}
 		}
 
-		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 3600)]
+		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
 		public FileContentResult GetProductImage(int? ImageId)
 		{
 			ProductImage image = db.ProductImages.FirstOrDefault(i => i.Id == ImageId);

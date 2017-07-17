@@ -5,6 +5,9 @@
 textarea {
   min-height: 20em; }
 
+.content {
+  margin: 5px 0; }
+
 .adminPass {
   float: right; }
 
@@ -74,6 +77,4 @@ form .btn {
   border-bottom-color: darkgreen; }
 
 /*/Продукт-Проект*/
-/*TinyMCE*/
-/*/TinyMCE*/
 

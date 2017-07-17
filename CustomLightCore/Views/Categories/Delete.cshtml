@@ -14,37 +14,37 @@
     <dl class="dl-horizontal">
         <input type="hidden" asp-for="Id" />
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            Наименование
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Name)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Description)
+           Описание
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Description)
+            @Html.Raw(Model.Description)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.ShortDescription)
+            Краткое описание
         </dt>
         <dd>
             @Html.DisplayFor(model => model.ShortDescription)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Icon)
+            Иконка
         </dt>
         <dd>
 			<img src="@Url.Action("GetCategoryIcon", "Categories", new { Id = Model.Id })" class="img-responsive" alt="@Model.Name">
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Created)
+            Создано
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Created)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Updated)
+            Изменено
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Updated)

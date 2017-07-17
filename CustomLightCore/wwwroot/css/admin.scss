@@ -1,8 +1,13 @@
 * {
   transition: none;
 }
+
 textarea {
   min-height: 20em;
+}
+
+.content {
+	margin: 5px 0;
 }
 
 .adminPass {
@@ -88,9 +93,4 @@ form .btn {
   border: 2px solid rgba(0, 0, 0, 0);
   border-bottom-color: darkgreen;
 }
-
 /*/Продукт-Проект*/
-
-/*TinyMCE*/
-
-/*/TinyMCE*/

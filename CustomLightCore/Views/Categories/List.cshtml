@@ -5,31 +5,24 @@
 	Layout = "~/Views/_Layouts/_Admin.cshtml";
 }
 
+<h2>Список категорий</h2>
+
 <p>
-	<a asp-controller="Categories" asp-action="Create">Создать</a>
+	<a asp-controller="Categories" asp-action="Create" class="btn btn-primary">Создать</a>
 </p>
 <table class="table">
 	<tr>
 		<th>
-			@Html.DisplayNameFor(model => model.Name)
+			Наименование
 		</th>
 		<th>
-			@Html.DisplayNameFor(model => model.Description)
+			Краткое описание
 		</th>
 		<th>
-			@Html.DisplayNameFor(model => model.ShortDescription)
-		</th>
-		@*<th>
-			@Html.DisplayNameFor(model => model.Icon)
+			Создано
 		</th>
 		<th>
-			@Html.DisplayNameFor(model => model.IconMimeType)
-		</th>*@
-		<th>
-			@Html.DisplayNameFor(model => model.Created)
-		</th>
-		<th>
-			@Html.DisplayNameFor(model => model.Updated)
+			Изменено
 		</th>
 		<th></th>
 	</tr>
@@ -41,17 +34,8 @@
 				@Html.DisplayFor(modelItem => item.Name)
 			</td>
 			<td>
-				@Html.DisplayFor(modelItem => item.Description)
-			</td>
-			<td>
 				@Html.DisplayFor(modelItem => item.ShortDescription)
 			</td>
-			@*<td>
-				@Html.DisplayFor(modelItem => item.Icon)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.IconMimeType)
-			</td>*@
 			<td>
 				@Html.DisplayFor(modelItem => item.Created)
 			</td>

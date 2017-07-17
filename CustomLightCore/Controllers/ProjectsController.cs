@@ -148,7 +148,7 @@ namespace CustomLightCore.Controllers
             return db.Projects.Any(e => e.Id == id);
         }
 
-		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 3600)]
+		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
 		public FileContentResult GetProjectIcon(int? Id)
 		{
 			Project projs = db.Projects
@@ -164,7 +164,7 @@ namespace CustomLightCore.Controllers
 			}
 		}
 
-		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 3600)]
+		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
 		public FileContentResult GetProjectImage(int? ImageId)
 		{
 			ProjectImage image = db.ProjectImages.FirstOrDefault(i => i.Id == ImageId);

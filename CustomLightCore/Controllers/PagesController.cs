@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CustomLightCore.Models;
 using Microsoft.AspNetCore.Authorization;
+using CustomLightCore.ViewModels.Pages;
 
 namespace CustomLightCore.Controllers
 {
@@ -34,14 +35,12 @@ namespace CustomLightCore.Controllers
                 return NotFound();
             }
 
-			ViewBag.Categories = await db.Categories.ToListAsync();
-			ViewBag.Projects = await db.Projects.ToListAsync();
-			ViewBag.Pages = await db.Pages.ToListAsync();
-			ViewBag.Essentials = await db.Essentials.FirstOrDefaultAsync();
+			await CreateViewBag();
 			return View(page);
         }
 
         // GET: Pages/Create
+		[Authorize]
         public IActionResult Create()
         {
             return View();
@@ -52,26 +51,33 @@ namespace CustomLightCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Alias,Name,PageContent,Created,Updated")] Page page)
+		[Authorize]
+		public async Task<IActionResult> Create([Bind("Id,Alias,Name,PageContent")] Page page)
         {
             if (ModelState.IsValid)
             {
-                db.Add(page);
+				var now = DateTime.Now;
+				page.Created = now;
+				page.Updated = now;
+
+				db.Add(page);
                 await db.SaveChangesAsync();
                 return RedirectToAction("List");
             }
             return View(page);
         }
 
-        // GET: Pages/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+		// GET: Pages/Edit/5
+		[Authorize]
+		public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var page = await db.Pages.SingleOrDefaultAsync(m => m.Id == id);
+            var page = await db.Pages.SingleOrDefaultAsync(m => m.Id == id); // TODO: (PageEditViewModel.Get(id))
+			
             if (page == null)
             {
                 return NotFound();
@@ -84,23 +90,29 @@ namespace CustomLightCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Alias,Name,PageContent,Created,Updated")] Page page)
+		[Authorize]
+		public async Task<IActionResult> Edit(int id, [Bind("Id,Alias,Name,PageContent")] Page newPageData)
         {
-            if (id != page.Id)
+            if (id != newPageData.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
+				// Старые данные объекта
+				Page oldPageData = await db.Pages.FirstOrDefaultAsync(p => p.Id == id);
+
+
+
                 try
                 {
-                    db.Update(page);
+                    db.Update(newPageData);
                     await db.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PageExists(page.Id))
+                    if (!PageExists(newPageData.Id))
                     {
                         return NotFound();
                     }
@@ -111,11 +123,12 @@ namespace CustomLightCore.Controllers
                 }
                 return RedirectToAction("List");
             }
-            return View(page);
+            return View(newPageData);
         }
 
-        // GET: Pages/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+		// GET: Pages/Delete/5
+		[Authorize]
+		public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -135,7 +148,8 @@ namespace CustomLightCore.Controllers
         // POST: Pages/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+		[Authorize]
+		public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var page = await db.Pages.SingleOrDefaultAsync(m => m.Id == id);
             db.Pages.Remove(page);

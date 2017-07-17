@@ -9,7 +9,7 @@ namespace CustomLightCore.Controllers
 {
     public class EssentialsController : BaseController
 	{
-		[ResponseCache(Duration = 3600, Location = ResponseCacheLocation.Any, VaryByHeader = "User-agent")]
+		[ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any, VaryByHeader = "User-agent")]
 		public FileContentResult GetLogotype(string logoType)
 		{
 			Essentials essential = db.Essentials

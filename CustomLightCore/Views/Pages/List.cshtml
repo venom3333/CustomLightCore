@@ -8,22 +8,22 @@
 <h2>Список страниц</h2>
 
 <p>
-	<a asp-controller="Pages" asp-action="Create">Создать</a>
+	<a asp-controller="Pages" asp-action="Create" class="btn btn-primary">Создать</a>
 </p>
 <table class="table">
 	<thead>
 		<tr>
 			<th>
-				@Html.DisplayNameFor(model => model.Alias)
+				Алиас
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.Name)
+				Название
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.Created)
+				Создано
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.Updated)
+				Изменено
 			</th>
 			<th></th>
 		</tr>

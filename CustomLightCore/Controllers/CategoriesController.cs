@@ -7,21 +7,24 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CustomLightCore.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace CustomLightCore.Controllers
 {
-    public class CategoriesController : BaseController
-    {
+	public class CategoriesController : BaseController
+	{
+		//public CategoriesController()
+		//{
+		//}
+
 		// GET: Categories
 		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 3600)]
 		public async Task<IActionResult> Index()
-        {
-			ViewBag.Categories = await db.Categories.ToListAsync();
-			ViewBag.Projects = await db.Projects.ToListAsync();
-			ViewBag.Pages = await db.Pages.ToListAsync();
-			ViewBag.Essentials = await db.Essentials.FirstOrDefaultAsync();
+		{
+			await CreateViewBag();
 			return View(await db.Categories.ToListAsync());
-        }
+		}
 
 		[Authorize]
 		public async Task<IActionResult> List()
@@ -32,136 +35,158 @@ namespace CustomLightCore.Controllers
 		// GET: Categories/Details/5
 		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 3600)]
 		public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+		{
+			if (id == null)
+			{
+				return NotFound();
+			}
 
-            var categories = await db.Categories
+			var categories = await db.Categories
 				.Include(cProd => cProd.CategoryProduct)
 					.ThenInclude(prod => prod.Products)
 				.Include(cProj => cProj.CategoryProject)
 					.ThenInclude(proj => proj.Projects)
-                .SingleOrDefaultAsync(m => m.Id == id);
-            if (categories == null)
-            {
-                return NotFound();
-            }
+				.SingleOrDefaultAsync(m => m.Id == id);
+			if (categories == null)
+			{
+				return NotFound();
+			}
 
-			ViewBag.Categories = await db.Categories.ToListAsync();
-			ViewBag.Projects = await db.Projects.ToListAsync();
-			ViewBag.Pages = await db.Pages.ToListAsync();
-			ViewBag.Essentials = await db.Essentials.FirstOrDefaultAsync();
+			await CreateViewBag();
 			return View(categories);
-        }
+		}
 
 		// GET: Categories/Create
-		public IActionResult Create()
-        {
-            return View();
-        }
+		[Authorize]
+		public async Task<IActionResult> Create()
+		{
+			await CreateViewBag();
+			return View();
+		}
 
-        // POST: Category/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,Created,Updated")] Category categories)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Add(categories);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-            return View(categories);
-        }
+		// POST: Category/Create
+		// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		[Authorize]
+		public async Task<IActionResult> Create([Bind("Id,Name,Description,ShortDescription")] Category categories, [Bind("Icon")] IFormFile icon)
+		{
+			if (ModelState.IsValid)
+			{
+				// »конка
+				if (icon != null && icon.ContentType.ToLower().StartsWith("image/"))
+				{
+					MemoryStream ms = new MemoryStream();
+					await icon.OpenReadStream().CopyToAsync(ms);
+					
+					categories.Icon = ms.ToArray();
+					categories.IconMimeType = icon.ContentType;
+				}
+
+				// Datetimes
+				var now = DateTime.Now;
+				categories.Created = now;
+				categories.Updated = now;
+
+				db.Add(categories);
+				await db.SaveChangesAsync();
+				return RedirectToAction("List");
+			}
+
+			await CreateViewBag();
+			return View(categories);
+		}
 
 		// GET: Categories/Edit/5
+		[Authorize]
 		public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+		{
+			if (id == null)
+			{
+				return NotFound();
+			}
 
-            var categories = await db.Categories.SingleOrDefaultAsync(m => m.Id == id);
-            if (categories == null)
-            {
-                return NotFound();
-            }
-            return View(categories);
-        }
+			var categories = await db.Categories.SingleOrDefaultAsync(m => m.Id == id);
+			if (categories == null)
+			{
+				return NotFound();
+			}
+			return View(categories);
+		}
 
 		// POST: Categories/Edit/5
 		// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
 		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,Created,Updated")] Category categories)
-        {
-            if (id != categories.Id)
-            {
-                return NotFound();
-            }
+		[ValidateAntiForgeryToken]
+		[Authorize]
+		public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,Created,Updated")] Category categories)
+		{
+			if (id != categories.Id)
+			{
+				return NotFound();
+			}
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    db.Update(categories);
-                    await db.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CategoriesExists(categories.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction("Index");
-            }
-            return View(categories);
-        }
+			if (ModelState.IsValid)
+			{
+				try
+				{
+					db.Update(categories);
+					await db.SaveChangesAsync();
+				}
+				catch (DbUpdateConcurrencyException)
+				{
+					if (!CategoriesExists(categories.Id))
+					{
+						return NotFound();
+					}
+					else
+					{
+						throw;
+					}
+				}
+				return RedirectToAction("List");
+			}
+			return View(categories);
+		}
 
 		// GET: Categories/Delete/5
+		[Authorize]
 		public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+		{
+			if (id == null)
+			{
+				return NotFound();
+			}
 
-            var categories = await db.Categories
-                .SingleOrDefaultAsync(m => m.Id == id);
-            if (categories == null)
-            {
-                return NotFound();
-            }
+			var categories = await db.Categories
+				.SingleOrDefaultAsync(m => m.Id == id);
+			if (categories == null)
+			{
+				return NotFound();
+			}
 
-            return View(categories);
-        }
+			await CreateViewBag();
+			return View(categories);
+		}
 
 		// POST: Categories/Delete/5
 		[HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var categories = await db.Categories.SingleOrDefaultAsync(m => m.Id == id);
-            db.Categories.Remove(categories);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
+		[ValidateAntiForgeryToken]
+		[Authorize]
+		public async Task<IActionResult> DeleteConfirmed(int id)
+		{
+			var categories = await db.Categories.SingleOrDefaultAsync(m => m.Id == id);
+			db.Categories.Remove(categories);
+			await db.SaveChangesAsync();
+			return RedirectToAction("List");
+		}
 
-        private bool CategoriesExists(int id)
-        {
-            return db.Categories.Any(e => e.Id == id);
-        }
+		private bool CategoriesExists(int id)
+		{
+			return db.Categories.Any(e => e.Id == id);
+		}
 
 		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 3600)]
 		public FileContentResult GetCategoryIcon(int? Id)

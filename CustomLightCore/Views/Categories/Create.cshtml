@@ -1,15 +1,15 @@
-@model CustomLightCore.Models.Category
+﻿@model CustomLightCore.Models.Category
 
 @{
-    ViewData["Title"] = "Create";
-    Layout = "~/Views/_Layouts/_Home.cshtml";
+    ViewData["Title"] = "Создать";
+    Layout = "~/Views/_Layouts/_Admin.cshtml";
 }
 
-<h2>Create</h2>
+<h2>Создать</h2>
 
-<form asp-action="Create">
+<form asp-action="Create" enctype="multipart/form-data">
     <div class="form-horizontal">
-        <h4>Categories</h4>
+        <h4>Категория</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
@@ -22,7 +22,7 @@
         <div class="form-group">
             <label asp-for="Description" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Description" class="form-control" />
+                <textarea asp-for="Description" class="form-control"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
         </div>
@@ -36,42 +36,25 @@
         <div class="form-group">
             <label asp-for="Icon" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Icon" class="form-control" />
+                <input type="file" asp-for="Icon" class="form-control" />
                 <span asp-validation-for="Icon" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="IconMimeType" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="IconMimeType" class="form-control" />
-                <span asp-validation-for="IconMimeType" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Created" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Created" class="form-control" />
-                <span asp-validation-for="Created" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Updated" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Updated" class="form-control" />
-                <span asp-validation-for="Updated" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Создать" class="btn btn-primary" />
             </div>
         </div>
     </div>
 </form>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="List"><input type="button" class="btn btn-default" value="Вернуться к списку" /></a>
 </div>
+
+<script>
+	CKEDITOR.replace('Description');
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

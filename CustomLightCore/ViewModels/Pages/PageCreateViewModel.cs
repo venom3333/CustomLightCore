@@ -41,7 +41,7 @@ namespace CustomLightCore.ViewModels.Pages
 		/// <summary>
 		/// Получаем ДатаМодель на основе существующей вью модели
 		/// </summary>
-		public Page GetDataModel()
+		public Page GetDataModelByViewModel()
 		{
 			return (Page)this;
 		}

@@ -1,7 +1,7 @@
 @model CustomLightCore.Models.Page
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = @Model.Name;
     Layout = "~/Views/_Layouts/_Main.cshtml";
 }
 
@@ -10,7 +10,7 @@
 		<hr>
 		@Html.Raw(Model.PageContent)
 	</div>
-<div>
+@*<div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
-</div>
+</div>*@

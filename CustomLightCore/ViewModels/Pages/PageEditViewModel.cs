@@ -66,7 +66,7 @@ namespace CustomLightCore.ViewModels.Pages
 		/// <summary>
 		/// Получаем ДатаМодель на основе существующей вью модели
 		/// </summary>
-		public Page GetDataModelByViewModel()
+		public Page GetModelByViewModel()
 		{
 			return (Page)this;
 		}
@@ -74,7 +74,7 @@ namespace CustomLightCore.ViewModels.Pages
 		/// <summary>
 		/// Получаем ВьюМодель на основе id ДатаМодели
 		/// </summary>
-		public static async Task<PageEditViewModel> GetViewModelByDataModelId(int? id)
+		public static async Task<PageEditViewModel> GetViewModelByModelId(int? id)
 		{
 			if (id == null)
 			{

@@ -70,7 +70,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Interfaces\" />
-    <Folder Include="ViewModels\Categories\" />
   </ItemGroup>
 
 </Project>

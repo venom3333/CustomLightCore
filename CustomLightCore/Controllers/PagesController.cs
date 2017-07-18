@@ -52,11 +52,11 @@ namespace CustomLightCore.Controllers
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[Authorize]
-		public async Task<IActionResult> Create([Bind("Id,Alias,Name,PageContent")] PageCreateViewModel createdPage)
+		public async Task<IActionResult> Create([Bind("Alias,Name,PageContent")] PageCreateViewModel createdPage)
 		{
 			if (ModelState.IsValid)
 			{
-				Page page = createdPage.GetDataModelByViewModel();
+				Page page = createdPage.GetModelByViewModel();
 
 				db.Add(page);
 				await db.SaveChangesAsync();
@@ -74,7 +74,7 @@ namespace CustomLightCore.Controllers
 				return NotFound();
 			}
 
-			var page = await PageEditViewModel.GetViewModelByDataModelId(id);
+			var page = await PageEditViewModel.GetViewModelByModelId(id);
 
 			if (page == null)
 			{
@@ -98,7 +98,7 @@ namespace CustomLightCore.Controllers
 
 			if (ModelState.IsValid)
 			{
-				Page page = newPage.GetDataModelByViewModel();
+				Page page = newPage.GetModelByViewModel();
 
 				try
 				{

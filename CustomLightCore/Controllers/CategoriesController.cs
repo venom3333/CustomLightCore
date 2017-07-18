@@ -9,15 +9,12 @@ using CustomLightCore.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using CustomLightCore.ViewModels.Categories;
 
 namespace CustomLightCore.Controllers
 {
 	public class CategoriesController : BaseController
 	{
-		//public CategoriesController()
-		//{
-		//}
-
 		// GET: Categories
 		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
 		public async Task<IActionResult> Index()
@@ -70,32 +67,19 @@ namespace CustomLightCore.Controllers
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[Authorize]
-		public async Task<IActionResult> Create([Bind("Id,Name,Description,ShortDescription")] Category categories, [Bind("Icon")] IFormFile icon)
+		public async Task<IActionResult> Create([Bind("Name,Description,ShortDescription,Icon")] CategoryCreateViewModel createdCategory)
 		{
 			if (ModelState.IsValid)
 			{
-				// Иконка
-				if (icon != null && icon.ContentType.ToLower().StartsWith("image/"))
-				{
-					MemoryStream ms = new MemoryStream();
-					await icon.OpenReadStream().CopyToAsync(ms);
+				Category category = createdCategory.GetModelByViewModel();
 
-					categories.Icon = ms.ToArray();
-					categories.IconMimeType = icon.ContentType;
-				}
-
-				// Datetimes
-				var now = DateTime.Now;
-				categories.Created = now;
-				categories.Updated = now;
-
-				db.Add(categories);
+				db.Add(category);
 				await db.SaveChangesAsync();
 				return RedirectToAction("List");
 			}
 
 			await CreateViewBag();
-			return View(categories);
+			return View(createdCategory);
 		}
 
 		// GET: Categories/Edit/5
@@ -107,12 +91,12 @@ namespace CustomLightCore.Controllers
 				return NotFound();
 			}
 
-			var categories = await db.Categories.SingleOrDefaultAsync(m => m.Id == id);
-			if (categories == null)
+			var category = await CategoryEditViewModel.GetViewModelByModelId(id);
+			if (category == null)
 			{
 				return NotFound();
 			}
-			return View(categories);
+			return View(category);
 		}
 
 		// POST: Categories/Edit/5
@@ -121,7 +105,7 @@ namespace CustomLightCore.Controllers
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[Authorize]
-		public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,ShortDescription")] Category newCategoryData, [Bind("NewIcon")] IFormFile newIcon)
+		public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,ShortDescription,Icon")] CategoryEditViewModel newCategoryData)
 		{
 			if (id != newCategoryData.Id)
 			{
@@ -131,33 +115,11 @@ namespace CustomLightCore.Controllers
 			if (ModelState.IsValid)
 			{
 				// Старые данные объекта
-				Category oldCategoryData = await db.Categories.FindAsync(id);
-
-				// Основные данные
-				if (newCategoryData.Name != null)
-				{
-					oldCategoryData.Name = newCategoryData.Name;
-					oldCategoryData.Description = newCategoryData.Description;
-					oldCategoryData.ShortDescription = newCategoryData.ShortDescription;
-				}
-
-				// Иконка
-				if (newIcon != null && newIcon.ContentType.ToLower().StartsWith("image/"))
-				{
-					MemoryStream ms = new MemoryStream();
-					await newIcon.OpenReadStream().CopyToAsync(ms);
-
-					oldCategoryData.Icon = ms.ToArray();
-					oldCategoryData.IconMimeType = newIcon.ContentType;
-				}
-
-				// Datetimes
-				var now = DateTime.Now;
-				oldCategoryData.Updated = now;
+				Category category = newCategoryData.GetModelByViewModel();
 
 				try
 				{
-					db.Update(oldCategoryData);
+					db.Update(category);
 					await db.SaveChangesAsync();
 				}
 				catch (DbUpdateConcurrencyException)
@@ -177,6 +139,7 @@ namespace CustomLightCore.Controllers
 		}
 
 		// GET: Categories/Delete/5
+		// TODO: Предусмотреть предупреждение о невозможности удалить категорию если к ней привязаны продукты/проекты
 		[Authorize]
 		public async Task<IActionResult> Delete(int? id)
 		{

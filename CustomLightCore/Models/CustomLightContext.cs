@@ -11,7 +11,7 @@ namespace CustomLightCore.Models
 		public virtual DbSet<Category> Categories { get; set; }
 		public virtual DbSet<CategoryProduct> CategoryProduct { get; set; }
 		public virtual DbSet<CategoryProject> CategoryProject { get; set; }
-		public virtual DbSet<Essentials> Essentials { get; set; }
+		public virtual DbSet<Essential> Essentials { get; set; }
 		public virtual DbSet<Order> Orders { get; set; }
 		public virtual DbSet<Page> Pages { get; set; }
 		public virtual DbSet<ProductImage> ProductImages { get; set; }
@@ -120,7 +120,7 @@ namespace CustomLightCore.Models
 					.HasConstraintName("FK_CategoryProject_Project");
 			});
 
-			modelBuilder.Entity<Essentials>(entity =>
+			modelBuilder.Entity<Essential>(entity =>
 			{
 				entity.Property(e => e.About).IsRequired();
 

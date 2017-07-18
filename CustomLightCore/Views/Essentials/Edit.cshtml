@@ -1,0 +1,99 @@
+﻿@model CustomLightCore.ViewModels.Essentials.EssentialEditViewModel
+
+@{
+    ViewData["Title"] = "Редактирование основной информации";
+    Layout = "~/Views/_Layouts/_Admin.cshtml";
+}
+
+<h2>Редактирование</h2>
+
+<form asp-action="Edit" enctype="multipart/form-data">
+    <div class="form-horizontal">
+        <h4>Основные данные</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+        <div class="form-group">
+            <label asp-for="Title" class="col-md-2 control-label">Наименование компании</label>
+            <div class="col-md-10">
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="About" class="col-md-2 control-label">О компании</label>
+            <div class="col-md-10">
+                <textarea asp-for="About" class="form-control"></textarea>
+                <span asp-validation-for="About" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Address" class="col-md-2 control-label">Адрес</label>
+            <div class="col-md-10">
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Phone" class="col-md-2 control-label">Телефон</label>
+            <div class="col-md-10">
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Boss" class="col-md-2 control-label">Директор</label>
+            <div class="col-md-10">
+                <input asp-for="Boss" class="form-control" />
+                <span asp-validation-for="Boss" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Email" class="col-md-2 control-label">Email</label>
+            <div class="col-md-10">
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+		<div class="form-group">
+			<label for="OldLogo" class="col-md-2 control-label">Текущee лого</label>
+			<div class="col-md-10">
+				<img name="OldLogo" src="@Url.Action("GetLogotype", "Essentials", new { Logotype = "normal" })" class="img-responsive" alt="Лого">
+			</div>
+		</div>
+		<div class="form-group">
+			<label asp-for="LogoImageData" class="col-md-2 control-label">Новое лого</label>
+			<div class="col-md-10">
+				<input asp-for="LogoImageData" class="form-control" />
+				<span asp-validation-for="LogoImageData" class="text-danger"></span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="OldInvertedLogo" class="col-md-2 control-label">Текущee инвертированное лого</label>
+			<div class="col-md-10">
+				<img name="OldInvertedLogo" class="inverted-logo" src="@Url.Action("GetLogotype", "Essentials", new { Logotype = "inverted" })" class="img-responsive" alt="Инвертированное лого">
+			</div>
+		</div>
+        <div class="form-group">
+            <label asp-for="LogoImageInvertedData" class="col-md-2 control-label">Новое инвертированное лого</label>
+            <div class="col-md-10">
+                <input asp-for="LogoImageInvertedData" class="form-control" />
+                <span asp-validation-for="LogoImageInvertedData" class="text-danger"></span>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Сохранить" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+	CKEDITOR.replace('About');
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

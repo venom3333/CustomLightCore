@@ -1202,8 +1202,7 @@ table td {
   padding: 15px 2%;
   height: 290px;
   text-align: justify;
-  overflow: hidden;
-  transition: all .2s; }
+  overflow: hidden; }
   .product-grid:hover {
     box-shadow: 0 0 2px black;
     opacity: .8;

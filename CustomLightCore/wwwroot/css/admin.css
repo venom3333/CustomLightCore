@@ -58,6 +58,9 @@ textarea {
   max-width: 200px;
   max-height: 150px; }
 
+.inverted-logo {
+  background: #555; }
+
 /*Продукт-Проект*/
 form .btn {
   margin: 10px 0; }

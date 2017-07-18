@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CustomLightCore.ViewModels.Pages
 {
-    public class PageCreateViewModel : PageBaseViewModel
+    public class PageCreateViewModel
 	{
 		[Required(ErrorMessage = "Введите Алиас!")]
 		[DataType(DataType.Text)]
@@ -19,25 +19,6 @@ namespace CustomLightCore.ViewModels.Pages
 		
 		[DataType(DataType.MultilineText)]
 		public string PageContent { get; set; }
-
-		///// <summary>
-		///// Приведение экземпляра доменной модели во viewModel.
-		///// </summary>
-		//public static explicit operator PageCreateViewModel(Page item)
-		//{
-		//	if (item == null)
-		//	{
-		//		return null;
-		//	}
-
-		//	PageCreateViewModel result = new PageCreateViewModel
-		//	{
-		//		Alias = item.Alias,
-		//		Name = item.Name,
-		//		PageContent = item.PageContent
-		//	};
-		//	return result;
-		//}
 
 		/// <summary>
 		/// Явное преобразование из вью-модели в доменную.
@@ -56,5 +37,14 @@ namespace CustomLightCore.ViewModels.Pages
 			};
 			return result;
 		}
+
+		/// <summary>
+		/// Получаем ДатаМодель на основе существующей вью модели
+		/// </summary>
+		public Page GetDataModel()
+		{
+			return (Page)this;
+		}
+
 	}
 }

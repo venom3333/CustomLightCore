@@ -56,7 +56,7 @@ namespace CustomLightCore.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				Page page = (Page)createdPage;
+				Page page = createdPage.GetDataModel();
 
 				db.Add(page);
 				await db.SaveChangesAsync();
@@ -67,14 +67,14 @@ namespace CustomLightCore.Controllers
 
 		// GET: Pages/Edit/5
 		[Authorize]
-		public async Task<IActionResult> Edit(int? id)
+		public IActionResult Edit(int? id)
 		{
 			if (id == null)
 			{
 				return NotFound();
 			}
 
-			var page = (PageEditViewModel)await PageBaseViewModel.Get(id);
+			var page = PageEditViewModel.Get(id);
 
 			if (page == null)
 			{
@@ -98,7 +98,7 @@ namespace CustomLightCore.Controllers
 
 			if (ModelState.IsValid)
 			{
-				Page page = (Page)newPage;
+				Page page = newPage.GetDataModel();
 
 				try
 				{

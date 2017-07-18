@@ -8,7 +8,7 @@ using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 
 namespace CustomLightCore.ViewModels.Pages
 {
-	public class PageEditViewModel : PageBaseViewModel
+	public class PageEditViewModel
 	{
 
 		public int Id { get; set; }
@@ -61,6 +61,32 @@ namespace CustomLightCore.ViewModels.Pages
 			result.Updated = DateTime.Now;
 
 			return result;
+		}
+
+		/// <summary>
+		/// Получаем ДатаМодель на основе существующей вью модели
+		/// </summary>
+		public Page GetDataModel()
+		{
+			return (Page)this;
+		}
+
+		/// <summary>
+		/// Получаем ВьюМодель на основе id ДатаМодели
+		/// </summary>
+		public static PageEditViewModel Get(int? id)
+		{
+			if (id == null)
+			{
+				return null;
+			}
+
+			Page page = new Page();
+			using (CustomLightContext db = new CustomLightContext())
+			{
+				page = db.Pages.Find(id);
+			}
+			return (PageEditViewModel)page;
 		}
 	}
 }

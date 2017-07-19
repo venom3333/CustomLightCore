@@ -1,0 +1,48 @@
+﻿@model CustomLightCore.Models.Slide
+
+@{
+    ViewData["Title"] = "Удалить слайд. " + Model.Name;
+    Layout = "~/Views/_Layouts/_Admin.cshtml";
+}
+
+<h2>Удалить</h2>
+
+<h3>Вы уверены что хотите удалить это?</h3>
+<div>
+    <h4>Слайд</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <input type="hidden" asp-for="Id" />
+        <dt>
+            Изображение
+        </dt>
+        <dd>
+			<img src="@Url.Action("GetSlideImage", "Slides", new { Id = Model.Id })" alt="item.Name" />
+        </dd>
+        <dt>
+            Тип
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ImageMimeType)
+        </dd>
+        <dt>
+            Наименование
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            Описание
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <input type="submit" value="Удалить" class="btn btn-danger" /> |
+            <a asp-action="List" class="btn btn-default">Вернуться к списку</a>
+        </div>
+    </form>
+</div>

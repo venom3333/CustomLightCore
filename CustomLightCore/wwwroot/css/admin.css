@@ -61,6 +61,11 @@ textarea {
 .inverted-logo {
   background: #555; }
 
+/*Слайды*/
+.list-preview-image {
+  max-height: 100px; }
+
+/*/Слайды*/
 /*Продукт-Проект*/
 form .btn {
   margin: 10px 0; }

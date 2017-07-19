@@ -1,0 +1,53 @@
+﻿@model IEnumerable<CustomLightCore.Models.Slide>
+
+@{
+    ViewData["Title"] = "Список слайдов";
+    Layout = "~/Views/_Layouts/_Admin.cshtml";
+}
+
+<h2>Список слайдов</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Создать</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    Изображение
+                </th>
+                <th>
+                    Тип
+                </th>
+                <th>
+                    Название
+                </th>
+                <th>
+                    Описание
+                </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                <img src="@Url.Action("GetSlideImage", "Slides", new { Id = item.Id })" alt="item.Name" class="list-preview-image" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ImageMimeType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+				<a asp-controller="Slides" asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>Редактировать</a> |
+				<a asp-controller="Slides" asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-times" aria-hidden="true"></i>Удалить</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

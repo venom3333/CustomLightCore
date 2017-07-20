@@ -1,0 +1,43 @@
+﻿@using CustomLightCore.Models
+<!-- Half Page Image Background Carousel Header -->
+<section id="myCarousel" class="carousel slide">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        @{
+            for (var i = 0; i < ((List<Slide>) ViewBag.Slides).Count; i++)
+            {
+                <li data-target="#myCarousel" data-slide-to="@i" class="@(i == 0 ? "active" : "")"></li>
+            }
+        }
+    </ol>
+
+    <!-- Wrapper for Slides -->
+    <div class="carousel-inner">
+        @{
+            var slideCounter = 0;
+            foreach (Slide slide in ViewBag.Slides)
+            {
+                <div class="item @(slideCounter == 0 ? "active" : "")">
+                    <!-- Set the first background image using inline CSS below. -->
+                    <div class="fill" style="background-image: url(@Url.Action("GetSlideImage", "Slides", new {slide.Id}));">
+                        <div class="slider-shape">
+                            @Html.DisplayFor(s => slide.Description)
+                        </div>
+                        <div class="slider-shape-2"></div>
+                    </div>
+                    <div class="carousel-caption">
+                        <h2>@Html.DisplayFor(s => slide.Name)</h2>
+                    </div>
+                </div>
+                slideCounter++;
+            }
+        }
+    </div>
+    <!-- Controls -->
+    @*<!--	<a class="left carousel-control" href="#myCarousel" data-slide="prev">-->*@
+    @*<!--		<span class="icon-prev"></span>-->*@
+    @*<!--	</a>-->*@
+    @*<!--	<a class="right carousel-control" href="#myCarousel" data-slide="next">-->*@
+    @*<!--		<span class="icon-next"></span>-->*@
+    @*<!--	</a>-->*@
+</section>

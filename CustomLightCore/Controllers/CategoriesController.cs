@@ -38,7 +38,7 @@ namespace CustomLightCore.Controllers
 				return NotFound();
 			}
 
-			var categories = await db.Categories
+			Category categories = await db.Categories
 				.Include(cProd => cProd.CategoryProduct)
 					.ThenInclude(prod => prod.Products)
 				.Include(cProj => cProj.CategoryProject)
@@ -89,7 +89,7 @@ namespace CustomLightCore.Controllers
 				return NotFound();
 			}
 
-			var category = await CategoryEditViewModel.GetViewModelByModelId(id);
+			CategoryEditViewModel category = await CategoryEditViewModel.GetViewModelByModelId(id);
 			if (category == null)
 			{
 				return NotFound();
@@ -112,7 +112,7 @@ namespace CustomLightCore.Controllers
 
 			if (ModelState.IsValid)
 			{
-				// Старые данные объекта
+				// РЎС‚Р°СЂС‹Рµ РґР°РЅРЅС‹Рµ РѕР±СЉРµРєС‚Р°
 				Category category = newCategoryData.GetModelByViewModel();
 
 				try
@@ -137,7 +137,7 @@ namespace CustomLightCore.Controllers
 		}
 
 		// GET: Categories/Delete/5
-		// TODO: Предусмотреть предупреждение о невозможности удалить категорию если к ней привязаны продукты/проекты
+		// TODO: РџСЂРµРґСѓСЃРјРѕС‚СЂРµС‚СЊ РїСЂРµРґСѓРїСЂРµР¶РґРµРЅРёРµ Рѕ РЅРµРІРѕР·РјРѕР¶РЅРѕСЃС‚Рё СѓРґР°Р»РёС‚СЊ РєР°С‚РµРіРѕСЂРёСЋ РµСЃР»Рё Рє РЅРµР№ РїСЂРёРІСЏР·Р°РЅС‹ РїСЂРѕРґСѓРєС‚С‹/РїСЂРѕРµРєС‚С‹
 		[Authorize]
 		public async Task<IActionResult> Delete(int? id)
 		{
@@ -146,7 +146,7 @@ namespace CustomLightCore.Controllers
 				return NotFound();
 			}
 
-			var categories = await db.Categories
+			Category categories = await db.Categories
 				.SingleOrDefaultAsync(m => m.Id == id);
 			if (categories == null)
 			{
@@ -163,31 +163,21 @@ namespace CustomLightCore.Controllers
 		[Authorize]
 		public async Task<IActionResult> DeleteConfirmed(int id)
 		{
-			var categories = await db.Categories.SingleOrDefaultAsync(m => m.Id == id);
+			Category categories = await db.Categories.SingleOrDefaultAsync(m => m.Id == id);
 			db.Categories.Remove(categories);
 			await db.SaveChangesAsync();
 			return RedirectToAction("List");
 		}
 
-		private bool CategoriesExists(int id)
-		{
-			return db.Categories.Any(e => e.Id == id);
-		}
+		private bool CategoriesExists(int id) => db.Categories.Any(e => e.Id == id);
 
 		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
-		public FileContentResult GetCategoryIcon(int? Id)
+		public FileContentResult GetCategoryIcon(int? id)
 		{
 			Category cat = db.Categories
-				.FirstOrDefault(c => c.Id == Id);
+				.FirstOrDefault(c => c.Id == id);
 
-			if (cat.Icon != null)
-			{
-				return File(cat.Icon, cat.IconMimeType);
-			}
-			else
-			{
-				return null;
-			}
+			return cat.Icon != null ? File(cat.Icon, cat.IconMimeType) : null;
 		}
 
 	}

@@ -1,13 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
   </PropertyGroup>
-
   <PropertyGroup>
     <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wp8+wpa81;</PackageTargetFallback>
   </PropertyGroup>
-
   <ItemGroup>
     <Content Include="wwwroot\css\admin.css" />
     <Content Include="wwwroot\css\admin.min.css" />
@@ -71,5 +68,4 @@
   <ItemGroup>
     <Folder Include="Interfaces\" />
   </ItemGroup>
-
 </Project>

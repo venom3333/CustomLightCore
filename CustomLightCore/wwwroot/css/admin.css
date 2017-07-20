@@ -1,4 +1,4 @@
-﻿@charset "UTF-8";
+@charset "UTF-8";
 * {
   transition: none; }
 
@@ -65,12 +65,12 @@ textarea {
 .inverted-logo {
   background: #555; }
 
-/*Слайды*/
+/*╨б╨╗╨░╨╣╨┤╤Л*/
 .list-preview-image {
   max-height: 75px; }
 
-/*/Слайды*/
-/*Продукт-Проект*/
+/*/╨б╨╗╨░╨╣╨┤╤Л*/
+/*╨Я╤А╨╛╨┤╤Г╨║╤В-╨Я╤А╨╛╨╡╨║╤В*/
 form .btn {
   margin: 10px 0; }
 
@@ -85,8 +85,9 @@ form .btn {
 
 .border {
   border-radius: 10px;
-  border: 2px solid transparent;
+  border: 2px solid rgba(0, 0, 0, 0);
   border-bottom-color: darkgreen; }
 
-/*/Продукт-Проект*/
+/*/╨Я╤А╨╛╨┤╤Г╨║╤В-╨Я╤А╨╛╨╡╨║╤В*/
 
+/*# sourceMappingURL=admin.css.map */

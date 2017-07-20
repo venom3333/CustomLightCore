@@ -26,14 +26,14 @@
 	<section class="content">
 		<div class="container">
 			@* Левое меню *@
-			@Html.Partial("~/Views/Shared/_SideMenu.cshtml")
+			@await  Html.PartialAsync("~/Views/Shared/_SideMenu.cshtml")
 			<div id="content">
 				@RenderBody()
 			</div>
 		</div>
 	</section>
 	<footer>
-		@Html.Partial("~/Views/Shared/_Footer.cshtml")
+		@await Html.PartialAsync("~/Views/Shared/_Footer.cshtml")
 	</footer>
 
 	<environment names="Development">

@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CustomLightCore.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -58,7 +55,7 @@ namespace CustomLightCore.Controllers
             {
                 db.Add(projects);
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("List");
             }
             return View(projects);
         }
@@ -109,7 +106,7 @@ namespace CustomLightCore.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("List");
             }
             return View(projects);
         }
@@ -140,7 +137,7 @@ namespace CustomLightCore.Controllers
             var projects = await db.Projects.SingleOrDefaultAsync(m => m.Id == id);
             db.Projects.Remove(projects);
             await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("List");
         }
 
         private bool ProjectsExists(int id)
@@ -149,10 +146,10 @@ namespace CustomLightCore.Controllers
         }
 
 		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
-		public FileContentResult GetProjectIcon(int? Id)
+		public FileContentResult GetProjectIcon(int? id)
 		{
 			Project projs = db.Projects
-				.FirstOrDefault(p => p.Id == Id);
+				.FirstOrDefault(p => p.Id == id);
 
 			if (projs.Icon != null)
 			{
@@ -165,9 +162,9 @@ namespace CustomLightCore.Controllers
 		}
 
 		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
-		public FileContentResult GetProjectImage(int? ImageId)
+		public FileContentResult GetProjectImage(int? imageId)
 		{
-			ProjectImage image = db.ProjectImages.FirstOrDefault(i => i.Id == ImageId);
+			ProjectImage image = db.ProjectImages.FirstOrDefault(i => i.Id == imageId);
 
 			if (image != null)
 			{

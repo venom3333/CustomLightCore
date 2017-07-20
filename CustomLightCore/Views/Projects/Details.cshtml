@@ -5,15 +5,15 @@
     Layout = "~/Views/_Layouts/_Main.cshtml";
 }
 
-<!--Èíôî î ïðîäóêòå-->
+<!--Ð˜Ð½Ñ„Ð¾ Ð¾ Ð¿Ñ€Ð¾Ð´ÑƒÐºÑ‚Ðµ-->
 <div class="col-md-10 Project-model-sec">
 	<h2 id="ProjectName">@Model.Name</h2>
 
-	<!--	Íå îòîáðàæàåòñÿ (íóæíî äëÿ êîðçèíû)-->
+	<!--	ÐÐµ Ð¾Ñ‚Ð¾Ð±Ñ€Ð°Ð¶Ð°ÐµÑ‚ÑÑ (Ð½ÑƒÐ¶Ð½Ð¾ Ð´Ð»Ñ ÐºÐ¾Ñ€Ð·Ð¸Ð½Ñ‹)-->
 	@*<div id="ProjectIcon" style="display: none;"><?= $Project['icon'] ?></div>*@
 	<div id="ProjectId" style="display: none;">>@Model.Id</div>
-	<!--	/Íå îòîáðàæàåòñÿ (íóæíî äëÿ êîðçèíû)-->
-	<!--Ãàëåðåÿ-->
+	<!--	/ÐÐµ Ð¾Ñ‚Ð¾Ð±Ñ€Ð°Ð¶Ð°ÐµÑ‚ÑÑ (Ð½ÑƒÐ¶Ð½Ð¾ Ð´Ð»Ñ ÐºÐ¾Ñ€Ð·Ð¸Ð½Ñ‹)-->
+	<!--Ð“Ð°Ð»ÐµÑ€ÐµÑ-->
 	<section id="myCarousel" class="carousel slide my-carousel col-md-7">
 		<!-- Indicators -->
 		<ol class="carousel-indicators image-carousel-indicators">
@@ -51,73 +51,12 @@
 			<span class="icon-next"></span>
 		</a>
 	</section>
-	<!--/Ãàëåðåÿ-->
+	<!--/Ð“Ð°Ð»ÐµÑ€ÐµÑ-->
 	
 	<section class="itemDescription">
 		<p>@Model.Description</p>
 	</section>
 
-	<!--/Èíôî î ïðîäóêòå-->
+	<!--/Ð˜Ð½Ñ„Ð¾ Ð¾ Ð¿Ñ€Ð¾Ð´ÑƒÐºÑ‚Ðµ-->
 	@*<script src="~/Content/js/cart.js"></script>*@
-
-
-	@*<h2>Details</h2>
-
-		<div>
-			<h4>Projects</h4>
-			<hr />
-			<dl class="dl-horizontal">
-				<dt>
-					@Html.DisplayNameFor(model => model.Name)
-				</dt>
-				<dd>
-					@Html.DisplayFor(model => model.Name)
-				</dd>
-				<dt>
-					@Html.DisplayNameFor(model => model.Description)
-				</dt>
-				<dd>
-					@Html.DisplayFor(model => model.Description)
-				</dd>
-				<dt>
-					@Html.DisplayNameFor(model => model.ShortDescription)
-				</dt>
-				<dd>
-					@Html.DisplayFor(model => model.ShortDescription)
-				</dd>
-				<dt>
-					@Html.DisplayNameFor(model => model.Icon)
-				</dt>
-				<dd>
-					@Html.DisplayFor(model => model.Icon)
-				</dd>
-				<dt>
-					@Html.DisplayNameFor(model => model.IconMimeType)
-				</dt>
-				<dd>
-					@Html.DisplayFor(model => model.IconMimeType)
-				</dd>
-				<dt>
-					@Html.DisplayNameFor(model => model.IsPublished)
-				</dt>
-				<dd>
-					@Html.DisplayFor(model => model.IsPublished)
-				</dd>
-				<dt>
-					@Html.DisplayNameFor(model => model.Created)
-				</dt>
-				<dd>
-					@Html.DisplayFor(model => model.Created)
-				</dd>
-				<dt>
-					@Html.DisplayNameFor(model => model.Updated)
-				</dt>
-				<dd>
-					@Html.DisplayFor(model => model.Updated)
-				</dd>
-			</dl>
-		</div>
-		<div>
-			<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-			<a asp-action="Index">Back to List</a>
-		</div>*@
+</div>

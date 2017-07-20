@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -65,7 +63,7 @@ namespace CustomLightCore.Controllers
             {
                 db.Add(product);
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("List");
             }
             ViewData["ProductTypeId"] = new SelectList(db.ProductTypes, "Id", "Name", product.ProductTypeId);
             return View(product);
@@ -118,7 +116,7 @@ namespace CustomLightCore.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("List");
             }
             ViewData["ProductTypeId"] = new SelectList(db.ProductTypes, "Id", "Name", product.ProductTypeId);
             return View(product);
@@ -160,10 +158,10 @@ namespace CustomLightCore.Controllers
         }
 
 		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
-		public FileContentResult GetProductIcon(int? Id)
+		public FileContentResult GetProductIcon(int? id)
 		{
 			Product prods = db.Products
-				.FirstOrDefault(p => p.Id == Id);
+				.FirstOrDefault(p => p.Id == id);
 
 			if (prods.Icon != null)
 			{
@@ -176,9 +174,9 @@ namespace CustomLightCore.Controllers
 		}
 
 		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
-		public FileContentResult GetProductImage(int? ImageId)
+		public FileContentResult GetProductImage(int? imageId)
 		{
-			ProductImage image = db.ProductImages.FirstOrDefault(i => i.Id == ImageId);
+			ProductImage image = db.ProductImages.FirstOrDefault(i => i.Id == imageId);
 
 			if (image != null)
 			{

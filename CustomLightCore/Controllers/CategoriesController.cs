@@ -52,7 +52,6 @@ namespace CustomLightCore.Controllers
 			await CreateViewBag();
 			return View(categories);
 		}
-
 		// GET: Categories/Create
 		[Authorize]
 		public async Task<IActionResult> Create()
@@ -81,7 +80,6 @@ namespace CustomLightCore.Controllers
 			await CreateViewBag();
 			return View(createdCategory);
 		}
-
 		// GET: Categories/Edit/5
 		[Authorize]
 		public async Task<IActionResult> Edit(int? id)

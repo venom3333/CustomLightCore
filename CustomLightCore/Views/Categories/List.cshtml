@@ -10,8 +10,11 @@
 <p>
 	<a asp-controller="Categories" asp-action="Create" class="btn btn-primary">Создать</a>
 </p>
-<table class="table">
+<table class="table table-responsive table-hover">
 	<tr>
+		<th>
+			Изображение
+		</th>
 		<th>
 			Наименование
 		</th>
@@ -30,6 +33,9 @@
 	@foreach (var item in Model)
 	{
 		<tr>
+			<td>
+				<img src="@Url.Action("GetCategoryIcon", "Categories", new { Id = item.Id })" alt="item.Name" class="list-preview-image" />
+			</td>
 			<td>
 				@Html.DisplayFor(modelItem => item.Name)
 			</td>

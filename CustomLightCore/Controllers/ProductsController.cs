@@ -10,18 +10,17 @@ namespace CustomLightCore.Controllers
 {
     public class ProductsController : BaseController
     {
-		// GET: Products
-		[Authorize]
-		public async Task<IActionResult> List()
+        // GET: Products
+        [Authorize]
+        public async Task<IActionResult> List()
         {
-			
             var products = await db.Products
-				.Include(p => p.ProductType)
-				.Include(p => p.CategoryProduct)
-					.ThenInclude(cp => cp.Categories)
-				.ToListAsync();
+                .Include(p => p.ProductType)
+                .Include(p => p.CategoryProduct)
+                .ThenInclude(cp => cp.Categories)
+                .ToListAsync();
 
-			return View(products);
+            return View(products);
         }
 
         // GET: Products/Details/5
@@ -33,19 +32,19 @@ namespace CustomLightCore.Controllers
             }
 
             var products = await db.Products
-				.Include(p => p.ProductImages)
-				.Include(p => p.Specifications)
-					.ThenInclude(s=>s.SpecificationValues)
+                .Include(p => p.ProductImages)
+                .Include(p => p.Specifications)
+                .ThenInclude(s => s.SpecificationValues)
                 .Include(p => p.ProductType)
-					.ThenInclude(pt=>pt.SpecificationTitles)
+                .ThenInclude(pt => pt.SpecificationTitles)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (products == null)
             {
                 return NotFound();
             }
 
-			await CreateViewBag();
-			return View(products);
+            await CreateViewBag();
+            return View(products);
         }
 
         // GET: Products/Create
@@ -60,7 +59,9 @@ namespace CustomLightCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,IsPublished,Created,Updated,ProductTypeId")] Product product)
+        public async Task<IActionResult> Create(
+            [Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,IsPublished,Created,Updated,ProductTypeId")]
+            Product product)
         {
             if (ModelState.IsValid)
             {
@@ -94,7 +95,9 @@ namespace CustomLightCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,IsPublished,Created,Updated,ProductTypeId")] Product product)
+        public async Task<IActionResult> Edit(int id,
+            [Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,IsPublished,Created,Updated,ProductTypeId")]
+            Product product)
         {
             if (id != product.Id)
             {
@@ -160,35 +163,35 @@ namespace CustomLightCore.Controllers
             return db.Products.Any(e => e.Id == id);
         }
 
-		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
-		public FileContentResult GetProductIcon(int? id)
-		{
-			Product prods = db.Products
-				.FirstOrDefault(p => p.Id == id);
+        [ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
+        public FileContentResult GetProductIcon(int? id)
+        {
+            Product prods = db.Products
+                .FirstOrDefault(p => p.Id == id);
 
-			if (prods.Icon != null)
-			{
-				return File(prods.Icon, prods.IconMimeType);
-			}
-			else
-			{
-				return null;
-			}
-		}
+            if (prods.Icon != null)
+            {
+                return File(prods.Icon, prods.IconMimeType);
+            }
+            else
+            {
+                return null;
+            }
+        }
 
-		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
-		public FileContentResult GetProductImage(int? imageId)
-		{
-			ProductImage image = db.ProductImages.FirstOrDefault(i => i.Id == imageId);
+        [ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
+        public FileContentResult GetProductImage(int? imageId)
+        {
+            ProductImage image = db.ProductImages.FirstOrDefault(i => i.Id == imageId);
 
-			if (image != null)
-			{
-				return File(image.ImageData, image.ImageMimeType);
-			}
-			else
-			{
-				return null;
-			}
-		}
-	}
+            if (image != null)
+            {
+                return File(image.ImageData, image.ImageMimeType);
+            }
+            else
+            {
+                return null;
+            }
+        }
+    }
 }

@@ -68,17 +68,13 @@ namespace CustomLightCore.Controllers
 		[Authorize]
 		public async Task<IActionResult> Create([Bind("Name,Description,ShortDescription,Icon")] CategoryCreateViewModel createdCategory)
 		{
-			if (ModelState.IsValid)
-			{
-				Category category = createdCategory.GetModelByViewModel();
+			if (!ModelState.IsValid) return View(createdCategory);
+			
+			var category = createdCategory.GetModelByViewModel();
 
-				db.Add(category);
-				await db.SaveChangesAsync();
-				return RedirectToAction("List");
-			}
-
-			await CreateViewBag();
-			return View(createdCategory);
+			db.Add(category);
+			await db.SaveChangesAsync();
+			return RedirectToAction("List");
 		}
 		// GET: Categories/Edit/5
 		[Authorize]

@@ -1,0 +1,36 @@
+﻿@using CustomLightCore.Models
+@model IEnumerable<ProductType>
+
+@{
+    ViewBag.Title = "Список типов продуктов";
+    Layout = "~/Views/_Layouts/_Admin.cshtml";
+}
+
+<h2>Список типов продуктов</h2>
+
+<p>
+    <a asp-controller="ProductTypes" asp-action="Create" class="btn btn-primary">Создать</a>
+</p>
+<table class="table table-hover table-responsive">
+    <thead>
+    <tr>
+        <th>
+            Наименование
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (ProductType item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                <a asp-controller="ProductTypes" asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>Редактировать</a> |
+                <a asp-controller="ProductTypes" asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-times" aria-hidden="true"></i>Удалить</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

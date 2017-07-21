@@ -14,8 +14,14 @@ namespace CustomLightCore.Controllers
 		[Authorize]
 		public async Task<IActionResult> List()
         {
-            var customLightContext = db.Products.Include(p => p.ProductType);
-            return View(await customLightContext.ToListAsync());
+			
+            var products = await db.Products
+				.Include(p => p.ProductType)
+				.Include(p => p.CategoryProduct)
+					.ThenInclude(cp => cp.Categories)
+				.ToListAsync();
+
+			return View(products);
         }
 
         // GET: Products/Details/5
@@ -38,10 +44,7 @@ namespace CustomLightCore.Controllers
                 return NotFound();
             }
 
-			ViewBag.Categories = await db.Categories.ToListAsync();
-			ViewBag.Projects = await db.Projects.ToListAsync();
-			ViewBag.Pages = await db.Pages.ToListAsync();
-			ViewBag.Essentials = await db.Essentials.FirstOrDefaultAsync();
+			await CreateViewBag();
 			return View(products);
         }
 

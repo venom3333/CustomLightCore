@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 using CustomLightCore.Models;
-using Microsoft.AspNetCore.Http;
-using System.IO;
 
 namespace CustomLightCore.ViewModels.ProductTypes
 {
@@ -15,7 +10,7 @@ namespace CustomLightCore.ViewModels.ProductTypes
 		[DataType(DataType.Text)]
 		public string Name { get; set; }
 
-		[Required]
+		//[Required]
 		[DataType(DataType.Text)]
 		public SpecificationTitle SpecificationTitle { get; set; }
 		
@@ -28,7 +23,7 @@ namespace CustomLightCore.ViewModels.ProductTypes
 		/// </summary>
 		public static explicit operator ProductType(ProductTypeCreateViewModel item)
 		{
-			ProductType result = new ProductType
+			var result = new ProductType
 			{
 				Name = item.Name,
 				SpecificationTitles = item.SpecificationTitles

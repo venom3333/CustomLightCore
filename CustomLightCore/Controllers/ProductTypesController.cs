@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CustomLightCore.Models;
 using CustomLightCore.ViewModels.ProductTypes;
@@ -42,14 +40,13 @@ namespace CustomLightCore.Controllers
             //TODO: коллекция SpecificationTitles приходит, доделать все!
             if (ModelState.IsValid)
             {
-                ProductType category = createdProductType.GetModelByViewModel();
+                var productType = createdProductType.GetModelByViewModel();
 
-                db.Add(category);
+                db.Add(productType);
                 await db.SaveChangesAsync();
                 return RedirectToAction("List");
             }
 
-            await CreateViewBag();
             return View(createdProductType);
         }
 
@@ -58,7 +55,7 @@ namespace CustomLightCore.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult GenerateSpecificationTitle(ProductTypeCreateViewModel productType)
         {
-            SpecificationTitle specificationTitle = new SpecificationTitle();
+            var specificationTitle = new SpecificationTitle();
 
             if (productType.SpecificationTitles == null)
             {

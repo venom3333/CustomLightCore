@@ -39,41 +39,41 @@
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
-    <script>
-        $(function() {
-            $("#add-specification-title").click(function() {
-                var form = $('form');
-                $.ajax({
-                    type: "POST",
-                    url: "/ProductTypes/GenerateSpecificationTitleEdit",
-                    data: form.serialize(),
-                    success: function(html) {
-                        //console.log(html);
-                        $('#specification-titles').html(html);
-                    },
-                    error: function(msg) {
-                        console.log(msg);
-                    }
-                });
-            });
-
-            $(".remove-specification-title").click(function() {
-                var form = $('form');
-                var specificationTitleIndex = parseInt(this.id.replace("remove-specification-title-", ""));
-                $.ajax({
-                    type: "POST",
-                    url: "/ProductTypes/RemoveSpecificationTitleEdit",
-                    data: form.serialize() + '&specificationTitleIndex=' + specificationTitleIndex,
-                    success: function(html) {
-                        //console.log(html);
-                        $('#specification-titles').html(html);
-                    },
-                    error: function(msg) {
-                        console.log(msg);
-                    }
-                });
-            });
-        });
-
-    </script>
+@*    <script>*@
+@*        $(function() {*@
+@*            $("#add-specification-title").click(function() {*@
+@*                var form = $('form');*@
+@*                $.ajax({*@
+@*                    type: "POST",*@
+@*                    url: "/ProductTypes/GenerateSpecificationTitleEdit",*@
+@*                    data: form.serialize(),*@
+@*                    success: function(html) {*@
+@*                        //console.log(html);*@
+@*                        $('#specification-titles').html(html);*@
+@*                    },*@
+@*                    error: function(msg) {*@
+@*                        console.log(msg);*@
+@*                    }*@
+@*                });*@
+@*            });*@
+@**@
+@*            $(".remove-specification-title").click(function() {*@
+@*                var form = $('form');*@
+@*                var specificationTitleIndex = parseInt(this.id.replace("remove-specification-title-", ""));*@
+@*                $.ajax({*@
+@*                    type: "POST",*@
+@*                    url: "/ProductTypes/RemoveSpecificationTitleEdit",*@
+@*                    data: form.serialize() + '&specificationTitleIndex=' + specificationTitleIndex,*@
+@*                    success: function(html) {*@
+@*                        //console.log(html);*@
+@*                        $('#specification-titles').html(html);*@
+@*                    },*@
+@*                    error: function(msg) {*@
+@*                        console.log(msg);*@
+@*                    }*@
+@*                });*@
+@*            });*@
+@*        });*@
+@**@
+@*    </script>*@
 }

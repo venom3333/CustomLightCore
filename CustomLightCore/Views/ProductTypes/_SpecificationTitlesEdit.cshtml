@@ -7,27 +7,27 @@
         <div class="col-md-10">     
             @Html.HiddenFor(model => model.SpecificationTitles[i].Id)
             @Html.EditorFor(model => model.SpecificationTitles[i].Name)
-@*            <i class="fa fa-times remove-specification-title" id="remove-specification-title-@i" aria-hidden="true"></i>*@
+<i class="fa fa-times remove-specification-title" id="remove-specification-title-@i" aria-hidden="true"></i>
             @*            @Html.ValidationMessageFor(model => model.SpecificationTitles[i].Name)*@
             @*            <span asp-validation-for="SpecificationTitle" class="text-danger"></span>*@
         </div>
     </div>
 }
-@*<script>*@
-@*    $(".remove-specification-title").click(function() {*@
-@*        var form = $('form');*@
-@*        var specificationTitleIndex = parseInt(this.id.replace("remove-specification-title-", ""));*@
-@*        $.ajax({*@
-@*            type: "POST",*@
-@*            url: "/ProductTypes/RemoveSpecificationTitleEdit",*@
-@*            data: form.serialize() + '&specificationTitleIndex=' + specificationTitleIndex,*@
-@*            success: function(html) {*@
-@*                //console.log(html);*@
-@*                $('#specification-titles').html(html);*@
-@*            },*@
-@*            error: function(msg) {*@
-@*                console.log(msg);*@
-@*            }*@
-@*        });*@
-@*    });*@
-@*</script>*@
+<script>
+    $(".remove-specification-title").click(function() {
+        var form = $('form');
+        var specificationTitleIndex = parseInt(this.id.replace("remove-specification-title-", ""));
+        $.ajax({
+            type: "POST",
+            url: "/ProductTypes/RemoveSpecificationTitleEdit",
+            data: form.serialize() + '&specificationTitleIndex=' + specificationTitleIndex,
+            success: function(html) {
+                //console.log(html);
+                $('#specification-titles').html(html);
+            },
+            error: function(msg) {
+                console.log(msg);
+            }
+        });
+    });
+</script>

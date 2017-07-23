@@ -89,26 +89,31 @@ namespace CustomLightCore.Controllers
 
                 try
                 {
-//                    // Удаляем из контекста уж ене нужные SpecificationTitles
-//                    var oldSpecificationTitles = db.ProductTypes.Include(pt => pt.SpecificationTitles)
-//                        .FirstOrDefault(pt => pt.Id == productType.Id)
-//                        .SpecificationTitles;
-//                    var newSpecificationTitles = productType.SpecificationTitles;
-//                    foreach (var item in newSpecificationTitles)
-//                    {
-//                        oldSpecificationTitles.RemoveWhere(ost => ost.Id == item.Id);
-//                    }
+                    using (db)
+                    {
+//                        // Удаляем из контекста уж ене нужные SpecificationTitles
+//                        var oldSpecificationTitles = db.ProductTypes.Include(pt => pt.SpecificationTitles)
+//                            .FirstOrDefault(pt => pt.Id == productType.Id)
+//                            .SpecificationTitles;
+//                        var newSpecificationTitles = productType.SpecificationTitles;
+//                        foreach (var item in newSpecificationTitles)
+//                        {
+//                            oldSpecificationTitles.RemoveWhere(ost => ost.Id == item.Id);
+//                        }
 //                    
-//                    foreach (var item in oldSpecificationTitles)
-//                    {
-//                        db.Remove(item);
-//                    }
+//                        foreach (var item in oldSpecificationTitles)
+//                        {
+//                            db.Remove(item);
+//                        }
 //
-//                    //db.SpecificationTitles.RemoveRange(oldSpecificationTitles);
-//                    db.SaveChanges();
-                    //TODO: Не удаляет уже созданные свойства у типа продукта
-                    db.Update(productType);
-                    await db.SaveChangesAsync();
+//                        //db.SpecificationTitles.RemoveRange(oldSpecificationTitles);
+//                        db.SaveChanges();
+                   
+                        //TODO: Не удаляет уже созданные свойства у типа продукта
+                        db.Update(productType);
+                        await db.SaveChangesAsync();
+                    }
+                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {

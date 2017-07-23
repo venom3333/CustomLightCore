@@ -15,6 +15,6 @@ namespace CustomLightCore.Models
         public string Name { get; set; }
 
         public virtual ICollection<Product> Products { get; set; }
-        public virtual ICollection<SpecificationTitle> SpecificationTitles { get; set; }
+        public virtual HashSet<SpecificationTitle> SpecificationTitles { get; set; }
     }
 }

@@ -1,0 +1,79 @@
+﻿@model CustomLightCore.ViewModels.ProductTypes.ProductTypeEditViewModel
+
+@{
+    ViewData["Title"] = "Редактирование. " + Model.Name;
+    Layout = "~/Views/_Layouts/_Admin.cshtml";
+}
+
+<h2>Редактирование</h2>
+
+<form asp-action="Edit" enctype="multipart/form-data">
+    <div class="form-horizontal">
+        <h4>Категория</h4>
+        <hr/>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id"/>
+        <div class="form-group">
+            <label asp-for="Name" class="col-md-2 control-label">Наименование</label>
+            <div class="col-md-10">
+                <input asp-for="Name" class="form-control" required/>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div id="specification-titles">
+            @await Html.PartialAsync("_SpecificationTitlesEdit")
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Сохранить" class="btn btn-success"/>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="List">
+        <input type="button" class="btn btn-default" value="Вернуться к списку"/>
+    </a>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+        $(function() {
+            $("#add-specification-title").click(function() {
+                var form = $('form');
+                $.ajax({
+                    type: "POST",
+                    url: "/ProductTypes/GenerateSpecificationTitleEdit",
+                    data: form.serialize(),
+                    success: function(html) {
+                        //console.log(html);
+                        $('#specification-titles').html(html);
+                    },
+                    error: function(msg) {
+                        console.log(msg);
+                    }
+                });
+            });
+
+            $(".remove-specification-title").click(function() {
+                var form = $('form');
+                var specificationTitleIndex = parseInt(this.id.replace("remove-specification-title-", ""));
+                $.ajax({
+                    type: "POST",
+                    url: "/ProductTypes/RemoveSpecificationTitleEdit",
+                    data: form.serialize() + '&specificationTitleIndex=' + specificationTitleIndex,
+                    success: function(html) {
+                        //console.log(html);
+                        $('#specification-titles').html(html);
+                    },
+                    error: function(msg) {
+                        console.log(msg);
+                    }
+                });
+            });
+        });
+
+    </script>
+}

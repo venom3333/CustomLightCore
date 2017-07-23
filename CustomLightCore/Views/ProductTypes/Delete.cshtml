@@ -1,0 +1,43 @@
+﻿@model CustomLightCore.Models.ProductType
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/_Layouts/_Admin.cshtml";
+}
+
+<h2>Удалить</h2>
+
+<h3>Вы уверены что хотите удалить это?</h3>
+<div>
+    <h4>Тип продукта</h4>
+    <hr/>
+    <dl class="dl-horizontal">
+        <input type="hidden" asp-for="Id"/>
+        <dt>
+            Наименование
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <hr/>
+        <dt>
+            Свойства
+        </dt>
+        <dd>
+            @foreach (var specificationTitle in Model.SpecificationTitles)
+            {
+                @Html.Raw(specificationTitle.Name)
+                <br>
+            }
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <input type="submit" value="Удалить" class="btn btn-danger"/> |
+            <a asp-action="List">
+                <input type="button" class="btn btn-default" value="Вернуться к списку"/>
+            </a>
+        </div>
+    </form>
+</div>

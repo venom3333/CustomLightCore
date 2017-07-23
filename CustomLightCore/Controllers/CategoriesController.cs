@@ -118,7 +118,7 @@ namespace CustomLightCore.Controllers
 				}
 				catch (DbUpdateConcurrencyException)
 				{
-					if (!CategoriesExists(newCategoryData.Id))
+					if (!CategoryExists(newCategoryData.Id))
 					{
 						return NotFound();
 					}
@@ -165,7 +165,7 @@ namespace CustomLightCore.Controllers
 			return RedirectToAction("List");
 		}
 
-		private bool CategoriesExists(int id) => db.Categories.Any(e => e.Id == id);
+		private bool CategoryExists(int id) => db.Categories.Any(e => e.Id == id);
 
 		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
 		public FileContentResult GetCategoryIcon(int? id)

@@ -23,10 +23,11 @@ namespace CustomLightCore.ViewModels.ProductTypes
 		/// </summary>
 		public static explicit operator ProductType(ProductTypeCreateViewModel item)
 		{
+			var specificationTitles = new HashSet<SpecificationTitle>(item.SpecificationTitles);
 			var result = new ProductType
 			{
 				Name = item.Name,
-				SpecificationTitles = item.SpecificationTitles
+				SpecificationTitles = specificationTitles
 			};
 
 			return result;

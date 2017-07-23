@@ -17,7 +17,7 @@
             <label asp-for="Name" class="col-md-2 control-label">Имя</label>
             <div class="col-md-10">
                 <input asp-for="Name" class="form-control"/>
-                <span asp-validation-for="Name" class="text-danger"></span>
+@*                <span asp-validation-for="Name" class="text-danger"></span>*@
             </div>
         </div>
         <div id="specification-titles">
@@ -25,12 +25,13 @@
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="button" id="addSpecificationTitle" class="btn btn-default" value="Добавить свойство"/>
+                <input type="button" id="add-specification-title" class="btn btn-default" value="Добавить свойство"/>
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Создать" class="btn btn-primary"/>
+                @Html.ValidationSummary()
             </div>
         </div>
     </div>
@@ -47,11 +48,11 @@
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
     <script>
         $(function() {
-            $("#addSpecificationTitle").click(function() {
+            $("#add-specification-title").click(function() {
                 var form = $('form');
                 $.ajax({
                     type: "POST",
-                    url: "/ProductTypes/GenerateSpecificationTitle",
+                    url: "/ProductTypes/GenerateSpecificationTitleCreate",
                     data: form.serialize(),
                     success: function(html) {
                         //console.log(html);
@@ -61,7 +62,7 @@
                         console.log(msg);
                     }
                 });
-            });
+            });           
         });
     </script>
 }

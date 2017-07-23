@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CustomLightCore.Models;
+using CustomLightCore.ViewModels.Categories;
 using CustomLightCore.ViewModels.ProductTypes;
 using Microsoft.AspNetCore.Authorization;
 
@@ -30,14 +32,13 @@ namespace CustomLightCore.Controllers
         // POST: ProductTypes/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
         public async Task<IActionResult> Create(
             [Bind("Name,SpecificationTitles")] ProductTypeCreateViewModel createdProductType)
         {
-            //TODO: коллекция SpecificationTitles приходит, доделать все!
             if (ModelState.IsValid)
             {
                 var productType = createdProductType.GetModelByViewModel();
@@ -50,10 +51,106 @@ namespace CustomLightCore.Controllers
             return View(createdProductType);
         }
 
+        // GET: ProductTypes/Edit/5
+        [Authorize]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var productTypeEditViewModel = await ProductTypeEditViewModel.GetViewModelByModelId(id);
+            if (productTypeEditViewModel == null)
+            {
+                return NotFound();
+            }
+            return View(productTypeEditViewModel);
+        }
+
+        // POST: ProductTypes/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> Edit(int id,
+            [Bind("Id,Name,SpecificationTitles")] ProductTypeEditViewModel newProductTypeData)
+        {
+            if (id != newProductTypeData.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                // Старые данные объекта
+                ProductType productType = newProductTypeData.GetModelByViewModel();
+
+                try
+                {
+                    //TODO: Не удаляет уже созданные свойства у типа продукта
+                    db.Update(productType);
+                    await db.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ProductTypeExists(newProductTypeData.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction("List");
+            }
+            return View(newProductTypeData);
+        }
+
+
+        // GET: ProductTypes/Delete/5
+        // TODO: Предусмотреть предупреждение о невозможности удалить категорию если к ней привязаны продукты/проекты
+        [Authorize]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var productType = await db.ProductTypes
+                .Include(pt => pt.SpecificationTitles)
+                .SingleOrDefaultAsync(m => m.Id == id);
+            if (productType == null)
+            {
+                return NotFound();
+            }
+
+            await CreateViewBag();
+            return View(productType);
+        }
+
+        // POST: ProductTypes/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var productType = db.ProductTypes.SingleOrDefault(pt => pt.Id == id);
+            db.ProductTypes.Remove(productType);
+            await db.SaveChangesAsync();
+            return RedirectToAction("List");
+        }
+
+        private bool ProductTypeExists(int id) => db.ProductTypes.Any(e => e.Id == id);
+
+        // Добавить SpecificationTitle для Create
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public ActionResult GenerateSpecificationTitle(ProductTypeCreateViewModel productType)
+        public ActionResult GenerateSpecificationTitleCreate(ProductTypeCreateViewModel productType)
         {
             var specificationTitle = new SpecificationTitle();
 
@@ -61,33 +158,52 @@ namespace CustomLightCore.Controllers
             {
                 productType.SpecificationTitles = new List<SpecificationTitle>();
             }
-            
+
             productType.SpecificationTitles.Add(specificationTitle);
 
-            return PartialView("_SpecificationTitles", productType);
+            return PartialView("_SpecificationTitlesCreate", productType);
         }
-    }
 
-    /*
-    [HttpPost]
-    public ActionResult GenerateContacts(CustomerModel customer)
-    {
-        // Check whether this request is comming with javascript, if so, we know that we are going to add contact details.
-        if (Request.IsAjaxRequest())
+        // Убрать SpecificationTitle для Create
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public ActionResult RemoveSpecificationTitleCreate(ProductTypeCreateViewModel productType,
+            int specificationTitleIndex)
         {
-            ContactModel contact = new ContactModel();
-            contact.ContactName = customer.ContactMode.ContactName;
-            contact.ContactNo = customer.ContactMode.ContactNo;
+            productType.SpecificationTitles.RemoveAt(specificationTitleIndex);
 
-            if (customer.Contacts == null)
+            return PartialView("_SpecificationTitlesCreate", productType);
+        }
+
+        // Добавить SpecificationTitle для Edit
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public ActionResult GenerateSpecificationTitleEdit(ProductTypeEditViewModel productType)
+        {
+            var specificationTitle = new SpecificationTitle();
+
+            if (productType.SpecificationTitles == null)
             {
-                customer.Contacts = new List<ContactModel>();
+                productType.SpecificationTitles = new List<SpecificationTitle>();
             }
 
-            customer.Contacts.Add(contact);
+            productType.SpecificationTitles.Add(specificationTitle);
 
-            return PartialView("_Contact", customer);
-        }            
+            return PartialView("_SpecificationTitlesEdit", productType);
+        }
+
+        // Убрать SpecificationTitle для Edit
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public ActionResult RemoveSpecificationTitleEdit(ProductTypeEditViewModel productType,
+            int specificationTitleIndex)
+        {
+            productType.SpecificationTitles.RemoveAt(specificationTitleIndex);
+
+            return PartialView("_SpecificationTitlesEdit", productType);
+        }
     }
-    */
 }

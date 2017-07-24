@@ -30,13 +30,17 @@ namespace CustomLightCore.ViewModels.ProductTypes
         public static explicit operator ProductType(ProductTypeEditViewModel item)
         {
             var specificationTitles = new HashSet<SpecificationTitle>(item.SpecificationTitles);
-            var result = new ProductType
-            {
-                Id = item.Id,
-                Name = item.Name,
-                SpecificationTitles = specificationTitles
-            };
+			var result = new ProductType();
+			using (CustomLightContext ctx = new CustomLightContext())
+			{
+				result = ctx.ProductTypes
+					.Include(pt => pt.SpecificationTitles)
+					.FirstOrDefault(pt => pt.Id == item.Id);
 
+				result.Name = item.Name;
+				result.SpecificationTitles = specificationTitles;
+				
+			}
             return result;
         }
 

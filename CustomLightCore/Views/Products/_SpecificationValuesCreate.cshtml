@@ -1,0 +1,13 @@
+@model HashSet<CustomLightCore.Models.SpecificationValue>
+
+@foreach (var value in Model)
+{
+//	@Html.TextBoxFor(m => value.Value)
+	<td>
+		@Html.EditorFor(m => value.Value)
+	</td>
+}
+@*int counter = 0;*@
+
+				}
+@*<td><i class="fa fa-times remove-specification" id="remove-specification-@counter" aria-hidden="true"></i></td>*@

@@ -213,12 +213,6 @@ namespace CustomLightCore.Controllers
 			[Bind("Id,Name,Description,ShortDescription,Icon,IsPublished,ProductTypeId,CategoryProductId,ProductImages,Specifications")]
 			ProductViewModel product)
 		{
-			// Добираем тип продукта для того чтобы знать как отображать спецификации
-			product.ProductType = db.ProductTypes
-				.Include(pt => pt.SpecificationTitles)
-				.AsNoTracking()
-				.FirstOrDefault(pt => pt.Id == product.ProductTypeId);
-
 			var specification = new Specification();
 			if (product.Specifications == null)
 			{
@@ -227,8 +221,21 @@ namespace CustomLightCore.Controllers
 
 			product.Specifications.Add(specification);
 
+			product = FillViewModelSpecifications(product);
+
+			return PartialView("_SpecificationsCreate", product);
+		}
+
+		private ProductViewModel FillViewModelSpecifications(ProductViewModel productViewModel)
+		{
+			// Добираем тип продукта для того чтобы знать как отображать спецификации
+			productViewModel.ProductType = db.ProductTypes
+				.Include(pt => pt.SpecificationTitles)
+				.AsNoTracking()
+				.FirstOrDefault(pt => pt.Id == productViewModel.ProductTypeId);
+
 			// Наполним пустыми Values если не заполненно
-			product.Specifications.ForEach(spec =>
+			productViewModel.Specifications.ForEach(spec =>
 			{
 				if (spec.SpecificationValues == null)
 				{
@@ -237,7 +244,7 @@ namespace CustomLightCore.Controllers
 
 				if (spec.SpecificationValues.Count == 0)
 				{
-					foreach ( var item in product.ProductType.SpecificationTitles)
+					foreach (var item in productViewModel.ProductType.SpecificationTitles)
 					{
 						spec.SpecificationValues.Add(new SpecificationValue
 						{
@@ -251,7 +258,7 @@ namespace CustomLightCore.Controllers
 				}
 			});
 
-			return PartialView("_SpecificationsCreate", product);
+			return productViewModel;
 		}
 
 		// Убрать спецификацию
@@ -271,6 +278,9 @@ namespace CustomLightCore.Controllers
 			product.Specifications.RemoveAt(specificationIndex);
 
 			ModelState.Clear();
+
+			product = FillViewModelSpecifications(product);
+
 			return PartialView("_SpecificationsCreate", product);
 		}
 
@@ -288,6 +298,9 @@ namespace CustomLightCore.Controllers
 			product.Specifications = new List<Specification>();
 
 			ModelState.Clear();
+
+			product = FillViewModelSpecifications(product);
+
 			return PartialView("_SpecificationsCreate", product);
 		}
 	}

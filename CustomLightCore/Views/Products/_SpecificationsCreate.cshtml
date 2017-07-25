@@ -14,25 +14,22 @@
 			</tr>
 		</thead>
 		<tbody>
-			@{int counter = 0;
-				@foreach (var specification in Model.Specifications)
+			@for (var i = 0; i < Model.Specifications.Count; i++)
 				{
-					<tr>
-						@foreach (var specificationValue in specification.SpecificationValues)
-						{
-
-							<td>@Html.EditorFor(sp => sp.Specifications[counter].SpecificationValues)</td>
+				<tr>
+					@for (var j = 0; j < Model.Specifications[i].SpecificationValues.Count; j++)
+					{
+						@*@Html.TextBoxFor(sp => sp.Specifications[counter].SpecificationValues)*@
+						<td>@Html.EditorFor(sp => Model.Specifications[i].SpecificationValues.ToList()[j].Value)</td>
 					}
-						<td>@Html.EditorFor(sp => sp.Specifications[counter].Price)</td>
-						<td><i class="fa fa-times remove-specification" id="remove-specification-@counter" aria-hidden="true"></i></td>
-						@(counter = counter +1);
-					</tr>
+					<td>@Html.EditorFor(sp => sp.Specifications[i].Price)</td>
+					<td><i class="fa fa-times remove-specification" id="remove-specification-@i" aria-h aria-hidden="true"></i></td>
+				</tr>
 				}
-			}
 		</tbody>
 	</table>
 
-				}
+}
 
 <script>
 	$(".remove-specification").click(function () {

@@ -37,7 +37,7 @@
 		var specificationIndex = parseInt(this.id.replace("remove-specification-", ""));
 		$.ajax({
 			type: "POST",
-			url: "/Products/RemoveSpecification",
+			url: "@Url.Action("RemoveSpecification")",
 			data: form.serialize() + '&specificationIndex=' + specificationIndex,
 			success: function (html) {
 				//console.log(html);

@@ -52,7 +52,7 @@
                 var form = $('form');
                 $.ajax({
                     type: "POST",
-                    url: "/ProductTypes/GenerateSpecificationTitleCreate",
+                    url: "@Url.Action("GenerateSpecificationTitleCreate")",
                     data: form.serialize(),
                     success: function(html) {
                         //console.log(html);

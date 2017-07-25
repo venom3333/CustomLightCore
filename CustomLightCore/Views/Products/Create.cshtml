@@ -49,12 +49,6 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label asp-for="ProductTypeId" class="col-md-2 control-label"></label>
-			<div class="col-md-10">
-				<select asp-for="ProductTypeId" class="form-control" asp-items="ViewBag.ProductTypeId"></select>
-			</div>
-		</div>
-		<div class="form-group">
 			<label asp-for="CategoryProductId" class="col-md-2 control-label"></label>
 			<div class="col-md-10">
 				<select asp-for="CategoryProductId" class="form-control" asp-items="ViewBag.Categories" multiple="multiple"></select>
@@ -65,6 +59,12 @@
 			<div class="col-md-10">
 				<input asp-for="ProductImages" class="form-control" multiple />
 				<span asp-validation-for="ProductImages" class="text-danger"></span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label asp-for="ProductTypeId" class="col-md-2 control-label"></label>
+			<div class="col-md-10">
+				<select asp-for="ProductTypeId" class="form-control" asp-items="ViewBag.ProductTypeId"></select>
 			</div>
 		</div>
 		<div class="table-responsive"  id="specifications">
@@ -102,7 +102,23 @@
 				var form = $('form');
 				$.ajax({
 					type: "POST",
-					url: "/Products/GenerateSpecification",
+					url: "@Url.Action("GenerateSpecification")",
+					data: form.serialize(),
+					success: function (html) {
+						//console.log(html);
+						$('#specifications').html(html);
+					},
+					error: function (msg) {
+						console.log(msg);
+					}
+				});
+			});
+			
+			$("#ProductTypeId").change(function () {
+				var form = $('form');
+				$.ajax({
+					type: "POST",
+					url: "@Url.Action("UpdateSpecifications")",
 					data: form.serialize(),
 					success: function (html) {
 						//console.log(html);

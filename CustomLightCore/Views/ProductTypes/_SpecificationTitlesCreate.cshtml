@@ -18,7 +18,7 @@
         var specificationTitleIndex = parseInt(this.id.replace("remove-specification-title-", ""));
         $.ajax({
             type: "POST",
-            url: "/ProductTypes/RemoveSpecificationTitleCreate",
+            url: "@Url.Action("RemoveSpecificationTitleCreate")",
             data: form.serialize() + '&specificationTitleIndex=' + specificationTitleIndex,
             success: function(html) {
                 //console.log(html);

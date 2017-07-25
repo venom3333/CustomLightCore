@@ -50,7 +50,7 @@
                 var form = $('form');
                 $.ajax({
                     type: "POST",
-                    url: "/ProductTypes/GenerateSpecificationTitleEdit",
+                    url: "@Url.Action("GenerateSpecificationTitleEdit")",
                     data: form.serialize(),
                     success: function(html) {
                         //console.log(html);
@@ -67,7 +67,7 @@
                 var specificationTitleIndex = parseInt(this.id.replace("remove-specification-title-", ""));
                 $.ajax({
                     type: "POST",
-                    url: "/ProductTypes/RemoveSpecificationTitleEdit",
+                    url: "@Url.Action("RemoveSpecificationTitleEdit")",
                     data: form.serialize() + '&specificationTitleIndex=' + specificationTitleIndex,
                     success: function(html) {
                         //console.log(html);

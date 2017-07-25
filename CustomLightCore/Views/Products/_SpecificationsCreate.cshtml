@@ -14,34 +14,31 @@
 			</tr>
 		</thead>
 		<tbody>
-			@{int counter = 0;}
-			@foreach (var specification in Model.Specifications)
-			{
+			@for (var i = 0; i < Model.Specifications.Count; i++)
+				{
 				<tr>
-					@foreach (var specificationVal in specification.SpecificationValues)
+					@for (var j = 0; j < Model.Specifications[i].SpecificationValues.Count; j++)
 					{
-
-						<td>@Html.Editor(specificationVal.Value)</td>
+						@*@Html.TextBoxFor(sp => sp.Specifications[counter].SpecificationValues)*@
+						<td>@Html.EditorFor(sp => Model.Specifications[i].SpecificationValues.ToList()[j].Value)</td>
 					}
-					<td>@specification.Price</td>
-					<td><i class="fa fa-times remove-specification" id="remove-specification-@counter" aria-hidden="true"></i></td>
-					@counter++
+					<td>@Html.EditorFor(sp => sp.Specifications[i].Price)</td>
+					<td><i class="fa fa-times remove-specification" id="remove-specification-@i" aria-h aria-hidden="true"></i></td>
 				</tr>
-			}
-
+				}
 		</tbody>
 	</table>
 
-				}
+}
 
 <script>
 	$(".remove-specification").click(function () {
 		var form = $('form');
-		var specificationTitleIndex = parseInt(this.id.replace("remove-specification-title-", ""));
+		var specificationIndex = parseInt(this.id.replace("remove-specification-", ""));
 		$.ajax({
 			type: "POST",
 			url: "/Products/RemoveSpecification",
-			data: form.serialize() + '&specificationTitleIndex=' + specificationTitleIndex,
+			data: form.serialize() + '&specificationIndex=' + specificationIndex,
 			success: function (html) {
 				//console.log(html);
 				$('#specifications').html(html);

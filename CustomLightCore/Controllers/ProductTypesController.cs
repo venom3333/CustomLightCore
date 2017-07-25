@@ -25,7 +25,6 @@ namespace CustomLightCore.Controllers
 		[Authorize]
 		public async Task<IActionResult> Create()
 		{
-			await CreateViewBag();
 			return View();
 		}
 
@@ -81,7 +80,7 @@ namespace CustomLightCore.Controllers
 			{
 				return NotFound();
 			}
-
+			
 			if (ModelState.IsValid)
 			{
 				try

@@ -1,0 +1,54 @@
+﻿@model CustomLightCore.ViewModels.Products.ProductViewModel
+
+@if (Model.ProductType != null)
+{
+
+	<table class="table table-bordered table-striped table-hover sort_table">
+		<thead>
+			<tr>
+				@foreach (var specificationTitle in Model.ProductType.SpecificationTitles)
+				{
+					<th>@specificationTitle.Name</th>
+				}
+				<th>Цена</th>
+			</tr>
+		</thead>
+		<tbody>
+			@{int counter = 0;}
+			@foreach (var specification in Model.Specifications)
+			{
+				<tr>
+					@foreach (var specificationVal in specification.SpecificationValues)
+					{
+
+						<td>@Html.Editor(specificationVal.Value)</td>
+					}
+					<td>@specification.Price</td>
+					<td><i class="fa fa-times remove-specification" id="remove-specification-@counter" aria-hidden="true"></i></td>
+					@counter++
+				</tr>
+			}
+
+		</tbody>
+	</table>
+
+				}
+
+<script>
+	$(".remove-specification").click(function () {
+		var form = $('form');
+		var specificationTitleIndex = parseInt(this.id.replace("remove-specification-title-", ""));
+		$.ajax({
+			type: "POST",
+			url: "/Products/RemoveSpecification",
+			data: form.serialize() + '&specificationTitleIndex=' + specificationTitleIndex,
+			success: function (html) {
+				//console.log(html);
+				$('#specifications').html(html);
+			},
+			error: function (msg) {
+				console.log(msg);
+			}
+		});
+	});
+</script>

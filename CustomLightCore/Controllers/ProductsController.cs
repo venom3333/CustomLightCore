@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CustomLightCore.Models;
 using Microsoft.AspNetCore.Authorization;
+using CustomLightCore.ViewModels.Products;
+using System.Collections.Generic;
 
 namespace CustomLightCore.Controllers
 {
@@ -48,10 +50,12 @@ namespace CustomLightCore.Controllers
         }
 
         // GET: Products/Create
+		[Authorize]
         public IActionResult Create()
         {
             ViewData["ProductTypeId"] = new SelectList(db.ProductTypes, "Id", "Name");
-            return View();
+			ViewData["Categories"] = new SelectList(db.Categories, "Id", "Name");
+			return View();
         }
 
         // POST: Products/Create
@@ -59,9 +63,10 @@ namespace CustomLightCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+		[Authorize]
         public async Task<IActionResult> Create(
-            [Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,IsPublished,Created,Updated,ProductTypeId")]
-            Product product)
+            [Bind("Id,Name,Description,ShortDescription,Icon,IsPublished,ProductTypeId,CategoryProductId,ProductImages")]
+            ProductViewModel product)
         {
             if (ModelState.IsValid)
             {
@@ -70,10 +75,13 @@ namespace CustomLightCore.Controllers
                 return RedirectToAction("List");
             }
             ViewData["ProductTypeId"] = new SelectList(db.ProductTypes, "Id", "Name", product.ProductTypeId);
-            return View(product);
+			ViewData["Categories"] = new SelectList(db.Categories, "Id", "Name", product.CategoryProductId);
+
+			return View(product);
         }
 
         // GET: Products/Edit/5
+		[Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -95,7 +103,8 @@ namespace CustomLightCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id,
+		[Authorize]
+		public async Task<IActionResult> Edit(int id,
             [Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,IsPublished,Created,Updated,ProductTypeId")]
             Product product)
         {
@@ -128,8 +137,9 @@ namespace CustomLightCore.Controllers
             return View(product);
         }
 
-        // GET: Products/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+		// GET: Products/Delete/5
+		[Authorize]
+		public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -147,8 +157,9 @@ namespace CustomLightCore.Controllers
             return View(product);
         }
 
-        // POST: Products/Delete/5
-        [HttpPost, ActionName("Delete")]
+		// POST: Products/Delete/5
+		[Authorize]
+		[HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -193,5 +204,46 @@ namespace CustomLightCore.Controllers
                 return null;
             }
         }
-    }
+
+		// Добавить спецификацию
+		[HttpPost]
+		[Authorize]
+		[ValidateAntiForgeryToken]
+		public ActionResult GenerateSpecification([Bind("Id,Name,Description,ShortDescription,Icon,IsPublished,ProductTypeId,CategoryProductId,ProductImages,Specifications")]ProductViewModel product)
+		{
+			product.ProductType = db.ProductTypes.Include(pt => pt.SpecificationTitles)
+				.FirstOrDefault(pt => pt.Id == product.ProductTypeId);
+			var specification = new Specification();
+			if(product.Specifications == null)
+			{
+				product.Specifications = new List<Specification>();
+			}
+
+			product.Specifications.Add(specification);
+
+			return PartialView("_SpecificationsCreate", product);
+		}
+
+		// Убрать спецификацию
+		[HttpPost]
+		[Authorize]
+		[ValidateAntiForgeryToken]
+		public ActionResult RemoveSpecification(ProductViewModel product, int specificationIndex)
+		{
+			product.Specifications.RemoveAt(specificationIndex);
+
+			ModelState.Clear();
+			return PartialView("_SpecificationsCreate", product);
+		}
+
+		// Обновить область отображения спецификаций
+		[HttpPost]
+		[Authorize]
+		[ValidateAntiForgeryToken]
+		public ActionResult UpdateSpecifications(ProductViewModel product)
+		{
+			ModelState.Clear();
+			return PartialView("_SpecificationsCreate", product);
+		}
+	}
 }

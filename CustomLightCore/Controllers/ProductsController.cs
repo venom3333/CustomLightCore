@@ -310,25 +310,25 @@ namespace CustomLightCore.Controllers
 		// Вижу / Не вижу
 		[HttpPost]
 		[Authorize]
-		public async Task<IActionResult> TogglePublish([Bind("id")]int? id)
+		public async Task<bool> TogglePublish([Bind("id")]int? id)
 		{
 			if (id == null)
 			{
-				return NotFound();
+				return false;
 			}
 
 			var product = await db.Products
 				.SingleOrDefaultAsync(m => m.Id == id);
 			if (product == null)
 			{
-				return NotFound();
+				return false;
 			}
 
 			product.IsPublished = !product.IsPublished;
 			db.Update(product);
 			await db.SaveChangesAsync();
 
-			return RedirectToAction("List");
+			return true;
 		}
 	}
 }

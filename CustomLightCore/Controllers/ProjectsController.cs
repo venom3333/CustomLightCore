@@ -175,5 +175,29 @@ namespace CustomLightCore.Controllers
 				return null;
 			}
 		}
+        
+        // Вижу / Не вижу
+        [HttpPost]
+        [Authorize]
+        public async Task<bool> TogglePublish([Bind("id")]int? id)
+        {
+            if (id == null)
+            {
+                return false;
+            }
+
+            var project = await db.Projects
+                .SingleOrDefaultAsync(m => m.Id == id);
+            if (project == null)
+            {
+                return false;
+            }
+
+            project.IsPublished = !project.IsPublished;
+            db.Update(project);
+            await db.SaveChangesAsync();
+
+            return true;
+        }
 	}
 }

@@ -12,62 +12,85 @@
 </p>
 <table class="table table-hover table-responsive">
 	<thead>
-		<tr>
-			<th>
-				Изображение
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Name)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Description)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.ShortDescription)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.IsPublished)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Created)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Updated)
-			</th>
-			<th></th>
-		</tr>
+	<tr>
+		<th>
+			Изображение
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.Name)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.Description)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.ShortDescription)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.IsPublished)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.Created)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.Updated)
+		</th>
+		<th></th>
+	</tr>
 	</thead>
 	<tbody>
-		@foreach (var item in Model)
-		{
-			<tr>
-				<td>
-					<img src="@Url.Action("GetProjectIcon", "Projects", new { Id = item.Id })" alt="item.Name" class="list-preview-image" />
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Name)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Description)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.ShortDescription)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.IsPublished)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Created)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Updated)
-				</td>
-				<td>
-					<a asp-controller="Projects" asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> |
-					<a asp-controller="Projects" asp-action="Details" asp-route-id="@item.Id">Просмотреть</a> |
-					<a asp-controller="Projects" asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
-				</td>
-			</tr>
-		}
+	@foreach (var item in Model)
+	{
+		<tr>
+			<td>
+				<img src="@Url.Action("GetProjectIcon", "Projects", new { Id = item.Id })" alt="item.Name" class="list-preview-image" />
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Name)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Description)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.ShortDescription)
+			</td>
+			<<td id="@item.Id">
+				@Html.CheckBoxFor(modelItem => item.IsPublished, new { id = "is-published-" + item.Id, @class = "is-published-check-box" })
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Created)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Updated)
+			</td>
+			<td>
+				<a asp-controller="Projects" asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> |
+				<a asp-controller="Projects" asp-action="Details" asp-route-id="@item.Id">Просмотреть</a> |
+				<a asp-controller="Projects" asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+			</td>
+		</tr>
+	}
 	</tbody>
 </table>
+
+@section Scripts {
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	<script>
+		$(".is-published-check-box").click(function () {
+
+			var id = parseInt(this.id.replace("is-published-", ""));
+			$.ajax({
+				type: "POST",
+				url: "@Url.Action("TogglePublish")",
+				data: { id: id },
+				success: function (html) {
+					//console.log(html);
+					$('#specifications').html(html);
+				},
+				error: function (msg) {
+					console.log(msg);
+				}
+			});
+		});
+	</script>
+}
+

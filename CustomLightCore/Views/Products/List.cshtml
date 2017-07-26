@@ -61,7 +61,7 @@
 				}
 				</td>
 				<td id="@item.Id">
-					@Html.CheckBoxFor(modelItem => item.IsPublished, new { id = item.Id, @class = "check-box" })
+					@Html.CheckBoxFor(modelItem => item.IsPublished, new { id = "is-published-" + item.Id, @class = "is-published-check-box" })
 				</td>
 				<td>
 					@Html.DisplayFor(modelItem => item.Created)
@@ -85,9 +85,9 @@
 @section Scripts {
 	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 	<script>
-		$(".check-box").click(function () {
+		$(".is-published-check-box").click(function () {
 
-			var id = parseInt(this.id);
+			var id = parseInt(this.id.replace("is-published-", ""));
 			$.ajax({
 				type: "POST",
 				url: "@Url.Action("TogglePublish")",

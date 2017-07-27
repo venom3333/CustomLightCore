@@ -54,9 +54,8 @@ namespace CustomLightCore.Controllers
 		}
 		// GET: Categories/Create
 		[Authorize]
-		public async Task<IActionResult> Create()
+		public IActionResult Create()
 		{
-			await CreateViewBag();
 			return View();
 		}
 

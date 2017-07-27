@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using CustomLightCore.ViewModels.Products;
 using System.Collections.Generic;
 
+
 namespace CustomLightCore.Controllers
 {
 	public class ProductsController : BaseController

@@ -3,7 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CustomLightCore.Models;
+using CustomLightCore.ViewModels.Projects;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CustomLightCore.Controllers
 {
@@ -13,7 +15,11 @@ namespace CustomLightCore.Controllers
 		[Authorize]
         public async Task<IActionResult> List()
         {
-            return View(await db.Projects.ToListAsync());
+			var projects = await db.Projects
+				.Include(p => p.CategoryProject)
+				.ThenInclude(cp => cp.Categories)
+				.ToListAsync();
+			return View(projects);
         }
 
         // GET: Projects/Details/5
@@ -31,16 +37,15 @@ namespace CustomLightCore.Controllers
                 return NotFound();
             }
 
-			ViewBag.Categories = await db.Categories.ToListAsync();
-			ViewBag.Projects = await db.Projects.ToListAsync();
-			ViewBag.Pages = await db.Pages.ToListAsync();
-			ViewBag.Essentials = await db.Essentials.FirstOrDefaultAsync();
+            await CreateViewBag();
 			return View(projects);
         }
 
         // GET: Projects/Create
+        [Authorize]
         public IActionResult Create()
         {
+            ViewData["Categories"] = new SelectList(db.Categories, "Id", "Name");
             return View();
         }
 
@@ -48,19 +53,27 @@ namespace CustomLightCore.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,IsPublished,Created,Updated")] Project projects)
+        public async Task<IActionResult> Create([Bind(
+                "Id,Name,Description,ShortDescription,Icon,IsPublished,CategoryProjectId,ProjectImages")]
+            ProjectViewModel createdProject)
         {
             if (ModelState.IsValid)
             {
-                db.Add(projects);
+                var project = createdProject.GetModelByViewModel();
+                
+                db.Add(project);
                 await db.SaveChangesAsync();
                 return RedirectToAction("List");
             }
-            return View(projects);
+            
+            ViewData["Categories"] = new SelectList(db.Categories, "Id", "Name");
+            return View(createdProject);
         }
 
         // GET: Projects/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -80,6 +93,7 @@ namespace CustomLightCore.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,IsPublished,Created,Updated")] Project projects)
         {
@@ -112,6 +126,7 @@ namespace CustomLightCore.Controllers
         }
 
         // GET: Projects/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -131,6 +146,7 @@ namespace CustomLightCore.Controllers
 
         // POST: Projects/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

@@ -41,7 +41,7 @@
 	{
 		<tr>
 			<td>
-				<img src="@Url.Action("GetProjectIcon", "Projects", new { Id = item.Id })" alt="item.Name" class="list-preview-image" />
+				<img src="@Url.Action("GetProjectIcon", "Projects", new { item.Id })" alt="item.Name" class="list-preview-image" />
 			</td>
 			<td>
 				@Html.DisplayFor(modelItem => item.Name)

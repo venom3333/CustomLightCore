@@ -1,16 +1,17 @@
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using CustomLightCore.Models;
-using Microsoft.AspNetCore.Authorization;
-using CustomLightCore.ViewModels.Products;
-using System.Collections.Generic;
-
-
 namespace CustomLightCore.Controllers
 {
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Threading.Tasks;
+
+	using CustomLightCore.Models;
+	using CustomLightCore.ViewModels.Products;
+
+	using Microsoft.AspNetCore.Authorization;
+	using Microsoft.AspNetCore.Mvc;
+	using Microsoft.AspNetCore.Mvc.Rendering;
+	using Microsoft.EntityFrameworkCore;
+
 	public class ProductsController : BaseController
 	{
 		// GET: Products
@@ -82,7 +83,16 @@ namespace CustomLightCore.Controllers
 			return View(product);
 		}
 
-		// GET: Products/Edit/5
+		/// <summary>
+		/// The edit.
+		/// </summary>
+		/// <param name="id">
+		/// The id.
+		/// </param>
+		/// <returns>
+		/// The <see cref="Task"/>.
+		/// </returns>
+		/// // GET: Products/Edit/5
 		[Authorize]
 		public async Task<IActionResult> Edit(int? id)
 		{

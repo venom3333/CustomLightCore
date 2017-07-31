@@ -1,15 +1,15 @@
 @model CustomLightCore.Models.Project
 
 @{
-    ViewData["Title"] = "Delete";
-    Layout = "~/Views/_Layouts/_Main.cshtml";
+    ViewData["Title"] = "Удалить Проект.";
+    Layout = "~/Views/_Layouts/_Admin.cshtml";
 }
 
-<h2>Delete</h2>
+<h2>Удалить</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Вы уверены что хотите удалить это?</h3>
 <div>
-    <h4>Projects</h4>
+    <h4>Проект</h4>
     <hr />
     <dl class="dl-horizontal">
         <input type="hidden" asp-for="Id" />
@@ -23,7 +23,7 @@
             @Html.DisplayNameFor(model => model.Description)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Description)
+            @Html.Raw(Model.Description)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.ShortDescription)
@@ -35,13 +35,7 @@
             @Html.DisplayNameFor(model => model.Icon)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Icon)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.IconMimeType)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.IconMimeType)
+            <img src="@Url.Action("GetProjectIcon", "Projects", new { Id = Model.Id })" class="img-responsive" alt="@Model.Name">
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.IsPublished)
@@ -65,8 +59,8 @@
     
     <form asp-action="Delete">
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            <a asp-action="List">Back to List</a>
+            <input type="submit" value="Удалить" class="btn btn-danger" /> |
+            <a asp-action="List"><input type="button" class="btn btn-default" value="Вернуться к списку" /></a>
         </div>
     </form>
 </div>

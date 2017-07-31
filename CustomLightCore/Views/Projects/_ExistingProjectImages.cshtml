@@ -1,3 +1,44 @@
-﻿@model $model$
+﻿@model CustomLightCore.ViewModels.Projects.ProjectViewModel
 
-$END$
+<div class="form-group">
+    <label asp-for="ExistingProjectImageIds" class="col-md-2 control-label"></label>
+    <div class="col-md-10">
+        @{
+            /*Для Id существующих изображений*/
+            for (var i = 0; i < Model.ExistingProjectImageIds.Count; i++)
+            {
+                @Html.HiddenFor(m => m.ExistingProjectImageIds[i])
+            }
+            
+            foreach (var imageId in Model.ExistingProjectImageIds)
+            {
+                <div class="col-md-2">
+                    <img src="@Url.Action("GetProjectImage", "Projects", new {imageId})" class="img-responsive" alt="@Model.Name">
+                    <i class="fa fa-times existing-image" id="remove-existing-image-@imageId" aria-hidden="true"></i>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<script>
+    $(function() {
+        $(".existing-image").click(function() {
+            var form = $('form');
+            var imageId = parseInt(this.id.replace("remove-existing-image-", ""));
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("RemoveExistingImage")",
+                data: form.serialize() + '&imageId=' + imageId,
+                success: function(html) {
+                    //console.log(html);
+                    $('#existing-images').html(html);
+                },
+                error: function(msg) {
+                    console.log(msg);
+                }
+            });
+        });
+    });
+
+</script>

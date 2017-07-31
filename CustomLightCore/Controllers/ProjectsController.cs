@@ -12,14 +12,14 @@ namespace CustomLightCore.Controllers
     public class ProjectsController : BaseController
     {
         // GET: Projects
-		[Authorize]
+        [Authorize]
         public async Task<IActionResult> List()
         {
-			var projects = await db.Projects
-				.Include(p => p.CategoryProject)
-				.ThenInclude(cp => cp.Categories)
-				.ToListAsync();
-			return View(projects);
+            var projects = await db.Projects
+                .Include(p => p.CategoryProject)
+                .ThenInclude(cp => cp.Categories)
+                .ToListAsync();
+            return View(projects);
         }
 
         // GET: Projects/Details/5
@@ -38,7 +38,7 @@ namespace CustomLightCore.Controllers
             }
 
             await CreateViewBag();
-			return View(projects);
+            return View(projects);
         }
 
         // GET: Projects/Create
@@ -62,12 +62,12 @@ namespace CustomLightCore.Controllers
             if (ModelState.IsValid)
             {
                 var project = createdProject.GetModelByViewModel();
-                
+
                 db.Add(project);
                 await db.SaveChangesAsync();
                 return RedirectToAction("List");
             }
-            
+
             ViewData["Categories"] = new SelectList(db.Categories, "Id", "Name");
             return View(createdProject);
         }
@@ -81,12 +81,11 @@ namespace CustomLightCore.Controllers
                 return NotFound();
             }
 
-            var projects = await db.Projects.SingleOrDefaultAsync(m => m.Id == id);
-            if (projects == null)
-            {
-                return NotFound();
-            }
-            return View(projects);
+            var projectViewModel = await ProjectViewModel.GetViewModelByModelId(id);
+
+            ViewData["Categories"] =
+                new MultiSelectList(db.Categories, "Id", "Name", projectViewModel.CategoryProjectId);
+            return View(projectViewModel);
         }
 
         // POST: Projects/Edit/5
@@ -95,9 +94,11 @@ namespace CustomLightCore.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,IsPublished,Created,Updated")] Project projects)
+        public async Task<IActionResult> Edit(int id, [Bind(
+                "Id,Name,Description,ShortDescription,Icon,IsPublished,CategoryProjectId,ProjectImages,ExistingProjectImageIds")]
+            ProjectViewModel editedProject)
         {
-            if (id != projects.Id)
+            if (id != editedProject.Id)
             {
                 return NotFound();
             }
@@ -106,12 +107,14 @@ namespace CustomLightCore.Controllers
             {
                 try
                 {
-                    db.Update(projects);
+                    var project = editedProject.GetModelByViewModel();
+                    
+                    db.Update(project);
                     await db.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProjectsExists(projects.Id))
+                    if (!ProjectsExists(editedProject.Id))
                     {
                         return NotFound();
                     }
@@ -122,7 +125,7 @@ namespace CustomLightCore.Controllers
                 }
                 return RedirectToAction("List");
             }
-            return View(projects);
+            return View(editedProject);
         }
 
         // GET: Projects/Delete/5
@@ -134,14 +137,14 @@ namespace CustomLightCore.Controllers
                 return NotFound();
             }
 
-            var projects = await db.Projects
+            var project = await db.Projects
                 .SingleOrDefaultAsync(m => m.Id == id);
-            if (projects == null)
+            if (project == null)
             {
                 return NotFound();
             }
 
-            return View(projects);
+            return View(project);
         }
 
         // POST: Projects/Delete/5
@@ -150,7 +153,8 @@ namespace CustomLightCore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var projects = await db.Projects.SingleOrDefaultAsync(m => m.Id == id);
+            var projects = await db.Projects
+                .SingleOrDefaultAsync(m => m.Id == id);
             db.Projects.Remove(projects);
             await db.SaveChangesAsync();
             return RedirectToAction("List");
@@ -161,41 +165,41 @@ namespace CustomLightCore.Controllers
             return db.Projects.Any(e => e.Id == id);
         }
 
-		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
-		public FileContentResult GetProjectIcon(int? id)
-		{
-			Project projs = db.Projects
-				.FirstOrDefault(p => p.Id == id);
+        [ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
+        public FileContentResult GetProjectIcon(int? id)
+        {
+            Project projs = db.Projects
+                .FirstOrDefault(p => p.Id == id);
 
-			if (projs.Icon != null)
-			{
-				return File(projs.Icon, projs.IconMimeType);
-			}
-			else
-			{
-				return null;
-			}
-		}
+            if (projs.Icon != null)
+            {
+                return File(projs.Icon, projs.IconMimeType);
+            }
+            else
+            {
+                return null;
+            }
+        }
 
-		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
-		public FileContentResult GetProjectImage(int? imageId)
-		{
-			ProjectImage image = db.ProjectImages.FirstOrDefault(i => i.Id == imageId);
+        [ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
+        public FileContentResult GetProjectImage(int? imageId)
+        {
+            ProjectImage image = db.ProjectImages.FirstOrDefault(i => i.Id == imageId);
 
-			if (image != null)
-			{
-				return File(image.ImageData, image.ImageMimeType);
-			}
-			else
-			{
-				return null;
-			}
-		}
-        
+            if (image != null)
+            {
+                return File(image.ImageData, image.ImageMimeType);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         // Вижу / Не вижу
         [HttpPost]
         [Authorize]
-        public async Task<bool> TogglePublish([Bind("id")]int? id)
+        public async Task<bool> TogglePublish([Bind("id")] int? id)
         {
             if (id == null)
             {
@@ -215,5 +219,19 @@ namespace CustomLightCore.Controllers
 
             return true;
         }
-	}
+
+        // Удалить существующее изображение для формы редактирования
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> RemoveExistingImage(
+            ProjectViewModel project, int imageId)
+        {
+            if (project.ExistingProjectImageIds != null)
+            {
+                project.ExistingProjectImageIds.Remove(imageId);
+                ModelState.Clear();
+            }
+            return PartialView("_ExistingProjectImages", project);
+        }
+    }
 }

@@ -1,78 +1,81 @@
-@model CustomLightCore.Models.Project
+@model CustomLightCore.ViewModels.Projects.ProjectViewModel
 
 @{
-    ViewData["Title"] = "Edit";
-    Layout = "~/Views/_Layouts/_Main.cshtml";
+    ViewData["Title"] = "Редактирование Проекта.";
+    Layout = "~/Views/_Layouts/_Admin.cshtml";
 }
 
-<h2>Edit</h2>
+<h2>Редактирование</h2>
 
-<form asp-action="Edit">
+<form asp-action="Edit" enctype="multipart/form-data">
     <div class="form-horizontal">
-        <h4>Projects</h4>
-        <hr />
+        <h4>Проект</h4>
+        <hr/>
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="Id"/>
         <div class="form-group">
             <label asp-for="Name" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control"/>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
             <label asp-for="Description" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Description" class="form-control" />
+                <textarea asp-for="Description" class="form-control"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
             <label asp-for="ShortDescription" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="ShortDescription" class="form-control" />
+                <input asp-for="ShortDescription" class="form-control"/>
                 <span asp-validation-for="ShortDescription" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">Текущая иконка</label>
+            <div class="col-md-10">
+                <img src="@Url.Action("GetProjectIcon", "Projects", new { Model.Id })" class="img-responsive" alt="@Model.Name">
             </div>
         </div>
         <div class="form-group">
             <label asp-for="Icon" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Icon" class="form-control" />
+                <input asp-for="Icon" class="form-control"/>
                 <span asp-validation-for="Icon" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="IconMimeType" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="IconMimeType" class="form-control" />
-                <span asp-validation-for="IconMimeType" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <div class="checkbox">
-                    <input asp-for="IsPublished" />
+                    <input asp-for="IsPublished"/>
                     <label asp-for="IsPublished"></label>
                 </div>
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="Created" class="col-md-2 control-label"></label>
+            <label asp-for="CategoryProjectId" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Created" class="form-control" />
-                <span asp-validation-for="Created" class="text-danger"></span>
+                <select asp-for="CategoryProjectId" class="form-control" asp-items="ViewBag.Categories"></select>
             </div>
+        </div>
+        <div id="existing-images">
+            @{ await Html.RenderPartialAsync("_ExistingProjectImages"); }
         </div>
         <div class="form-group">
-            <label asp-for="Updated" class="col-md-2 control-label"></label>
+            <label asp-for="ProjectImages" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Updated" class="form-control" />
-                <span asp-validation-for="Updated" class="text-danger"></span>
+                <input asp-for="ProjectImages" class="form-control" multiple/>
+                <span asp-validation-for="ProjectImages" class="text-danger"></span>
             </div>
         </div>
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Save" class="btn btn-default"/>
+                @Html.ValidationSummary()
             </div>
         </div>
     </div>
@@ -83,5 +86,32 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    
+    <script>
+        CKEDITOR.replace('Description');
+    </script>
+    
+    <script>
+        $(function() {
+            $(".existing-image").click(function() {
+                var form = $('form');
+                var formData = new FormData(form)
+                var imageId = parseInt(this.id.replace("remove-existing-image-", ""));
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("RemoveExistingImage")",
+                    data: form.serialize() + '&imageId=' + imageId,
+                    success: function(html) {
+                        //console.log(html);
+                        $('#existing-images').html(html);
+                    },
+                    error: function(msg) {
+                        console.log(msg);
+                    }
+                });
+            });
+        });
+
+    </script>
 }

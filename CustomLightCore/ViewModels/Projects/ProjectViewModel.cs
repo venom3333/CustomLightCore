@@ -1,116 +1,194 @@
 ﻿using System;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using CustomLightCore.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CustomLightCore.ViewModels.Projects
 {
-	public class ProjectViewModel
-	{
-		public int Id { get; set; }
+    public class ProjectViewModel
+    {
+        public int Id { get; set; }
 
-		[Required(ErrorMessage = "Введите наименование!")]
-		[DataType(DataType.Text)]
-		public string Name { get; set; }
+        [DisplayName("Наименование")]
+        [Required(ErrorMessage = "Введите наименование!")]
+        [DataType(DataType.Text)]
+        public string Name { get; set; }
 
-		[DataType(DataType.MultilineText)]
-		public string Description { get; set; }
+        [DisplayName("Описание")]
+        [DataType(DataType.MultilineText)]
+        public string Description { get; set; }
 
-		[DataType(DataType.Text)]
-		public string ShortDescription { get; set; }
+        [DisplayName("Краткое описание")]
+        [DataType(DataType.Text)]
+        public string ShortDescription { get; set; }
 
-		[DataType(DataType.Upload)]
-		public IFormFile Icon { get; set; }
+        [DisplayName("Загрузить Иконку")]
+        [DataType(DataType.Upload)]
+        public IFormFile Icon { get; set; }
 
-		public bool IsPublished { get; set; }
+        [DisplayName("Опубликовано")]
+        public bool IsPublished { get; set; }
 
-		// Категории
-		public List<int> CategoryProjectId { get; set; }
+        // Категории
+        [DisplayName("Категории")]
+        public List<int> CategoryProjectId { get; set; }
 
-		// Изображения
-		public virtual List<IFormFile> ProjectImages { get; set; }
+        // Изображения
+        [DisplayName("Добавить Изображения")]
+        public virtual List<IFormFile> ProjectImages { get; set; }
 
+        [DisplayName("Текущие изображения")]
+        public List<int> ExistingProjectImageIds { get; set; }
 
-		/// <summary>
-		/// Явное преобразование из вью-модели в доменную.
-		/// </summary>
-		public static explicit operator Project(ProjectViewModel item)
-		{
-			var now = DateTime.Now;
+        /// <summary>
+        /// Явное преобразование из вью-модели в доменную.
+        /// </summary>
+        public static explicit operator Project(ProjectViewModel item)
+        {
+            var now = DateTime.Now;
 
-			var result = new Project
-			{
-				Name = item.Name,
-				Description = item.Description,
-				ShortDescription = item.ShortDescription,
-				Created = now,
-				Updated = now,
-				IsPublished = item.IsPublished
+            var result = new Project();
 
-			};
-			
-			// Категории проекта
-			if (item.CategoryProjectId != null)
-			{
-				var categoryProjects = new HashSet<CategoryProject>();
-				foreach (var categoryId in item.CategoryProjectId)
+            if (item.Id != 0)
+            {
+                using (var db = new CustomLightContext())
+                {
+                    result = db.Projects
+                        .Include(p=>p.CategoryProject)
+                        .FirstOrDefault(p => p.Id == item.Id);
+                }
+            }
+
+            result.Name = item.Name;
+            result.Description = item.Description;
+            result.ShortDescription = item.ShortDescription;
+            result.Updated = now;
+            result.IsPublished = item.IsPublished;
+            
+
+            // Категории проекта
+            if (item.CategoryProjectId != null)
+            {
+                var categoryProjects = new HashSet<CategoryProject>();
+                foreach (var categoryId in item.CategoryProjectId)
+                {
+                    if (result.CategoryProject.Select(cp => cp.CategoriesId).ToList().Contains(categoryId))
+                    {
+                        continue;
+                    }
+                    var categoryProject = new CategoryProject
+                    {
+                        CategoriesId = categoryId
+                    };
+                    categoryProjects.Add(categoryProject);
+                }
+                result.CategoryProject = categoryProjects;
+            }
+
+            // иконка
+            if (item.Icon != null && item.Icon.ContentType.ToLower().StartsWith("image/"))
+            {
+                MemoryStream ms = new MemoryStream();
+                item.Icon.OpenReadStream().CopyTo(ms);
+
+                result.Icon = ms.ToArray();
+                result.IconMimeType = item.Icon.ContentType;
+            }
+
+            // изображения
+            if (item.ProjectImages != null)
+            {
+                var projectImages = new HashSet<ProjectImage>();
+                foreach (var projectImage in item.ProjectImages)
+                {
+                    if (projectImage != null && projectImage.ContentType.ToLower().StartsWith("image/"))
+                    {
+                        var ms = new MemoryStream();
+                        projectImage.OpenReadStream().CopyTo(ms);
+
+                        var image = new ProjectImage
+                        {
+                            ImageData = ms.ToArray(),
+                            ImageMimeType = projectImage.ContentType
+                        };
+                        projectImages.Add(image);
+                    }
+                }
+				// Теперь добавим то, что осталось в ExistingProjectImagesIds
+				if (item.ExistingProjectImageIds != null)
 				{
-					var categoryProject = new CategoryProject
+					foreach (var imageId in item.ExistingProjectImageIds)
 					{
-						CategoriesId = categoryId
-					};
-					categoryProjects.Add(categoryProject);
+						using (var db = new CustomLightContext())
+						{
+							var image = db.ProjectImages.Find(imageId);
+							projectImages.Add(image);
+						}
+					}
 				}
-				result.CategoryProject = categoryProjects;
-			}
-			
-			// иконка
-			if (item.Icon != null && item.Icon.ContentType.ToLower().StartsWith("image/"))
-			{
-				MemoryStream ms = new MemoryStream();
-				item.Icon.OpenReadStream().CopyTo(ms);
+                    result.ProjectImages = projectImages;
+            }
 
-				result.Icon = ms.ToArray();
-				result.IconMimeType = item.Icon.ContentType;
-			}
 
-			// изображения
-			var projectImages = new HashSet<ProjectImage>(); 
-			foreach (var projectImage in item.ProjectImages)
-			{
-				if (projectImage != null && projectImage.ContentType.ToLower().StartsWith("image/"))
-				{
-					var ms = new MemoryStream();
-					projectImage.OpenReadStream().CopyTo(ms);
+            return result;
+        }
 
-					var image = new ProjectImage
-					{
-						ImageData = ms.ToArray(),
-						ImageMimeType = projectImage.ContentType
-					};
-					projectImages.Add(image);
-				}
-			}
-			result.ProjectImages = projectImages;
+        /// <summary>
+        /// Получаем ДатаМодель на основе существующей вью модели
+        /// </summary>
+        public Project GetModelByViewModel()
+        {
+            return (Project) this;
+        }
 
-			return result;
+        /// <summary>
+        /// Приведение экземпляра доменной модели во viewModel.
+        /// </summary>
+        public static explicit operator ProjectViewModel(Project item)
+        {
+            if (item == null)
+            {
+                return null;
+            }
 
-		}
+            ProjectViewModel result = new ProjectViewModel
+            {
+                Id = item.Id,
+                Description = item.Description,
+                ShortDescription = item.ShortDescription,
+                Name = item.Name,
+                IsPublished = item.IsPublished,
+                ExistingProjectImageIds = item.ProjectImages.Select(image => image.Id).ToList(),
+                CategoryProjectId = item.CategoryProject.Select(cp => cp.CategoriesId).ToList()
+            };
+            return result;
+        }
 
-		/// <summary>
-		/// Получаем ДатаМодель на основе существующей вью модели
-		/// </summary>
-		public Project GetModelByViewModel()
-		{
-			return (Project)this;
-		}
-		//public ProjectViewModel()
-		//{
-		//	CategoryProject = new HashSet<CategoryProject>();
-		//	ProjectImages = new HashSet<ProjectImage>();
-		//	Specifications = new HashSet<Specification>();
-		//}
-	}
+        /// <summary>
+        /// Получаем ВьюМодель на основе id ДатаМодели
+        /// </summary>
+        public static async Task<ProjectViewModel> GetViewModelByModelId(int? id)
+        {
+            if (id == null)
+            {
+                return null;
+            }
+
+            var project = new Project();
+            using (var db = new CustomLightContext())
+            {
+                project = await db.Projects
+                    .Include(p => p.CategoryProject)
+                    .Include(p => p.ProjectImages)
+                    .FirstOrDefaultAsync(p => p.Id == id);
+            }
+            return (ProjectViewModel) project;
+        }
+    }
 }

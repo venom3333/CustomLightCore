@@ -1,345 +1,470 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ProductsController.cs" company="CustomLight">
+//   Venom
+// </copyright>
+// <summary>
+//   The products controller.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
 namespace CustomLightCore.Controllers
 {
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Threading.Tasks;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
 
-	using CustomLightCore.Models;
-	using CustomLightCore.ViewModels.Products;
+    using CustomLightCore.Models;
+    using CustomLightCore.ViewModels.Products;
 
-	using Microsoft.AspNetCore.Authorization;
-	using Microsoft.AspNetCore.Mvc;
-	using Microsoft.AspNetCore.Mvc.Rendering;
-	using Microsoft.EntityFrameworkCore;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using Microsoft.EntityFrameworkCore;
 
-	public class ProductsController : BaseController
-	{
-		// GET: Products
-		[Authorize]
-		public async Task<IActionResult> List()
-		{
-			var products = await db.Products
-				.Include(p => p.ProductType)
-				.Include(p => p.CategoryProduct)
-				.ThenInclude(cp => cp.Categories)
-				.ToListAsync();
+    /// <summary>
+    /// The products controller.
+    /// </summary>
+    public class ProductsController : BaseController
+    {
+        /// <summary>
+        /// GET: Products
+        /// </summary>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
+        [Authorize]
+        public async Task<IActionResult> List()
+        {
+            var products = await db.Products
+                .Include(p => p.ProductType)
+                .Include(p => p.CategoryProduct)
+                .ThenInclude(cp => cp.Categories)
+                .ToListAsync();
 
-			return View(products);
-		}
+            return View(products);
+        }
 
-		// GET: Products/Details/5
-		public async Task<IActionResult> Details(int? id)
-		{
-			if (id == null)
-			{
-				return NotFound();
-			}
+        /// <summary>
+        /// GET: Products/Details/5
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-			var products = await db.Products
-				.Include(p => p.ProductImages)
-				.Include(p => p.Specifications)
-				.ThenInclude(s => s.SpecificationValues)
-				.Include(p => p.ProductType)
-				.ThenInclude(pt => pt.SpecificationTitles)
-				.SingleOrDefaultAsync(m => m.Id == id);
-			if (products == null)
-			{
-				return NotFound();
-			}
+            var products = await db.Products
+                .Include(p => p.ProductImages)
+                .Include(p => p.Specifications)
+                .ThenInclude(s => s.SpecificationValues)
+                .Include(p => p.ProductType)
+                    .ThenInclude(pt => pt.SpecificationTitles)
+                .SingleOrDefaultAsync(m => m.Id == id);
+            if (products == null)
+            {
+                return NotFound();
+            }
 
-			await CreateViewBag();
-			return View(products);
-		}
+            await CreateViewBag();
+            return View(products);
+        }
 
-		// GET: Products/Create
-		[Authorize]
-		public IActionResult Create()
-		{
-			ViewData["ProductTypeId"] = new SelectList(db.ProductTypes, "Id", "Name");
-			ViewData["Categories"] = new SelectList(db.Categories, "Id", "Name");
-			return View();
-		}
+        /// <summary>
+        /// GET: Products/Create
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IActionResult"/>.
+        /// </returns>
+        [Authorize]
+        public IActionResult Create()
+        {
+            ViewData["ProductTypeId"] = new SelectList(db.ProductTypes, "Id", "Name");
+            ViewData["Categories"] = new SelectList(db.Categories, "Id", "Name");
+            return View();
+        }
 
-		// POST: Products/Create
-		// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		[Authorize]
-		public async Task<IActionResult> Create(
-			[Bind(
-				"Id,Name,Description,ShortDescription,Icon,IsPublished,ProductTypeId,CategoryProductId,ProductImages,Specifications")]
-			ProductViewModel product)
-		{
-			if (ModelState.IsValid)
-			{
-				db.Add(product);
-				await db.SaveChangesAsync();
-				return RedirectToAction("List");
-			}
-			ViewData["ProductTypeId"] = new SelectList(db.ProductTypes, "Id", "Name", product.ProductTypeId);
-			ViewData["Categories"] = new SelectList(db.Categories, "Id", "Name", product.CategoryProductId);
+        /// <summary>
+        /// POST: Products/Create
+        /// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        /// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> Create(
+            [Bind(
+                "Id,Name,Description,ShortDescription,Icon,IsPublished,ProductTypeId,CategoryProductId,ProductImages,Specifications")]
+            ProductViewModel product)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Add(product);
+                await db.SaveChangesAsync();
+                return RedirectToAction("List");
+            }
 
-			return View(product);
-		}
+            ViewData["ProductTypeId"] = new SelectList(db.ProductTypes, "Id", "Name", product.ProductTypeId);
+            ViewData["Categories"] = new SelectList(db.Categories, "Id", "Name", product.CategoryProductId);
 
-		/// <summary>
-		/// The edit.
-		/// </summary>
-		/// <param name="id">
-		/// The id.
-		/// </param>
-		/// <returns>
-		/// The <see cref="Task"/>.
-		/// </returns>
-		/// // GET: Products/Edit/5
-		[Authorize]
-		public async Task<IActionResult> Edit(int? id)
-		{
-			if (id == null)
-			{
-				return NotFound();
-			}
+            return View(product);
+        }
 
-			var products = await db.Products.SingleOrDefaultAsync(m => m.Id == id);
-			if (products == null)
-			{
-				return NotFound();
-			}
-			ViewData["ProductTypeId"] = new SelectList(db.ProductTypes, "Id", "Name", products.ProductTypeId);
-			return View(products);
-		}
+        /// <summary>
+        /// The edit.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
+        /// // GET: Products/Edit/5
+        [Authorize]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-		// POST: Products/Edit/5
-		// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		[Authorize]
-		public async Task<IActionResult> Edit(int id,
-			[Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,IsPublished,Created,Updated,ProductTypeId")]
-			Product product)
-		{
-			if (id != product.Id)
-			{
-				return NotFound();
-			}
+            var products = await db.Products.SingleOrDefaultAsync(m => m.Id == id);
+            if (products == null)
+            {
+                return NotFound();
+            }
 
-			if (ModelState.IsValid)
-			{
-				try
-				{
-					db.Update(product);
-					await db.SaveChangesAsync();
-				}
-				catch (DbUpdateConcurrencyException)
-				{
-					if (!ProductsExists(product.Id))
-					{
-						return NotFound();
-					}
-					else
-					{
-						throw;
-					}
-				}
-				return RedirectToAction("List");
-			}
-			ViewData["ProductTypeId"] = new SelectList(db.ProductTypes, "Id", "Name", product.ProductTypeId);
-			return View(product);
-		}
+            ViewData["ProductTypeId"] = new SelectList(db.ProductTypes, "Id", "Name", products.ProductTypeId);
+            return View(products);
+        }
 
-		// GET: Products/Delete/5
-		[Authorize]
-		public async Task<IActionResult> Delete(int? id)
-		{
-			if (id == null)
-			{
-				return NotFound();
-			}
+        /// <summary>
+        /// POST: Products/Edit/5
+        /// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        /// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> Edit(
+            int id,
+            [Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,IsPublished,Created,Updated,ProductTypeId")]
+            Product product)
+        {
+            if (id != product.Id)
+            {
+                return NotFound();
+            }
 
-			var product = await db.Products
-				.Include(p => p.ProductType)
-				.SingleOrDefaultAsync(m => m.Id == id);
-			if (product == null)
-			{
-				return NotFound();
-			}
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    db.Update(product);
+                    await db.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ProductsExists(product.Id))
+                    {
+                        return NotFound();
+                    }
 
-			return View(product);
-		}
+                    throw;
+                }
 
-		// POST: Products/Delete/5
-		[Authorize]
-		[HttpPost, ActionName("Delete")]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> DeleteConfirmed(int id)
-		{
-			var product = await db.Products.SingleOrDefaultAsync(m => m.Id == id);
-			db.Products.Remove(product);
-			await db.SaveChangesAsync();
-			return RedirectToAction("List");
-		}
+                return RedirectToAction("List");
+            }
 
-		private bool ProductsExists(int id)
-		{
-			return db.Products.Any(e => e.Id == id);
-		}
+            ViewData["ProductTypeId"] = new SelectList(db.ProductTypes, "Id", "Name", product.ProductTypeId);
+            return View(product);
+        }
 
-		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
-		public FileContentResult GetProductIcon(int? id)
-		{
-			Product prods = db.Products
-				.FirstOrDefault(p => p.Id == id);
+        /// <summary>
+        /// GET: Products/Delete/5
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
+        [Authorize]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-			if (prods.Icon != null)
-			{
-				return File(prods.Icon, prods.IconMimeType);
-			}
-			else
-			{
-				return null;
-			}
-		}
+            var product = await db.Products
+                .Include(p => p.ProductType)
+                .SingleOrDefaultAsync(m => m.Id == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
 
-		[ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
-		public FileContentResult GetProductImage(int? imageId)
-		{
-			ProductImage image = db.ProductImages.FirstOrDefault(i => i.Id == imageId);
+            return View(product);
+        }
 
-			if (image != null)
-			{
-				return File(image.ImageData, image.ImageMimeType);
-			}
-			else
-			{
-				return null;
-			}
-		}
+        /// <summary>
+        /// POST: Products/Delete/5
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
+        [Authorize]
+        [HttpPost]
+        [ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var product = await db.Products.SingleOrDefaultAsync(m => m.Id == id);
+            db.Products.Remove(product);
+            await db.SaveChangesAsync();
+            return RedirectToAction("List");
+        }
 
-		// Добавить спецификацию
-		[HttpPost]
-		[Authorize]
-		[ValidateAntiForgeryToken]
-		public ActionResult GenerateSpecification(
-			[Bind(
-				"Id,Name,Description,ShortDescription,Icon,IsPublished,ProductTypeId,CategoryProductId,ProductImages,Specifications")]
-			ProductViewModel product)
-		{
-			var specification = new Specification();
-			if (product.Specifications == null)
-			{
-				product.Specifications = new List<Specification>();
-			}
+        /// <summary>
+        /// The get product icon.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="FileContentResult"/>.
+        /// </returns>
+        [ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
+        public FileContentResult GetProductIcon(int? id)
+        {
+            var prods = db.Products
+                .FirstOrDefault(p => p.Id == id);
 
-			product.Specifications.Add(specification);
+            return prods.Icon != null ? this.File(prods.Icon, prods.IconMimeType) : null;
+        }
 
-			product = FillViewModelSpecifications(product);
+        /// <summary>
+        /// The get product image.
+        /// </summary>
+        /// <param name="imageId">
+        /// The image id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="FileContentResult"/>.
+        /// </returns>
+        [ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
+        public FileContentResult GetProductImage(int? imageId)
+        {
+            var image = db.ProductImages.FirstOrDefault(i => i.Id == imageId);
 
-			return PartialView("_SpecificationsCreate", product);
-		}
+            return image != null ? File(image.ImageData, image.ImageMimeType) : null;
+        }
 
-		private ProductViewModel FillViewModelSpecifications(ProductViewModel productViewModel)
-		{
-			// Добираем тип продукта для того чтобы знать как отображать спецификации
-			productViewModel.ProductType = db.ProductTypes
-				.Include(pt => pt.SpecificationTitles)
-				.AsNoTracking()
-				.FirstOrDefault(pt => pt.Id == productViewModel.ProductTypeId);
+        /// <summary>
+        ///  Добавить спецификацию
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public ActionResult GenerateSpecification(
+            [Bind(
+                "Id,Name,Description,ShortDescription,Icon,IsPublished,ProductTypeId,CategoryProductId,ProductImages,Specifications")]
+            ProductViewModel product)
+        {
+            var specification = new Specification();
+            if (product.Specifications == null)
+            {
+                product.Specifications = new List<Specification>();
+            }
 
-			// Наполним пустыми Values если не заполненно
-			productViewModel.Specifications.ForEach(spec =>
-			{
-				if (spec.SpecificationValues == null)
-				{
-					spec.SpecificationValues = new List<SpecificationValue>();
-				}
+            product.Specifications.Add(specification);
 
-				if (spec.SpecificationValues.Count == 0)
-				{
-					foreach (var item in productViewModel.ProductType.SpecificationTitles)
-					{
-						spec.SpecificationValues.Add(new SpecificationValue
-						{
-							Value = "0",
-							Specification = spec,
-							SpecificationId = spec.Id,
-							SpecificationTitle = item,
-							SpecificationTitleId = item.Id
-						});
-					}
-				}
-			});
+            product = FillViewModelSpecifications(product);
 
-			return productViewModel;
-		}
+            return PartialView("_SpecificationsCreate", product);
+        }
 
-		// Убрать спецификацию
-		[HttpPost]
-		[Authorize]
-		[ValidateAntiForgeryToken]
-		public ActionResult RemoveSpecification(
-			[Bind(
-				"Id,Name,Description,ShortDescription,Icon,IsPublished,ProductTypeId,CategoryProductId,ProductImages,Specifications")]
-			ProductViewModel product,
-			int specificationIndex)
-		{
-			// Добираем тип продукта для того чтобы знать как отображать спецификации
-			product.ProductType = db.ProductTypes.Include(pt => pt.SpecificationTitles)
-				.AsNoTracking()
-				.FirstOrDefault(pt => pt.Id == product.ProductTypeId);
+        /// <summary>
+        /// Убрать спецификацию
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <param name="specificationIndex">
+        /// The specification index.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public ActionResult RemoveSpecification(
+            [Bind("Id,Name,Description,ShortDescription,Icon,IsPublished,ProductTypeId,CategoryProductId,ProductImages,Specifications")]
+            ProductViewModel product,
+            int specificationIndex)
+        {
+            // Добираем тип продукта для того чтобы знать как отображать спецификации
+            product.ProductType = db.ProductTypes.Include(pt => pt.SpecificationTitles)
+                .AsNoTracking()
+                .FirstOrDefault(pt => pt.Id == product.ProductTypeId);
 
-			product.Specifications.RemoveAt(specificationIndex);
+            product.Specifications.RemoveAt(specificationIndex);
 
-			ModelState.Clear();
+            ModelState.Clear();
 
-			product = FillViewModelSpecifications(product);
+            product = FillViewModelSpecifications(product);
 
-			return PartialView("_SpecificationsCreate", product);
-		}
+            return PartialView("_SpecificationsCreate", product);
+        }
 
-		// Обновить область отображения спецификаций
-		[HttpPost]
-		[Authorize]
-		[ValidateAntiForgeryToken]
-		public ActionResult UpdateSpecifications(ProductViewModel product)
-		{
-			// Добираем тип продукта для того чтобы знать как отображать спецификации
-			product.ProductType = db.ProductTypes.Include(pt => pt.SpecificationTitles)
-				.AsNoTracking()
-				.FirstOrDefault(pt => pt.Id == product.ProductTypeId);
+        /// <summary>
+        /// Обновить область отображения спецификаций
+        /// </summary>
+        /// <param name="product">
+        /// The product.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateSpecifications(ProductViewModel product)
+        {
+            // Добираем тип продукта для того чтобы знать как отображать спецификации
+            product.ProductType = db.ProductTypes.Include(pt => pt.SpecificationTitles)
+                .AsNoTracking()
+                .FirstOrDefault(pt => pt.Id == product.ProductTypeId);
 
-			product.Specifications = new List<Specification>();
+            product.Specifications = new List<Specification>();
 
-			ModelState.Clear();
+            ModelState.Clear();
 
-			product = FillViewModelSpecifications(product);
+            product = FillViewModelSpecifications(product);
 
-			return PartialView("_SpecificationsCreate", product);
-		}
+            return PartialView("_SpecificationsCreate", product);
+        }
 
-		// Вижу / Не вижу
-		[HttpPost]
-		[Authorize]
-		public async Task<bool> TogglePublish([Bind("id")]int? id)
-		{
-			if (id == null)
-			{
-				return false;
-			}
+        /// <summary>
+        /// Вижу / Не вижу
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
+        [HttpPost]
+        [Authorize]
+        public async Task<bool> TogglePublish([Bind("id")]int? id)
+        {
+            if (id == null)
+            {
+                return false;
+            }
 
-			var product = await db.Products
-				.SingleOrDefaultAsync(m => m.Id == id);
-			if (product == null)
-			{
-				return false;
-			}
+            var product = await db.Products.SingleOrDefaultAsync(m => m.Id == id);
+            if (product == null)
+            {
+                return false;
+            }
 
-			product.IsPublished = !product.IsPublished;
-			db.Update(product);
-			await db.SaveChangesAsync();
+            product.IsPublished = !product.IsPublished;
+            db.Update(product);
+            await db.SaveChangesAsync();
 
-			return true;
-		}
-	}
+            return true;
+        }
+
+        /// <summary>
+        /// The products exists.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        private bool ProductsExists(int id)
+        {
+            return db.Products.Any(e => e.Id == id);
+        }
+
+        /// <summary>
+        /// The fill view model specifications.
+        /// </summary>
+        /// <param name="productViewModel">
+        /// The product view model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ProductViewModel"/>.
+        /// </returns>
+        private ProductViewModel FillViewModelSpecifications(ProductViewModel productViewModel)
+        {
+            // Добираем тип продукта для того чтобы знать как отображать спецификации
+            productViewModel.ProductType = db.ProductTypes
+                .Include(pt => pt.SpecificationTitles)
+                .AsNoTracking()
+                .FirstOrDefault(pt => pt.Id == productViewModel.ProductTypeId);
+
+            // Наполним пустыми Values если не заполненно
+            productViewModel.Specifications.ForEach(spec =>
+                {
+                    if (spec.SpecificationValues == null)
+                    {
+                        spec.SpecificationValues = new List<SpecificationValue>();
+                    }
+
+                    if (spec.SpecificationValues.Count == 0)
+                    {
+                        foreach (var item in productViewModel.ProductType.SpecificationTitles)
+                        {
+                            spec.SpecificationValues.Add(
+                                new SpecificationValue
+                                {
+                                    Value = string.Empty,
+                                    Specification = spec,
+                                    SpecificationId = spec.Id,
+                                    SpecificationTitle = item,
+                                    SpecificationTitleId = item.Id
+                                });
+                        }
+                    }
+                });
+
+            return productViewModel;
+        }
+    }
 }

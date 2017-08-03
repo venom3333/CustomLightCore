@@ -1,4 +1,7 @@
-﻿@model CustomLightCore.ViewModels.Products.ProductViewModel
+﻿@using System.Linq
+@using Microsoft.AspNetCore.Mvc
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model CustomLightCore.ViewModels.Products.ProductViewModel
 
 @if (Model.ProductType != null)
 {
@@ -20,7 +23,7 @@
 					@for (var j = 0; j < Model.Specifications[i].SpecificationValues.Count; j++)
 					{
 						@*@Html.TextBoxFor(sp => sp.Specifications[counter].SpecificationValues)*@
-						<td>@Html.EditorFor(sp => Model.Specifications[i].SpecificationValues.ToList()[j].Value)</td>
+						<td>@Html.EditorFor(sp => Model.Specifications[i].SpecificationValues[j].Value)</td>
 					}
 					<td>@Html.EditorFor(sp => sp.Specifications[i].Price)</td>
 					<td><i class="fa fa-times remove-specification" id="remove-specification-@i" aria-h aria-hidden="true"></i></td>

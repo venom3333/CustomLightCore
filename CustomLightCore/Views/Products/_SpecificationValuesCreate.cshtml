@@ -1,4 +1,6 @@
-@model HashSet<CustomLightCore.Models.SpecificationValue>
+@using System.Collections.Generic
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model System.Collections.Generic.HashSet<CustomLightCore.Models.SpecificationValue>
 
 @foreach (var value in Model)
 {
@@ -9,5 +11,4 @@
 }
 @*int counter = 0;*@
 
-				}
 @*<td><i class="fa fa-times remove-specification" id="remove-specification-@counter" aria-hidden="true"></i></td>*@

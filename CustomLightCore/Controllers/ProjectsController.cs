@@ -1,14 +1,16 @@
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using CustomLightCore.Models;
-using CustomLightCore.ViewModels.Projects;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Rendering;
-
 namespace CustomLightCore.Controllers
 {
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using CustomLightCore.Models;
+    using CustomLightCore.ViewModels.Projects;
+
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using Microsoft.EntityFrameworkCore;
+
     public class ProjectsController : BaseController
     {
         // GET: Projects

@@ -15,6 +15,7 @@ namespace CustomLightCore.Controllers
 
     using CustomLightCore.Models;
     using CustomLightCore.ViewModels.Products;
+    using CustomLightCore.ViewModels.Specifications;
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -41,7 +42,7 @@ namespace CustomLightCore.Controllers
                 .ThenInclude(cp => cp.Categories)
                 .ToListAsync();
 
-            return View(products);
+            return View("~/Views/Products/List.cshtml",products);
         }
 
         /// <summary>
@@ -87,7 +88,7 @@ namespace CustomLightCore.Controllers
         {
             ViewData["ProductTypeId"] = new SelectList(db.ProductTypes, "Id", "Name");
             ViewData["Categories"] = new SelectList(db.Categories, "Id", "Name");
-            return View();
+            return View("~/Views/Products/Create.cshtml");
         }
 
         /// <summary>
@@ -119,7 +120,7 @@ namespace CustomLightCore.Controllers
             ViewData["ProductTypeId"] = new SelectList(db.ProductTypes, "Id", "Name", product.ProductTypeId);
             ViewData["Categories"] = new SelectList(db.Categories, "Id", "Name", product.CategoryProductId);
 
-            return View(product);
+            return View("~/Views/Products/Create.cshtml", product);
         }
 
         /// <summary>
@@ -302,10 +303,10 @@ namespace CustomLightCore.Controllers
                 "Id,Name,Description,ShortDescription,Icon,IsPublished,ProductTypeId,CategoryProductId,ProductImages,Specifications")]
             ProductViewModel product)
         {
-            var specification = new Specification();
+            var specification = new SpecificationViewModel();
             if (product.Specifications == null)
             {
-                product.Specifications = new List<Specification>();
+                product.Specifications = new List<SpecificationViewModel>();
             }
 
             product.Specifications.Add(specification);
@@ -368,7 +369,7 @@ namespace CustomLightCore.Controllers
                 .AsNoTracking()
                 .FirstOrDefault(pt => pt.Id == product.ProductTypeId);
 
-            product.Specifications = new List<Specification>();
+            product.Specifications = new List<SpecificationViewModel>();
 
             ModelState.Clear();
 

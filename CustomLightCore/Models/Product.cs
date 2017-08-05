@@ -48,8 +48,14 @@ namespace CustomLightCore.Models
         public int ProductTypeId { get; set; }
 
         public virtual ICollection<CategoryProduct> CategoryProduct { get; set; }
+
+        [DisplayName("Текущие изображения")]
         public virtual ICollection<ProductImage> ProductImages { get; set; }
+
+        [DisplayName("Текущие спецификации")]
         public virtual ICollection<Specification> Specifications { get; set; }
+
+        [DisplayName("Тип продукта")]
         public virtual ProductType ProductType { get; set; }
     }
 }

@@ -222,6 +222,7 @@ namespace CustomLightCore.Controllers
 
             var product = await db.Products
                 .Include(p => p.ProductType)
+                .Include(p => p.ProductImages)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (product == null)
             {
@@ -273,16 +274,16 @@ namespace CustomLightCore.Controllers
         /// <summary>
         /// The get product image.
         /// </summary>
-        /// <param name="imageId">
-        /// The image id.
+        /// <param name="Id">
+        /// The Id.
         /// </param>
         /// <returns>
         /// The <see cref="FileContentResult"/>.
         /// </returns>
         [ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
-        public FileContentResult GetProductImage(int? imageId)
+        public FileContentResult GetProductImage(int? id)
         {
-            var image = db.ProductImages.FirstOrDefault(i => i.Id == imageId);
+            var image = db.ProductImages.FirstOrDefault(i => i.Id == id);
 
             return image != null ? File(image.ImageData, image.ImageMimeType) : null;
         }

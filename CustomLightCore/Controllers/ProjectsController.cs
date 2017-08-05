@@ -140,6 +140,7 @@ namespace CustomLightCore.Controllers
             }
 
             var project = await db.Projects
+                .Include(p => p.ProjectImages)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (project == null)
             {
@@ -184,9 +185,9 @@ namespace CustomLightCore.Controllers
         }
 
         [ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
-        public FileContentResult GetProjectImage(int? imageId)
+        public FileContentResult GetProjectImage(int? id)
         {
-            ProjectImage image = db.ProjectImages.FirstOrDefault(i => i.Id == imageId);
+            ProjectImage image = db.ProjectImages.FirstOrDefault(i => i.Id == id);
 
             if (image != null)
             {

@@ -35,13 +35,24 @@
             @Html.DisplayNameFor(model => model.Icon)
         </dt>
         <dd>
-            <img src="@Url.Action("GetProjectIcon", "Projects", new { Id = Model.Id })" class="img-responsive" alt="@Model.Name">
+            <img src="@Url.Action("GetProjectIcon", "Projects", new { Model.Id })" class="img-responsive" alt="@Model.Name">
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.IsPublished)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.IsPublished)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProjectImages)
+        </dt>
+        <dd>
+            @foreach (var productImage in Model.ProjectImages)
+            {
+                <div class="col-lg-2">
+                    <img src="@Url.Action("GetProjectImage", "Projects", new { productImage.Id })" class="img-responsive" alt="@Model.Name">
+                </div>
+            }
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Created)
@@ -56,7 +67,7 @@
             @Html.DisplayFor(model => model.Updated)
         </dd>
     </dl>
-    
+
     <form asp-action="Delete">
         <div class="form-actions no-color">
             <input type="submit" value="Удалить" class="btn btn-danger" /> |

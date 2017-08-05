@@ -1,15 +1,16 @@
+﻿@using CustomLightCore.Models
 @model CustomLightCore.Models.Product
 
 @{
-    ViewData["Title"] = "Delete";
-    Layout = "~/Views/_Layouts/_Main.cshtml";
+    ViewData["Title"] = "Удалить Продукт.";
+    Layout = "~/Views/_Layouts/_Admin.cshtml";
 }
 
-<h2>Delete</h2>
+<h2>Удалить</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Вы уверены что хотите удалить это?</h3>
 <div>
-    <h4>Products</h4>
+    <h4>Продукт</h4>
     <hr />
     <dl class="dl-horizontal">
         <input type="hidden" asp-for="Id" />
@@ -20,10 +21,16 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
         <dt>
+            @Html.DisplayNameFor(model => model.ProductType)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductType.Name)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.Description)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Description)
+            @Html.Raw(Model.Description)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.ShortDescription)
@@ -35,13 +42,7 @@
             @Html.DisplayNameFor(model => model.Icon)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Icon)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.IconMimeType)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.IconMimeType)
+            <img src="@Url.Action("GetProductIcon", "Products", new { Model.Id })" class="img-responsive" alt="@Model.Name">
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.IsPublished)
@@ -50,29 +51,34 @@
             @Html.DisplayFor(model => model.IsPublished)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Created)
+            @Html.DisplayNameFor(model => model.ProductImages)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Created)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Updated)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Updated)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ProductType)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ProductType.Name)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            <a asp-action="List">Back to List</a>
-        </div>
-    </form>
-</div>
+            @foreach (var productImage in Model.ProductImages)
+            {
+                <div class="col-lg-2">
+                    <img src="@Url.Action("GetProductImage", "Products", new { productImage.Id })" class="img-responsive" alt="@Model.Name">
+                </div>
+                }
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Created)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Created)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Updated)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Updated)
+            </dd>
+        </dl>
+
+        <form asp-action="Delete">
+            <div class="form-actions no-color">
+                <input type="submit" value="Удалить" class="btn btn-danger" /> |
+                <a asp-action="List"><input type="button" class="btn btn-default" value="Вернуться к списку" /></a>
+            </div>
+        </form>
+    </div>

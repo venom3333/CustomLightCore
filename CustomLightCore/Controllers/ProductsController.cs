@@ -108,19 +108,20 @@ namespace CustomLightCore.Controllers
         public async Task<IActionResult> Create(
             [Bind(
                 "Id,Name,Description,ShortDescription,Icon,IsPublished,ProductTypeId,CategoryProductId,ProductImages,Specifications")]
-            ProductViewModel product)
+            ProductViewModel createdProduct)
         {
             if (ModelState.IsValid)
             {
+                var product = (Product)createdProduct;
                 db.Add(product);
                 await db.SaveChangesAsync();
                 return RedirectToAction("List");
             }
 
-            ViewData["ProductTypeId"] = new SelectList(db.ProductTypes, "Id", "Name", product.ProductTypeId);
-            ViewData["Categories"] = new SelectList(db.Categories, "Id", "Name", product.CategoryProductId);
+            ViewData["ProductTypeId"] = new SelectList(db.ProductTypes, "Id", "Name", createdProduct.ProductTypeId);
+            ViewData["Categories"] = new SelectList(db.Categories, "Id", "Name", createdProduct.CategoryProductId);
 
-            return View("~/Views/Products/Create.cshtml", product);
+            return View("~/Views/Products/Create.cshtml", createdProduct);
         }
 
         /// <summary>

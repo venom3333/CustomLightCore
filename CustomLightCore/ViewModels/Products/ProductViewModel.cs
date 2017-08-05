@@ -144,6 +144,7 @@ namespace CustomLightCore.ViewModels.Products
             result.Description = item.Description;
             result.ShortDescription = item.ShortDescription;
             result.Updated = now;
+            result.ProductTypeId = item.ProductTypeId;
             result.IsPublished = item.IsPublished;
 
 
@@ -158,9 +159,9 @@ namespace CustomLightCore.ViewModels.Products
                         continue;
                     }
                     var categoryProduct = new CategoryProduct
-                                              {
-                                                  CategoriesId = categoryId
-                                              };
+                    {
+                        CategoriesId = categoryId
+                    };
                     categoryProducts.Add(categoryProduct);
                 }
                 result.CategoryProduct = categoryProducts;
@@ -188,10 +189,10 @@ namespace CustomLightCore.ViewModels.Products
                         productImage.OpenReadStream().CopyTo(ms);
 
                         var image = new ProductImage
-                                        {
-                                            ImageData = ms.ToArray(),
-                                            ImageMimeType = productImage.ContentType
-                                        };
+                        {
+                            ImageData = ms.ToArray(),
+                            ImageMimeType = productImage.ContentType
+                        };
                         productImages.Add(image);
                     }
                 }
@@ -208,6 +209,23 @@ namespace CustomLightCore.ViewModels.Products
                     }
                 }
                 result.ProductImages = productImages;
+            }
+
+            // спецификаци
+            if (item.Specifications != null)
+            {
+                var specifications = new HashSet<Specification>();
+                foreach (var specification in item.Specifications)
+                {
+                    var spec = new Specification
+                    {
+                        Price = specification.Price,
+                        SpecificationValues = specification.SpecificationValues
+                    };
+                    specifications.Add(spec);
+                }
+
+                result.Specifications = specifications;
             }
 
 
@@ -233,15 +251,15 @@ namespace CustomLightCore.ViewModels.Products
             }
 
             ProductViewModel result = new ProductViewModel
-                                          {
-                                              Id = item.Id,
-                                              Description = item.Description,
-                                              ShortDescription = item.ShortDescription,
-                                              Name = item.Name,
-                                              IsPublished = item.IsPublished,
-                                              ExistingProductImageIds = item.ProductImages.Select(image => image.Id).ToList(),
-                                              CategoryProductId = item.CategoryProduct.Select(cp => cp.CategoriesId).ToList()
-                                          };
+            {
+                Id = item.Id,
+                Description = item.Description,
+                ShortDescription = item.ShortDescription,
+                Name = item.Name,
+                IsPublished = item.IsPublished,
+                ExistingProductImageIds = item.ProductImages.Select(image => image.Id).ToList(),
+                CategoryProductId = item.CategoryProduct.Select(cp => cp.CategoriesId).ToList()
+            };
             return result;
         }
 

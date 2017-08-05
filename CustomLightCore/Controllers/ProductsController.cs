@@ -42,7 +42,7 @@ namespace CustomLightCore.Controllers
                 .ThenInclude(cp => cp.Categories)
                 .ToListAsync();
 
-            return View("~/Views/Products/List.cshtml",products);
+            return View("~/Views/Products/List.cshtml", products);
         }
 
         /// <summary>
@@ -455,9 +455,9 @@ namespace CustomLightCore.Controllers
                             spec.SpecificationValues.Add(
                                 new SpecificationValue
                                 {
+                                    // Specification = spec,
+                                    // SpecificationId = spec.Id,
                                     Value = string.Empty,
-                                    Specification = spec,
-                                    SpecificationId = spec.Id,
                                     SpecificationTitle = item,
                                     SpecificationTitleId = item.Id
                                 });

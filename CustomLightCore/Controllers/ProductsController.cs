@@ -221,8 +221,11 @@ namespace CustomLightCore.Controllers
             }
 
             var product = await db.Products
-                .Include(p => p.ProductType)
                 .Include(p => p.ProductImages)
+                .Include(p => p.Specifications)
+                    .ThenInclude(s => s.SpecificationValues)
+                .Include(p => p.ProductType)
+                    .ThenInclude(pt => pt.SpecificationTitles)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (product == null)
             {

@@ -59,26 +59,56 @@
                 <div class="col-lg-2">
                     <img src="@Url.Action("GetProductImage", "Products", new { productImage.Id })" class="img-responsive" alt="@Model.Name">
                 </div>
-                }
-            </dd>
-            <dt>
-                @Html.DisplayNameFor(model => model.Created)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Created)
-            </dd>
-            <dt>
-                @Html.DisplayNameFor(model => model.Updated)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Updated)
-            </dd>
-        </dl>
-
-        <form asp-action="Delete">
-            <div class="form-actions no-color">
-                <input type="submit" value="Удалить" class="btn btn-danger" /> |
-                <a asp-action="List"><input type="button" class="btn btn-default" value="Вернуться к списку" /></a>
+            }
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Specifications)
+        </dt>
+        <dd>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped table-hover sort_table">
+                    <thead>
+                        <tr>
+                            @foreach (var specificationTitle in Model.ProductType.SpecificationTitles)
+                            {
+                                <th>@specificationTitle.Name</th>
+                            }
+                            <th>Цена</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var specification in Model.Specifications)
+                        {
+                            <tr>
+                                @foreach (var specificationVal in specification.SpecificationValues)
+                                {
+                                    <td>@specificationVal.Value</td>
+                                }
+                                <td>@specification.Price</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
-        </form>
-    </div>
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Created)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Created)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Updated)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Updated)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <input type="submit" value="Удалить" class="btn btn-danger" /> |
+            <a asp-action="List"><input type="button" class="btn btn-default" value="Вернуться к списку" /></a>
+        </div>
+    </form>
+</div>

@@ -66,15 +66,15 @@ namespace CustomLightCore.ViewModels.Products
         [DisplayName("Текущие спецификации")]
         public List<Specification> ExistingSpecifications { get; set; }
 
-        /// <summary>
-        /// Gets or sets the specification values.
-        /// </summary>
-        public List<SpecificationValue> SpecificationValues { get; set; }
+        ///// <summary>
+        ///// Gets or sets the specification values.
+        ///// </summary>
+        //public List<SpecificationValue> SpecificationValues { get; set; }
 
-        /// <summary>
-        /// Gets or sets the specification value.
-        /// </summary>
-        public SpecificationValue SpecificationValue { get; set; }
+        ///// <summary>
+        ///// Gets or sets the specification value.
+        ///// </summary>
+        //public SpecificationValue SpecificationValue { get; set; }
 
 
         /// <summary>
@@ -103,6 +103,8 @@ namespace CustomLightCore.ViewModels.Products
                     result = db.Products
                         .Include(p => p.CategoryProduct)
                         .Include(p => p.ProductImages)
+                        .Include(p => p.Specifications)
+                        .Include(p => p.ProductType)
                         .FirstOrDefault(p => p.Id == item.Id);
 
                     // Удаленные категории удаляем из контекста

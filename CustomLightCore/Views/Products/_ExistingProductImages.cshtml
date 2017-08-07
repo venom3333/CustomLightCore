@@ -1,0 +1,44 @@
+@model CustomLightCore.ViewModels.Products.ProductViewModel
+
+<div class="form-group">
+    <label asp-for="ExistingProductImageIds" class="col-md-2 control-label"></label>
+    <div class="col-md-10">
+        @{
+            /*Для Id существующих изображений*/
+            for (var i = 0; i < Model.ExistingProductImageIds.Count; i++)
+            {
+                @Html.HiddenFor(m => m.ExistingProductImageIds[i])
+            }
+
+            foreach (var imageId in Model.ExistingProductImageIds)
+            {
+                <div class="col-md-2">
+                    <img src="@Url.Action("GetProductImage", "Products", new {imageId})" class="img-responsive" alt="@Model.Name">
+                    <i class="fa fa-times existing-image" id="remove-existing-image-@imageId" aria-hidden="true"></i>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<script>
+    $(function() {
+        $(".existing-image").click(function() {
+            var form = $('form');
+            var imageId = parseInt(this.id.replace("remove-existing-image-", ""));
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("RemoveExistingImage")",
+                data: form.serialize() + '&imageId=' + imageId,
+                success: function(html) {
+                    //console.log(html);
+                    $('#existing-images').html(html);
+                },
+                error: function(msg) {
+                    console.log(msg);
+                }
+            });
+        });
+    });
+
+</script>

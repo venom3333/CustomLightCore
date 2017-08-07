@@ -472,5 +472,19 @@ namespace CustomLightCore.Controllers
 
             return productViewModel;
         }
+
+        // Удалить существующее изображение для формы редактирования
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> RemoveExistingImage(
+            ProductViewModel product, int imageId)
+        {
+            if (product.ExistingProductImageIds != null)
+            {
+                product.ExistingProductImageIds.Remove(imageId);
+                ModelState.Clear();
+            }
+            return PartialView("_ExistingProductImages", product);
+        }
     }
 }

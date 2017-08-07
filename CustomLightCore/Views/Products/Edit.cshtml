@@ -1,18 +1,18 @@
-@model CustomLightCore.Models.Product
+@model CustomLightCore.ViewModels.Products.ProductViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Редактирование Продукта.";
     Layout = "~/Views/_Layouts/_Admin.cshtml";
 }
 
-<h2>Edit</h2>
+<h2>Редактирование</h2>
 
-<form asp-action="Edit">
+<form asp-action="Edit" enctype="multipart/form-data">
     <div class="form-horizontal">
-        <h4>Products</h4>
+        <h4>Проект</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="Id" />
         <div class="form-group">
             <label asp-for="Name" class="col-md-2 control-label"></label>
             <div class="col-md-10">
@@ -23,7 +23,7 @@
         <div class="form-group">
             <label asp-for="Description" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Description" class="form-control" />
+                <textarea asp-for="Description" class="form-control"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
         </div>
@@ -35,17 +35,16 @@
             </div>
         </div>
         <div class="form-group">
+            <label class="col-md-2 control-label">Текущая иконка</label>
+            <div class="col-md-10">
+                <img src="@Url.Action("GetProductIcon", "Products", new { Model.Id })" class="img-responsive" alt="@Model.Name">
+            </div>
+        </div>
+        <div class="form-group">
             <label asp-for="Icon" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="Icon" class="form-control" />
                 <span asp-validation-for="Icon" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="IconMimeType" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="IconMimeType" class="form-control" />
-                <span asp-validation-for="IconMimeType" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
@@ -57,38 +56,62 @@
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="Created" class="col-md-2 control-label"></label>
+            <label asp-for="CategoryProductId" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Created" class="form-control" />
-                <span asp-validation-for="Created" class="text-danger"></span>
+                <select asp-for="CategoryProductId" class="form-control" asp-items="ViewBag.Categories"></select>
             </div>
+        </div>
+        <div id="existing-images">
+            @{ await Html.RenderPartialAsync("_ExistingProductImages"); }
         </div>
         <div class="form-group">
-            <label asp-for="Updated" class="col-md-2 control-label"></label>
+            <label asp-for="ProductImages" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Updated" class="form-control" />
-                <span asp-validation-for="Updated" class="text-danger"></span>
+                <input asp-for="ProductImages" class="form-control" multiple />
+                <span asp-validation-for="ProductImages" class="text-danger"></span>
             </div>
         </div>
-        <div class="form-group">
-            <label asp-for="ProductTypeId" class="control-label col-md-2"></label>
-            <div class="col-md-10">
-                <select asp-for="ProductTypeId" class="form-control" asp-items="ViewBag.ProductTypeId"></select>
-                <span asp-validation-for="ProductTypeId" class="text-danger"></span>
-            </div>
-        </div>
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Сохранить" class="btn btn-success" />
+                @Html.ValidationSummary()
             </div>
         </div>
     </div>
 </form>
 
 <div>
-    <a asp-action="List">Back to List</a>
+    <a asp-action="List" class="btn btn-default">Вернуться к списку</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+    <script>
+        CKEDITOR.replace('Description');
+    </script>
+
+    <script>
+        $(function() {
+            $(".existing-image").click(function() {
+                var form = $('form');
+                var formData = new FormData(form)
+                var imageId = parseInt(this.id.replace("remove-existing-image-", ""));
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("RemoveExistingImage")",
+                    data: form.serialize() + '&imageId=' + imageId,
+                    success: function(html) {
+                        //console.log(html);
+                        $('#existing-images').html(html);
+                    },
+                    error: function(msg) {
+                        console.log(msg);
+                    }
+                });
+            });
+        });
+
+    </script>
 }

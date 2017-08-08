@@ -172,7 +172,7 @@ namespace CustomLightCore.Controllers
         [Authorize]
         public async Task<IActionResult> Edit(
             int id,
-            [Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,IsPublished,Created,Updated,ProductTypeId")]
+            [Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,IsPublished,Created,Updated,ProductTypeId,ExistingProductImageIds,CategoryProductId,Specifications,ProductImages")]
             ProductViewModel editedProduct)
         {
             if (id != editedProduct.Id)
@@ -182,7 +182,7 @@ namespace CustomLightCore.Controllers
 
             if (ModelState.IsValid)
             {
-                var product = (Product)editedProduct;
+                var product = editedProduct.GetModelByViewModel();
                 try
                 {
                     db.Update(product);
@@ -201,6 +201,7 @@ namespace CustomLightCore.Controllers
                 return RedirectToAction("List");
             }
 
+            ViewData["Categories"] = new SelectList(db.Categories, "Id", "Name", editedProduct.CategoryProductId);
             ViewData["ProductTypeId"] = new SelectList(db.ProductTypes, "Id", "Name", editedProduct.ProductTypeId);
             return View(editedProduct);
         }

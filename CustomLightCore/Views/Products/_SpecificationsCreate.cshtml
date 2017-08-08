@@ -6,31 +6,35 @@
 @if (Model.ProductType != null)
 {
 
-	<table class="table table-bordered table-striped table-hover sort_table">
-		<thead>
-			<tr>
-				@foreach (var specificationTitle in Model.ProductType.SpecificationTitles)
-				{
-					<th>@specificationTitle.Name</th>
-				}
-				<th>Цена</th>
-			</tr>
-		</thead>
-		<tbody>
-			@for (var i = 0; i < Model.Specifications.Count; i++)
-				{
-				<tr>
-					@for (var j = 0; j < Model.Specifications[i].SpecificationValues.Count; j++)
-					{
-						@*@Html.TextBoxFor(sp => sp.Specifications[counter].SpecificationValues)*@
-						<td>@Html.EditorFor(sp => Model.Specifications[i].SpecificationValues[j].Value)</td>
-					}
-					<td>@Html.EditorFor(sp => sp.Specifications[i].Price)</td>
-					<td><i class="fa fa-times remove-specification" id="remove-specification-@i" aria-h aria-hidden="true"></i></td>
-				</tr>
-				}
-		</tbody>
-	</table>
+    <table class="table table-bordered table-striped table-hover sort_table">
+        <thead>
+            <tr>
+                <th>
+
+                </th>
+                @foreach (var specificationTitle in Model.ProductType.SpecificationTitles)
+                {
+                    <th>@specificationTitle.Name</th>
+                }
+                <th>Цена</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (var i = 0; i < Model.Specifications.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @Html.HiddenFor(m => m.Specifications[i].Id)
+                    </td>
+                    @for (var j = 0; j < Model.Specifications[i].SpecificationValues.Count; j++)
+                    {
+                        @*@Html.TextBoxFor(sp => sp.Specifications[counter].SpecificationValues)*@
+                        <td>@Html.EditorFor(sp => Model.Specifications[i].SpecificationValues[j].Value)</td>    }
+                    <td>@Html.EditorFor(sp => sp.Specifications[i].Price)</td>
+                    <td><i class="fa fa-times remove-specification" id="remove-specification-@i" aria-h aria-hidden="true"></i></td>
+                </tr>}
+        </tbody>
+    </table>
 
 }
 

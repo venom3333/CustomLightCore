@@ -66,17 +66,6 @@ namespace CustomLightCore.ViewModels.Products
         [DisplayName("Текущие спецификации")]
         public List<Specification> ExistingSpecifications { get; set; }
 
-        ///// <summary>
-        ///// Gets or sets the specification values.
-        ///// </summary>
-        //public List<SpecificationValue> SpecificationValues { get; set; }
-
-        ///// <summary>
-        ///// Gets or sets the specification value.
-        ///// </summary>
-        //public SpecificationValue SpecificationValue { get; set; }
-
-
         /// <summary>
         /// Gets or sets the product type.
         /// </summary>
@@ -198,6 +187,7 @@ namespace CustomLightCore.ViewModels.Products
                         productImages.Add(image);
                     }
                 }
+
                 // Теперь добавим то, что осталось в ExistingProductImagesIds
                 if (item.ExistingProductImageIds != null)
                 {
@@ -230,6 +220,14 @@ namespace CustomLightCore.ViewModels.Products
                 result.Specifications = specifications;
             }
 
+            // Удалим из контекста предыдущие спецификации
+            using (var db = new CustomLightContext())
+            {
+                var existingProductSpecs = db.Specifications.AsNoTracking().Where(s => s.ProductId == item.Id);
+
+                db.Specifications.RemoveRange(existingProductSpecs);
+                db.SaveChanges();
+            }
 
             return result;
         }
@@ -238,6 +236,9 @@ namespace CustomLightCore.ViewModels.Products
         /// <summary>
         /// Приведение экземпляра доменной модели во viewModel.
         /// </summary>
+        /// /// <param name="item">
+        /// The item
+        /// </param>
         public static explicit operator ProductViewModel(Product item)
         {
             if (item == null)
@@ -252,7 +253,6 @@ namespace CustomLightCore.ViewModels.Products
                 ShortDescription = item.ShortDescription,
                 Name = item.Name,
                 IsPublished = item.IsPublished,
-                //ExistingSpecifications = item.Specifications.ToList(),
                 ProductTypeId = item.ProductTypeId,
                 ProductType = item.ProductType,
                 ExistingProductImageIds = item.ProductImages.Select(image => image.Id).ToList(),
@@ -264,6 +264,7 @@ namespace CustomLightCore.ViewModels.Products
             {
                 var resultSpecification = new SpecificationViewModel
                 {
+                    Id = itemSpecification.Id,
                     Price = itemSpecification.Price,
                     SpecificationValues = itemSpecification.SpecificationValues
                 };
@@ -274,16 +275,14 @@ namespace CustomLightCore.ViewModels.Products
         }
 
         /// <summary>
-        /// Получаем ДатаМодель на основе существующей вью модели
-        /// </summary>
-        public Product GetModelByViewModel()
-        {
-            return (Product)this;
-        }
-
-        /// <summary>
         /// Получаем ВьюМодель на основе id ДатаМодели
         /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
         public static async Task<ProductViewModel> GetViewModelByModelId(int? id)
         {
             if (id == null)
@@ -304,6 +303,17 @@ namespace CustomLightCore.ViewModels.Products
                               .FirstOrDefaultAsync(p => p.Id == id);
             }
             return (ProductViewModel)product;
+        }
+
+        /// <summary>
+        /// Получаем ДатаМодель на основе существующей вью модели
+        /// </summary>
+        /// <returns>
+        /// The <see cref="Product"/>.
+        /// </returns>
+        public Product GetModelByViewModel()
+        {
+            return (Product)this;
         }
     }
 }

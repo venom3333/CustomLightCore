@@ -13,7 +13,7 @@
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
-        @Html.HiddenFor(m => m.ProductTypeId);
+        @Html.HiddenFor(m => m.ProductTypeId)
         <div class="form-group">
             <label asp-for="Name" class="col-md-2 control-label"></label>
             <div class="col-md-10">
@@ -74,13 +74,6 @@
                 <span asp-validation-for="ProductImages" class="text-danger"></span>
             </div>
         </div>
-
-        @*<div class="form-group">
-                <label asp-for="ExistingSpecifications" class="col-md-2 control-label"></label>
-                <div class="table-responsive" id="specifications">
-                    @{ await Html.RenderPartialAsync("_ExistingSpecifications"); }
-                </div>
-            </div>*@
 
         <div class="form-group">
             <label asp-for="Specifications" class="col-md-2 control-label"></label>

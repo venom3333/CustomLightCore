@@ -234,13 +234,6 @@ namespace CustomLightCore.ViewModels.Products
             return result;
         }
 
-        /// <summary>
-        /// Получаем ДатаМодель на основе существующей вью модели
-        /// </summary>
-        public Product GetModelByViewModel()
-        {
-            return (Product)this;
-        }
 
         /// <summary>
         /// Приведение экземпляра доменной модели во viewModel.
@@ -259,10 +252,21 @@ namespace CustomLightCore.ViewModels.Products
                 ShortDescription = item.ShortDescription,
                 Name = item.Name,
                 IsPublished = item.IsPublished,
+                ExistingSpecifications = item.Specifications.ToList(),
+                ProductTypeId = item.ProductTypeId,
+                ProductType = item.ProductType,
                 ExistingProductImageIds = item.ProductImages.Select(image => image.Id).ToList(),
                 CategoryProductId = item.CategoryProduct.Select(cp => cp.CategoriesId).ToList()
             };
             return result;
+        }
+
+        /// <summary>
+        /// Получаем ДатаМодель на основе существующей вью модели
+        /// </summary>
+        public Product GetModelByViewModel()
+        {
+            return (Product)this;
         }
 
         /// <summary>

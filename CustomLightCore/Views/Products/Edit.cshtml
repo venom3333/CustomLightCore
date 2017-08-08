@@ -1,15 +1,15 @@
-@model CustomLightCore.ViewModels.Products.ProductViewModel
+п»ї@model CustomLightCore.ViewModels.Products.ProductViewModel
 
 @{
-    ViewData["Title"] = "Редактирование Продукта.";
+    ViewData["Title"] = "Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ РџСЂРѕРґСѓРєС‚Р°.";
     Layout = "~/Views/_Layouts/_Admin.cshtml";
 }
 
-<h2>Редактирование</h2>
+<h2>Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ</h2>
 
 <form asp-action="Edit" enctype="multipart/form-data">
     <div class="form-horizontal">
-        <h4>Проект</h4>
+        <h4>РџСЂРѕРµРєС‚</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
@@ -35,7 +35,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-md-2 control-label">Текущая иконка</label>
+            <label class="col-md-2 control-label">РўРµРєСѓС‰Р°СЏ РёРєРѕРЅРєР°</label>
             <div class="col-md-10">
                 <img src="@Url.Action("GetProductIcon", "Products", new { Model.Id })" class="img-responsive" alt="@Model.Name">
             </div>
@@ -74,7 +74,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Сохранить" class="btn btn-success" />
+                <input type="submit" value="РЎРѕС…СЂР°РЅРёС‚СЊ" class="btn btn-success" />
                 @Html.ValidationSummary()
             </div>
         </div>
@@ -82,7 +82,7 @@
 </form>
 
 <div>
-    <a asp-action="List" class="btn btn-default">Вернуться к списку</a>
+    <a asp-action="List" class="btn btn-default">Р’РµСЂРЅСѓС‚СЊСЃСЏ Рє СЃРїРёСЃРєСѓ</a>
 </div>
 
 @section Scripts {

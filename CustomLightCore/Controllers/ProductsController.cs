@@ -142,14 +142,14 @@ namespace CustomLightCore.Controllers
                 return NotFound();
             }
 
-            var products = await db.Products.SingleOrDefaultAsync(m => m.Id == id);
-            if (products == null)
+            var product = await ProductViewModel.GetViewModelByModelId(id);
+            if (product == null)
             {
                 return NotFound();
             }
 
-            ViewData["ProductTypeId"] = new SelectList(db.ProductTypes, "Id", "Name", products.ProductTypeId);
-            return View(products);
+            ViewData["ProductTypeId"] = new SelectList(db.ProductTypes, "Id", "Name", product.ProductTypeId);
+            return View(product);
         }
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace CustomLightCore.Controllers
         /// <param name="id">
         /// The id.
         /// </param>
-        /// <param name="product">
+        /// <param name="editedProduct">
         /// The product.
         /// </param>
         /// <returns>
@@ -172,15 +172,16 @@ namespace CustomLightCore.Controllers
         public async Task<IActionResult> Edit(
             int id,
             [Bind("Id,Name,Description,ShortDescription,Icon,IconMimeType,IsPublished,Created,Updated,ProductTypeId")]
-            Product product)
+            ProductViewModel editedProduct)
         {
-            if (id != product.Id)
+            if (id != editedProduct.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
+                var product = (Product)editedProduct;
                 try
                 {
                     db.Update(product);
@@ -199,8 +200,8 @@ namespace CustomLightCore.Controllers
                 return RedirectToAction("List");
             }
 
-            ViewData["ProductTypeId"] = new SelectList(db.ProductTypes, "Id", "Name", product.ProductTypeId);
-            return View(product);
+            ViewData["ProductTypeId"] = new SelectList(db.ProductTypes, "Id", "Name", editedProduct.ProductTypeId);
+            return View(editedProduct);
         }
 
         /// <summary>

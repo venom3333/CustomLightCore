@@ -74,6 +74,7 @@ namespace CustomLightCore.ViewModels.Products
         /// <summary>
         /// Gets or sets the product type ID.
         /// </summary>
+        [DisplayName("Тип продукта")]
         public int ProductTypeId { get; set; }
 
         /// <summary>
@@ -93,7 +94,6 @@ namespace CustomLightCore.ViewModels.Products
                         .Include(p => p.CategoryProduct)
                         .Include(p => p.ProductImages)
                         .Include(p => p.Specifications)
-                        .Include(p => p.ProductType)
                         .FirstOrDefault(p => p.Id == item.Id);
 
                     // Удаленные категории удаляем из контекста

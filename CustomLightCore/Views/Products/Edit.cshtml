@@ -13,7 +13,7 @@
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
-        @Html.HiddenFor(m => m.ProductTypeId)
+        @*@Html.HiddenFor(m => m.ProductTypeId)*@
         <div class="form-group">
             <label asp-for="Name" class="col-md-2 control-label"></label>
             <div class="col-md-10">
@@ -76,6 +76,13 @@
         </div>
 
         <div class="form-group">
+            <label asp-for="ProductTypeId" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="ProductTypeId" class="form-control" asp-items="ViewBag.ProductTypeId"></select>
+            </div>
+        </div>
+
+        <div class="form-group">
             <label asp-for="Specifications" class="col-md-2 control-label"></label>
             <div class="table-responsive" id="specifications">
                 @{ await Html.RenderPartialAsync("_SpecificationsCreate"); }
@@ -109,70 +116,72 @@
     </script>
 
     <script>
-        $(function() {
-            $(".existing-image").click(function() {
-                var form = $('form');
-                var formData = new FormData(form)
-                var imageId = parseInt(this.id.replace("remove-existing-image-", ""));
-                $.ajax({
-                    type: "POST",
-                    url: "@Url.Action("RemoveExistingImage")",
-                    data: form.serialize() + '&imageId=' + imageId,
-                    success: function(html) {
-                        //console.log(html);
-                        $('#existing-images').html(html);
-                    },
-                    error: function(msg) {
-                        console.log(msg);
-                    }
+        $(function () {
+            $(document).ready(function () {
+                $(".existing-image").click(function() {
+                    var form = $('form');
+                    var formData = new FormData(form)
+                    var imageId = parseInt(this.id.replace("remove-existing-image-", ""));
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("RemoveExistingImage")",
+                        data: form.serialize() + '&imageId=' + imageId,
+                        success: function(html) {
+                            //console.log(html);
+                            $('#existing-images').html(html);
+                        },
+                        error: function(msg) {
+                            console.log(msg);
+                        }
+                    });
                 });
-            });
-            $("#add-specification").click(function () {
-                var form = $('form');
-                $.ajax({
-                    type: "POST",
-                    url: "@Url.Action("GenerateSpecification")",
-                    data: form.serialize(),
-                    success: function (html) {
-                        //console.log(html);
-                        $('#specifications').html(html);
-                    },
-                    error: function (msg) {
-                        console.log(msg);
-                    }
+                $("#add-specification").click(function () {
+                    var form = $('form');
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("GenerateSpecification")",
+                        data: form.serialize(),
+                        success: function (html) {
+                            //console.log(html);
+                            $('#specifications').html(html);
+                        },
+                        error: function (msg) {
+                            console.log(msg);
+                        }
+                    });
                 });
-            });
 
-            $("#ProductTypeId").change(function () {
-                var form = $('form');
-                $.ajax({
-                    type: "POST",
-                    url: "@Url.Action("UpdateSpecifications")",
-                    data: form.serialize(),
-                    success: function (html) {
-                        //console.log(html);
-                        $('#specifications').html(html);
-                    },
-                    error: function (msg) {
-                        console.log(msg);
-                    }
+                $("#ProductTypeId").change(function () {
+                    var form = $('form');
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("UpdateSpecifications")",
+                        data: form.serialize(),
+                        success: function (html) {
+                            //console.log(html);
+                            $('#specifications').html(html);
+                        },
+                        error: function (msg) {
+                            console.log(msg);
+                        }
+                    });
                 });
-            });
 
-            $(".remove-specification").click(function () {
-                var form = $('form');
-                var specificationIndex = parseInt(this.id.replace("remove-specification-", ""));
-                $.ajax({
-                    type: "POST",
-                    url: "@Url.Action("RemoveSpecification")",
-                    data: form.serialize() + '&specificationIndex=' + specificationIndex,
-                    success: function (html) {
-                        //console.log(html);
-                        $('#specifications').html(html);
-                    },
-                    error: function (msg) {
-                        console.log(msg);
-                    }
+                $(".remove-specification").click(function () {
+                    var form = $('form');
+                    var specificationIndex = parseInt(this.id.replace("remove-specification-", ""));
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("RemoveSpecification")",
+                        data: form.serialize() + '&specificationIndex=' + specificationIndex,
+                        success: function (html) {
+                            //console.log(html);
+                            $('#specifications').html(html);
+                        },
+                        error: function (msg) {
+                            console.log(msg);
+                        }
+                    });
                 });
             });
         });

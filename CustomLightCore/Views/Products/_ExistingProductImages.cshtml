@@ -13,7 +13,7 @@
             foreach (var imageId in Model.ExistingProductImageIds)
             {
                 <div class="col-md-2">
-                    <img src="@Url.Action("GetProductImage", "Products", new {imageId})" class="img-responsive" alt="@Model.Name">
+                    <img src="@Url.Action("GetProductImage", "Products", new {id = imageId})" class="img-responsive" alt="@Model.Name">
                     <i class="fa fa-times existing-image" id="remove-existing-image-@imageId" aria-hidden="true"></i>
                 </div>
             }

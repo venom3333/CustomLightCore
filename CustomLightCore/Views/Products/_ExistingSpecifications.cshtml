@@ -1,0 +1,54 @@
+﻿@using System.Linq
+@using Microsoft.AspNetCore.Mvc
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model CustomLightCore.ViewModels.Products.ProductViewModel
+
+@if (Model.ProductType != null)
+{
+
+	<table class="table table-bordered table-striped table-hover sort_table">
+		<thead>
+			<tr>
+				@foreach (var specificationTitle in Model.ProductType.SpecificationTitles)
+				{
+					<th>@specificationTitle.Name</th>
+				}
+				<th>Цена</th>
+			</tr>
+		</thead>
+		<tbody>
+			@for (var i = 0; i < Model.ExistingSpecifications.Count; i++)
+				{
+				<tr>
+					@for (var j = 0; j < Model.ExistingSpecifications[i].SpecificationValues.Count; j++)
+					{
+						@*@Html.TextBoxFor(sp => sp.Specifications[counter].SpecificationValues)*@
+					    <td>@Html.EditorFor(sp => Model.ExistingSpecifications[i].SpecificationValues[j].Value)</td>
+					}
+					<td>@Html.EditorFor(sp => sp.ExistingSpecifications[i].Price)</td>
+					<td><i class="fa fa-times remove-specification" id="remove-specification-@i" aria-h aria-hidden="true"></i></td>
+				</tr>
+				}
+		</tbody>
+	</table>
+
+}
+
+<script>
+	$(".remove-specification").click(function () {
+		var form = $('form');
+		var specificationIndex = parseInt(this.id.replace("remove-specification-", ""));
+		$.ajax({
+			type: "POST",
+			url: "@Url.Action("RemoveSpecification")",
+			data: form.serialize() + '&specificationIndex=' + specificationIndex,
+			success: function (html) {
+				//console.log(html);
+				$('#specifications').html(html);
+			},
+			error: function (msg) {
+				console.log(msg);
+			}
+		});
+	});
+</script>

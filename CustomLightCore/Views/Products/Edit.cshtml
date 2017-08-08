@@ -13,6 +13,7 @@
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
+        @Html.HiddenFor(m => m.ProductTypeId);
         <div class="form-group">
             <label asp-for="Name" class="col-md-2 control-label"></label>
             <div class="col-md-10">
@@ -62,13 +63,35 @@
             </div>
         </div>
         <div id="existing-images">
-            @{ await Html.RenderPartialAsync("_ExistingProductImages"); }
+            @{
+                await Html.RenderPartialAsync("_ExistingProductImages");
+            }
         </div>
         <div class="form-group">
             <label asp-for="ProductImages" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="ProductImages" class="form-control" multiple />
                 <span asp-validation-for="ProductImages" class="text-danger"></span>
+            </div>
+        </div>
+
+        @*<div class="form-group">
+                <label asp-for="ExistingSpecifications" class="col-md-2 control-label"></label>
+                <div class="table-responsive" id="specifications">
+                    @{ await Html.RenderPartialAsync("_ExistingSpecifications"); }
+                </div>
+            </div>*@
+
+        <div class="form-group">
+            <label asp-for="Specifications" class="col-md-2 control-label"></label>
+            <div class="table-responsive" id="specifications">
+                @{ await Html.RenderPartialAsync("_SpecificationsCreate"); }
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" id="add-specification" class="btn btn-default" value="Добавить спецификацию" />
             </div>
         </div>
 
@@ -107,6 +130,54 @@
                         $('#existing-images').html(html);
                     },
                     error: function(msg) {
+                        console.log(msg);
+                    }
+                });
+            });
+            $("#add-specification").click(function () {
+                var form = $('form');
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("GenerateSpecification")",
+                    data: form.serialize(),
+                    success: function (html) {
+                        //console.log(html);
+                        $('#specifications').html(html);
+                    },
+                    error: function (msg) {
+                        console.log(msg);
+                    }
+                });
+            });
+
+            $("#ProductTypeId").change(function () {
+                var form = $('form');
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("UpdateSpecifications")",
+                    data: form.serialize(),
+                    success: function (html) {
+                        //console.log(html);
+                        $('#specifications').html(html);
+                    },
+                    error: function (msg) {
+                        console.log(msg);
+                    }
+                });
+            });
+
+            $(".remove-specification").click(function () {
+                var form = $('form');
+                var specificationIndex = parseInt(this.id.replace("remove-specification-", ""));
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("RemoveSpecification")",
+                    data: form.serialize() + '&specificationIndex=' + specificationIndex,
+                    success: function (html) {
+                        //console.log(html);
+                        $('#specifications').html(html);
+                    },
+                    error: function (msg) {
                         console.log(msg);
                     }
                 });

@@ -7,14 +7,14 @@ namespace CustomLightCore.Models
     {
         public Specification()
         {
-            SpecificationValues = new HashSet<SpecificationValue>();
+            SpecificationValues = new List<SpecificationValue>();
         }
 
         public int Id { get; set; }
         public int ProductId { get; set; }
         public int Price { get; set; }
 
-        public virtual ICollection<SpecificationValue> SpecificationValues { get; set; }
+        public virtual List<SpecificationValue> SpecificationValues { get; set; }
         public virtual Product Product { get; set; }
     }
 }

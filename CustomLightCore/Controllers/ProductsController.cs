@@ -64,7 +64,7 @@ namespace CustomLightCore.Controllers
             var products = await db.Products
                 .Include(p => p.ProductImages)
                 .Include(p => p.Specifications)
-                .ThenInclude(s => s.SpecificationValues)
+                    .ThenInclude(s => s.SpecificationValues)
                 .Include(p => p.ProductType)
                     .ThenInclude(pt => pt.SpecificationTitles)
                 .SingleOrDefaultAsync(m => m.Id == id);
@@ -148,6 +148,7 @@ namespace CustomLightCore.Controllers
                 return NotFound();
             }
 
+            ViewData["Categories"] = new SelectList(db.Categories, "Id", "Name", product.CategoryProductId);
             ViewData["ProductTypeId"] = new SelectList(db.ProductTypes, "Id", "Name", product.ProductTypeId);
             return View(product);
         }

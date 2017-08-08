@@ -23,7 +23,7 @@
 				foreach (var image in Model.ProductImages)
 				{
 					<li data-target="#myCarousel" data-slide-to="@(counter = counter + 1);" class="@if (@counter == 1) {<text>myCarousel active</text>} else {<text>myCarousel</text>}">
-						<img src="@Url.Action("GetProductImage", "Products", new { ImageId = image.Id })" class="img-responsive" alt="@Model.Name">
+						<img src="@Url.Action("GetProductImage", "Products", new { image.Id })" class="img-responsive" alt="@Model.Name">
 					</li>
 				}
 			}
@@ -36,7 +36,7 @@
 					@(counter = counter + 1);
 					<div class="@if (@counter == 1) {<text>item active</text>} else {<text>class = item</text>}">
 						<!-- Set the first background image using inline CSS below. -->
-						<div class="fill" style="background-image:url('@Url.Action("GetProductImage", "Products", new { ImageId = image.Id })');"></div>
+						<div class="fill" style="background-image:url('@Url.Action("GetProductImage", "Products", new { image.Id })');"></div>
 						<div class="carousel-caption">
 							<h2>Caption 1</h2>
 						</div>

@@ -252,12 +252,24 @@ namespace CustomLightCore.ViewModels.Products
                 ShortDescription = item.ShortDescription,
                 Name = item.Name,
                 IsPublished = item.IsPublished,
-                ExistingSpecifications = item.Specifications.ToList(),
+                //ExistingSpecifications = item.Specifications.ToList(),
                 ProductTypeId = item.ProductTypeId,
                 ProductType = item.ProductType,
                 ExistingProductImageIds = item.ProductImages.Select(image => image.Id).ToList(),
                 CategoryProductId = item.CategoryProduct.Select(cp => cp.CategoriesId).ToList()
             };
+
+            result.Specifications = new List<SpecificationViewModel>();
+            foreach (var itemSpecification in item.Specifications)
+            {
+                var resultSpecification = new SpecificationViewModel
+                {
+                    Price = itemSpecification.Price,
+                    SpecificationValues = itemSpecification.SpecificationValues
+                };
+                result.Specifications.Add(resultSpecification);
+            }
+
             return result;
         }
 
@@ -285,6 +297,10 @@ namespace CustomLightCore.ViewModels.Products
                 product = await db.Products
                               .Include(p => p.CategoryProduct)
                               .Include(p => p.ProductImages)
+                              .Include(p => p.ProductType)
+                                .ThenInclude(pt => pt.SpecificationTitles)
+                              .Include(p => p.Specifications)
+                                .ThenInclude(s => s.SpecificationValues)
                               .FirstOrDefaultAsync(p => p.Id == id);
             }
             return (ProductViewModel)product;

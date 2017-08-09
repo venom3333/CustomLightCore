@@ -9,149 +9,81 @@
 
 <!--Инфо о продукте-->
 <div class="col-md-10 product-model-sec">
-	<h2 id="productName">@Model.Name</h2>
+    <h2 id="productName">@Model.Name</h2>
 
-	<!--	Не отображается (нужно для корзины)-->
-	@*<div id="productIcon" style="display: none;"><?= $product['icon'] ?></div>*@
-	<div id="productId" style="display: none;">>@Model.Id</div>
-	<!--	/Не отображается (нужно для корзины)-->
-	<!--Галерея-->
-	<section id="myCarousel" class="carousel slide my-carousel col-md-7">
-		<!-- Indicators -->
-		<ol class="carousel-indicators image-carousel-indicators">
-			@{int counter = 0;
-				foreach (var image in Model.ProductImages)
-				{
-					<li data-target="#myCarousel" data-slide-to="@(counter = counter + 1);" class="@if (@counter == 1) {<text>myCarousel active</text>} else {<text>myCarousel</text>}">
-						<img src="@Url.Action("GetProductImage", "Products", new { image.Id })" class="img-responsive" alt="@Model.Name">
-					</li>
-				}
-			}
-		</ol>
-		<!-- Wrapper for Slides -->
-		<div class="carousel-inner">
-			@{counter = 0;
-				foreach (var image in Model.ProductImages)
-				{
-					@(counter = counter + 1);
-					<div class="@if (@counter == 1) {<text>item active</text>} else {<text>class = item</text>}">
-						<!-- Set the first background image using inline CSS below. -->
-						<div class="fill" style="background-image:url('@Url.Action("GetProductImage", "Products", new { image.Id })');"></div>
-						<div class="carousel-caption">
-							<h2>Caption 1</h2>
-						</div>
-					</div>
-				}
-			}
-		</div>
+    <!--	Не отображается (нужно для корзины)-->
+    @*<div id="productIcon" style="display: none;"><?= $product['icon'] ?></div>*@
+    <div id="productId" style="display: none;">>@Model.Id</div>
+    <!--	/Не отображается (нужно для корзины)-->
+<!--Галерея-->
+    <section>
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            <!-- Indicators -->
+            <ol class="carousel-indicators image-carousel-indicators">
+                @{
+                    for (int i = 0; i < Model.ProductImages.Count; i++)
+                    {
+                        <li data-target="#myCarousel" data-slide-to="@i" class="@(i == 0 ? "active" : "")">
+                            <img src="@Url.Action("GetProductImage", "Products", new { Model.ProductImages.ToList()[i].Id })" class="img-responsive" alt="@Model.Name">
+                        </li>
+                    }
+                }
+            </ol>
 
-		<!-- Controls -->
-		<a class="left carousel-control" href="#myCarousel" data-slide="prev">
-			<span class="icon-prev"></span>
-		</a>
-		<a class="right carousel-control" href="#myCarousel" data-slide="next">
-			<span class="icon-next"></span>
-		</a>
-	</section>
-	<!--/Галерея-->
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+                @{
+                    for (int i = 0; i < Model.ProductImages.Count; i++)
+                    {
+                        <div class="item @(i == 0 ? "active" : "")">
+                            <img src="@Url.Action("GetProductImage", "Products", new { Model.ProductImages.ToList()[i].Id })" alt="@Model.Name">
+                        </div>
+                    }
+                }
+            </div>
 
-	<section class="itemDescription">
-		<p>@Html.Raw(Model.Description)</p>
-	</section>
-	<div class="clear"></div>
+            <!-- Left and right controls -->
+            <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </section>
+<!--/Галерея-->
 
-	<div class="table-responsive">
-		<table class="table table-bordered table-striped table-hover sort_table">
-			<thead>
-				<tr>
-					@foreach (var specificationTitle in Model.ProductType.SpecificationTitles)
-					{
-						<th>@specificationTitle.Name</th>
-					}
-					<th>Цена</th>
-				</tr>
-			</thead>
-			<tbody>
-				@foreach (var specification in Model.Specifications)
-				{
-					<tr>
-						@foreach (var specificationVal in specification.SpecificationValues)
-						{
-							<td>@specificationVal.Value</td>
-						}
-						<td>@specification.Price</td>
-					</tr>
-				}
-			</tbody>
-		</table>
-	</div>
+    <section class="itemDescription">
+        <p>@Html.Raw(Model.Description)</p>
+    </section>
+    <div class="clear"></div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover sort_table">
+            <thead>
+                <tr>
+                    @foreach (var specificationTitle in Model.ProductType.SpecificationTitles)
+                    {
+                        <th>@specificationTitle.Name</th>
+                    }
+                    <th>Цена</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var specification in Model.Specifications)
+                {
+                    <tr>
+                        @foreach (var specificationVal in specification.SpecificationValues)
+                        {
+                            <td>@specificationVal.Value</td>
+                        }
+                        <td>@specification.Price</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 <!--/Инфо о продукте-->
-@*<script src="~/Content/js/cart.js"></script>*@
-
-@*<h2>Details</h2>
-
-<div>
-    <h4>Products</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ShortDescription)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ShortDescription)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Icon)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Icon)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.IconMimeType)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.IconMimeType)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.IsPublished)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.IsPublished)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Created)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Created)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Updated)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Updated)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ProductType)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ProductType.Name)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>*@

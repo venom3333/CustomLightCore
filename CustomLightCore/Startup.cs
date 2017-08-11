@@ -35,8 +35,12 @@ namespace CustomLightCore
 			services.AddIdentity<User, Role>()
 				.AddEntityFrameworkStores<CustomLightContext>()
 				.AddDefaultTokenProviders();
-			
-			services.AddMvc();
+
+            services.AddMvc();
+
+            // Для сессий
+            services.AddMemoryCache();
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,6 +60,9 @@ namespace CustomLightCore
             }
 
             app.UseStaticFiles();
+
+            // Сессии
+            app.UseSession();
 
 			// Аутентификация
 			app.UseIdentity();

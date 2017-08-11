@@ -15,7 +15,7 @@
     @*<div id="productIcon" style="display: none;"><?= $product['icon'] ?></div>*@
     <div id="productId" style="display: none;">>@Model.Id</div>
     <!--	/Не отображается (нужно для корзины)-->
-<!--Галерея-->
+    <!--Галерея-->
     <section>
         <div id="myCarousel" class="carousel slide" data-ride="carousel">
             <!-- Indicators -->
@@ -53,7 +53,7 @@
             </a>
         </div>
     </section>
-<!--/Галерея-->
+    <!--/Галерея-->
 
     <section class="itemDescription">
         <p>@Html.Raw(Model.Description)</p>
@@ -69,6 +69,7 @@
                         <th>@specificationTitle.Name</th>
                     }
                     <th>Цена</th>
+                    <th>Количество</th>
                 </tr>
             </thead>
             <tbody>
@@ -80,6 +81,10 @@
                             <td>@specificationVal.Value</td>
                         }
                         <td>@specification.Price</td>
+                        <td>
+                            <input type="number" min="0" name="specificationQuantity_@specification.Id" id="specificationQuantity_@specification.Id" value="" />
+                            <i class="fa fa-cart-arrow-down" aria-hidden="true"></i>
+                        </td>
                     </tr>
                 }
             </tbody>

@@ -1,0 +1,11 @@
+﻿@using Microsoft.AspNetCore.Mvc
+@using Microsoft.AspNetCore.Http
+<div class="carticon" id="carticon">
+    <a asp-action="Details" asp-controller="Cart">
+        <i class="fa fa-cart-arrow-down" aria-hidden="true"></i>
+        @*{
+            HttpContext.Session.TryGetValue("Cart");
+        ? 0 : Session["Cart"]; шт.<br>на <?= $_SESSION['cart']['grandTotal'] ?> руб
+        }*@
+    </a>
+</div>

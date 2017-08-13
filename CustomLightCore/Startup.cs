@@ -11,11 +11,15 @@ using CustomLightCore.Models;
 
 namespace CustomLightCore
 {
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc.Infrastructure;
+    using Microsoft.Extensions.DependencyInjection.Extensions;
+
     public class Startup
     {
-		//private IConfiguration config;
+        //private IConfiguration config;
 
-		public Startup(IHostingEnvironment env)
+        public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -30,17 +34,24 @@ namespace CustomLightCore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-			// Add framework services.
-			services.AddDbContext<CustomLightContext>();
-			services.AddIdentity<User, Role>()
-				.AddEntityFrameworkStores<CustomLightContext>()
-				.AddDefaultTokenProviders();
+            // Add framework services.
+            services.AddDbContext<CustomLightContext>();
+            services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<CustomLightContext>()
+                .AddDefaultTokenProviders();
 
             services.AddMvc();
 
             // Для сессий
+            services.AddDistributedMemoryCache();
             services.AddMemoryCache();
-            services.AddSession();
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddSession(options =>
+                {
+                    options.CookieName = ".CustomLight.Session";
+                    options.IdleTimeout = TimeSpan.FromSeconds(3600);
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,10 +75,23 @@ namespace CustomLightCore
             // Сессии
             app.UseSession();
 
-			// Аутентификация
-			app.UseIdentity();
+            //app.Run(async (context) =>
+            //    {
+            //        if (context.Session.Keys.Contains("Cart"))
+            //        {
+            //            //await context.Response.WriteAsync($"Hello {context.Session.GetString("name")}!");
+            //        }
+            //        else
+            //        {
+            //            context.Session.SetString("Cart", "");
+            //            //await context.Response.WriteAsync("Hello World!");
+            //        }
+            //    });
 
-			app.UseMvc(routes =>
+            // Аутентификация
+            app.UseIdentity();
+
+            app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",

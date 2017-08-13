@@ -4,13 +4,14 @@
 	</div>
 	
 	<!-- Навбар -->
-	<div class="col-lg-8 nav-line">
-		@Html.Partial("~/Views/Shared/_NavBar.cshtml")
-	</div>
+    <div class="col-lg-8 nav-line">
+        @Html.Partial("~/Views/Shared/_NavBar.cshtml")
+    </div>
 	<!-- /Навбар -->
 	<div class="col-md-2">
-		<!--Виджет корзины-->
-		@Html.Partial("~/Views/Shared/_CartIcon.cshtml")
+	    <!--Виджет корзины-->
+        @await Component.InvokeAsync("CartIcon")
+		@*@Html.Partial("~/Views/Shared/_CartIcon.cshtml")*@
 			<!--/Виджет корзины-->
 			<div class="h-line clearfix"></div>
 			<div class="phone-number">

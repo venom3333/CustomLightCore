@@ -1,51 +1,44 @@
-namespace CustomLightCore.Controllers
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CartIconViewComponent.cs" company="CustomLigth">
+//   CustomLigth
+// </copyright>
+// <summary>
+//   The cart icon view component.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace CustomLightCore.Views.Cart.Components
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
-    using CustomLightCore.Models;
     using CustomLightCore.ViewModels.Cart;
 
-    using Microsoft.ApplicationInsights.Extensibility.Implementation;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
 
     using Newtonsoft.Json;
 
     /// <summary>
-    /// The base controller.
+    /// The cart icon view component.
     /// </summary>
-    public class BaseController : Controller
+    public class CartIconViewComponent : ViewComponent
     {
-        /// <summary>
-        /// The db.
-        /// </summary>
-        protected CustomLightContext db = new CustomLightContext();
-
         /// <summary>
         /// Gets or sets the cart.
         /// </summary>
         protected CartViewModel Cart { get; set; }
 
         /// <summary>
-        /// The create view bag.
+        /// The invoke.
         /// </summary>
         /// <returns>
-        /// The <see cref="Task"/>.
+        /// The <see cref="IViewComponentResult"/>.
         /// </returns>
-        [ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
-        protected async Task<bool> CreateViewBag()
+        public IViewComponentResult Invoke()
         {
-            ViewBag.Categories = await db.Categories.ToListAsync();
-            ViewBag.Projects = await db.Projects.ToListAsync();
-            ViewBag.Pages = await db.Pages.ToListAsync();
-            ViewBag.Slides = await db.Slides.ToListAsync();
-            ViewBag.Essentials = await db.Essentials.FirstOrDefaultAsync();
-
             var key = "Cart";
 
             if (HttpContext.Session.GetString(key) == null)
@@ -67,7 +60,7 @@ namespace CustomLightCore.Controllers
                 Cart = JsonConvert.DeserializeObject<CartViewModel>(str);
             }
 
-            return true;
+            return this.View("~/Views/Shared/_CartIcon.cshtml", Cart);
         }
     }
 }

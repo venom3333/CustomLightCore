@@ -8,15 +8,75 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace CustomLightCore.ViewModels.Cart
 {
+    using System;
     using System.Collections.Generic;
 
     using CustomLightCore.Models;
+
+    using Microsoft.AspNetCore.Http;
+
+    using Newtonsoft.Json;
 
     /// <summary>
     /// The cart view model.
     /// </summary>
     public class CartViewModel
     {
+        /// <summary>
+        /// The instance.
+        /// </summary>
+        private static CartViewModel instance;
+
+        /// <summary>
+        /// The sync root.
+        /// </summary>
+        private static object syncRoot = new object();
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CartViewModel"/> class.
+        /// </summary>
+        public CartViewModel()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CartViewModel"/> class.
+        /// </summary>
+        /// <param name="context">
+        /// The context.
+        /// </param>
+        protected CartViewModel(HttpContext context)
+        {
+            var key = "Cart";
+            if (context.Session.GetString(key) == null)
+            {
+                this.Specifications = new List<Specification>();
+                this.SpecificationQuantities = new Dictionary<int, int>();
+
+                // для теста
+                this.Specifications.Add(new Specification
+                {
+                    Id = 1,
+                    Price = 150
+                });
+
+                this.SpecificationQuantities.Add(1, 5);
+
+                // Save            
+                var str = JsonConvert.SerializeObject(this);
+                context.Session.SetString(key, str);
+            }
+            else
+            {
+                // Retrieve
+                var str = context.Session.GetString(key);
+                var currentCart = JsonConvert.DeserializeObject<CartViewModel>(str);
+                this.SpecificationQuantities = currentCart.SpecificationQuantities;
+                this.Specifications = currentCart.Specifications;
+            }
+            this.UpdateTotals();
+        }
+
         /// <summary>
         /// Gets or sets the id.
         /// </summary>
@@ -25,12 +85,12 @@ namespace CustomLightCore.ViewModels.Cart
         /// <summary>
         /// Gets or sets the specidications.
         /// </summary>
-        public List<Specification> Specidications { get; set; }
+        public List<Specification> Specifications { get; set; }
 
         /// <summary>
         /// Gets or sets the specifications quantity.
         /// </summary>
-        public List<int> SpecificationsQuantity { get; set; }
+        public Dictionary<int, int> SpecificationQuantities { get; set; }
 
         /// <summary>
         /// Gets or sets the total quantity.
@@ -41,5 +101,63 @@ namespace CustomLightCore.ViewModels.Cart
         /// Gets or sets the total price.
         /// </summary>
         public int TotalPrice { get; set; }
+
+        /// <summary>
+        /// The get instance.
+        /// </summary>
+        /// <param name="context">
+        /// The context.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CartViewModel"/>.
+        /// </returns>
+        public static CartViewModel GetInstance(HttpContext context)
+        {
+            if (instance == null)
+            {
+                lock (syncRoot)
+                {
+                    if (instance == null)
+                    {
+                        instance = new CartViewModel(context);
+                    }
+                }
+            }
+
+            return instance;
+        }
+
+
+        /// <summary>
+        /// The add specification.
+        /// </summary>
+        /// <param name="specification">
+        /// The specification.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CartViewModel"/>.
+        /// </returns>
+        public CartViewModel AddSpecification(Specification specification)
+        {
+            return instance;
+        }
+
+        /// <summary>
+        /// The update totals.
+        /// </summary>
+        private void UpdateTotals()
+        {
+            // Обнуляем Общую цену и общее кол-во
+            this.TotalPrice = 0;
+            this.TotalQuantity = 0;
+
+            // Набираем общую цену
+            foreach (var specification in this.Specifications)
+            {
+                this.TotalPrice += specification.Price * this.SpecificationQuantities[specification.Id];
+                this.TotalQuantity += this.SpecificationQuantities[specification.Id];
+            }
+
+        }
     }
 }

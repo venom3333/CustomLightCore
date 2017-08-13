@@ -10,6 +10,7 @@ namespace CustomLightCore.ViewModels.Cart
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using CustomLightCore.Models;
 
@@ -53,7 +54,7 @@ namespace CustomLightCore.ViewModels.Cart
                 this.Specifications = new List<Specification>();
                 this.SpecificationQuantities = new Dictionary<int, int>();
 
-                // для теста
+                // для тестов
                 this.Specifications.Add(new Specification
                 {
                     Id = 1,
@@ -129,7 +130,31 @@ namespace CustomLightCore.ViewModels.Cart
 
 
         /// <summary>
-        /// The add specification.
+        /// Добавить спецификацию или обновить количество у существующей.
+        /// </summary>
+        /// <param name="specification">
+        /// The specification.
+        /// </param>
+        /// <param name="quantity">
+        /// The quantity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CartViewModel"/>.
+        /// </returns>
+        public CartViewModel UpdateSpecifications(Specification specification, int quantity)
+        {
+            if (!this.Specifications.Select(sp => sp.Id).Contains(specification.Id))
+            {
+                this.Specifications.Add(specification);
+            }
+
+            this.SpecificationQuantities[specification.Id] = quantity;
+            this.UpdateTotals();
+            return this;
+        }
+
+        /// <summary>
+        /// The remove specification.
         /// </summary>
         /// <param name="specification">
         /// The specification.
@@ -137,9 +162,12 @@ namespace CustomLightCore.ViewModels.Cart
         /// <returns>
         /// The <see cref="CartViewModel"/>.
         /// </returns>
-        public CartViewModel AddSpecification(Specification specification)
+        public CartViewModel RemoveSpecification(Specification specification)
         {
-            return instance;
+            this.Specifications.RemoveAll(sp => sp.Id == specification.Id);
+            this.SpecificationQuantities.Remove(specification.Id);
+            this.UpdateTotals();
+            return this;
         }
 
         /// <summary>

@@ -5,6 +5,7 @@ namespace CustomLightCore.Controllers
     using System.Linq;
     using System.Threading.Tasks;
 
+    using CustomLightCore.Models;
     using CustomLightCore.ViewModels.Cart;
 
     using Microsoft.AspNetCore.Http;
@@ -23,20 +24,19 @@ namespace CustomLightCore.Controllers
         /// </returns>
         public async Task<IActionResult> Details()
         {
+            // Для тестов
+            var cart = CartViewModel.GetInstance(HttpContext);
+            cart.UpdateSpecifications(
+                new Specification
+                {
+                    Id = 2,
+                    Price = 120,
+                },
+            7);
+
             await CreateViewBag();
-            return View();
+            return View(cart);
         }
 
-        /// <summary>
-        /// The render cart icon.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="PartialViewResult"/>.
-        /// </returns>
-        public PartialViewResult RenderCartIcon()
-        {
-            var model = Cart;
-            return PartialView("~/Views/Shared/_CartIcon.cshtml", model);
-        }
     }
 }

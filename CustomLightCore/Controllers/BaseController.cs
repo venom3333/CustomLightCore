@@ -46,27 +46,6 @@ namespace CustomLightCore.Controllers
             ViewBag.Slides = await db.Slides.ToListAsync();
             ViewBag.Essentials = await db.Essentials.FirstOrDefaultAsync();
 
-            //var key = "Cart";
-
-            //if (HttpContext.Session.GetString(key) == null)
-            //{
-            //    Cart = new CartViewModel
-            //               {
-            //                   TotalQuantity = 0,
-            //                   TotalPrice = 0
-            //               };
-
-            //    // Save            
-            //    var str = JsonConvert.SerializeObject(Cart);
-            //    HttpContext.Session.SetString(key, str);
-            //}
-            //else
-            //{
-            //    // Retrieve
-            //    var str = HttpContext.Session.GetString(key);
-            //    Cart = JsonConvert.DeserializeObject<CartViewModel>(str);
-            //}
-
             return true;
         }
     }

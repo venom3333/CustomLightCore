@@ -1,8 +1,10 @@
-@model CustomLightCore.ViewModels.Cart.CartViewModel
+﻿@model CustomLightCore.ViewModels.Cart.CartViewModel
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/_Layouts/_Main.cshtml";
 }
 
 <h2>Details</h2>
-
+<p>Общее количество: @Html.DisplayFor(m => m.TotalQuantity)</p>
+<br />
+<p>Общая цена: @Html.DisplayFor(m => m.TotalPrice)</p>

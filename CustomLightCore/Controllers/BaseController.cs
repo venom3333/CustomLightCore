@@ -29,7 +29,7 @@ namespace CustomLightCore.Controllers
         /// <summary>
         /// Gets or sets the cart.
         /// </summary>
-        protected CartViewModel Cart { get; set; }
+        protected static CartViewModel Cart { get; set; }
 
         /// <summary>
         /// The create view bag.
@@ -45,6 +45,11 @@ namespace CustomLightCore.Controllers
             ViewBag.Pages = await db.Pages.ToListAsync();
             ViewBag.Slides = await db.Slides.ToListAsync();
             ViewBag.Essentials = await db.Essentials.FirstOrDefaultAsync();
+
+            if (Cart == null)
+            {
+                Cart = CartViewModel.GetInstance(HttpContext);
+            }
 
             return true;
         }

@@ -54,15 +54,6 @@ namespace CustomLightCore.ViewModels.Cart
                 this.Specifications = new List<Specification>();
                 this.SpecificationQuantities = new Dictionary<int, int>();
 
-                // для тестов
-                this.Specifications.Add(new Specification
-                {
-                    Id = 1,
-                    Price = 150
-                });
-
-                this.SpecificationQuantities.Add(1, 5);
-
                 // Save            
                 var str = JsonConvert.SerializeObject(this);
                 context.Session.SetString(key, str);
@@ -128,9 +119,36 @@ namespace CustomLightCore.ViewModels.Cart
             return instance;
         }
 
+        /// <summary>
+        /// Добавить спецификацию или добавить количество у существующей (Из детализации продукта).
+        /// </summary>
+        /// <param name="specification">
+        /// The specification.
+        /// </param>
+        /// <param name="quantity">
+        /// The quantity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CartViewModel"/>.
+        /// </returns>
+        public CartViewModel AddToCart(Specification specification, int quantity)
+        {
+            if (!this.Specifications.Select(sp => sp.Id).Contains(specification.Id))
+            {
+                this.Specifications.Add(specification);
+                this.SpecificationQuantities.Add(specification.Id, quantity);
+            }
+            else
+            {
+                this.SpecificationQuantities[specification.Id] += quantity;
+            }
+
+            this.UpdateTotals();
+            return this;
+        }
 
         /// <summary>
-        /// Добавить спецификацию или обновить количество у существующей.
+        /// Добавить спецификацию или обновить количество у существующей (из просмотра корзины).
         /// </summary>
         /// <param name="specification">
         /// The specification.
@@ -146,15 +164,18 @@ namespace CustomLightCore.ViewModels.Cart
             if (!this.Specifications.Select(sp => sp.Id).Contains(specification.Id))
             {
                 this.Specifications.Add(specification);
+                this.SpecificationQuantities.Add(specification.Id, quantity);
             }
-
-            this.SpecificationQuantities[specification.Id] = quantity;
+            else
+            {
+                this.SpecificationQuantities[specification.Id] = quantity;
+            }
             this.UpdateTotals();
             return this;
         }
 
         /// <summary>
-        /// The remove specification.
+        /// The remove specification (из просмотра корзины).
         /// </summary>
         /// <param name="specification">
         /// The specification.
@@ -186,6 +207,9 @@ namespace CustomLightCore.ViewModels.Cart
                 this.TotalQuantity += this.SpecificationQuantities[specification.Id];
             }
 
+            // На всякий пожарный
+            this.TotalQuantity = (this.TotalQuantity < 0) ? 0 : this.TotalQuantity;
+            this.TotalPrice = (this.TotalPrice < 0) ? 0 : this.TotalPrice;
         }
     }
 }

@@ -8,7 +8,7 @@
         @Html.Partial("~/Views/Shared/_NavBar.cshtml")
     </div>
 	<!-- /Навбар -->
-	<div class="col-md-2">
+	<div class="col-md-2" id="cart-icon">
 	    <!--Виджет корзины-->
         @await Component.InvokeAsync("CartIcon")
 		@*@Html.Partial("~/Views/Shared/_CartIcon.cshtml")*@

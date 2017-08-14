@@ -75,19 +75,6 @@ namespace CustomLightCore
             // Сессии
             app.UseSession();
 
-            //app.Run(async (context) =>
-            //    {
-            //        if (context.Session.Keys.Contains("Cart"))
-            //        {
-            //            //await context.Response.WriteAsync($"Hello {context.Session.GetString("name")}!");
-            //        }
-            //        else
-            //        {
-            //            context.Session.SetString("Cart", "");
-            //            //await context.Response.WriteAsync("Hello World!");
-            //        }
-            //    });
-
             // Аутентификация
             app.UseIdentity();
 

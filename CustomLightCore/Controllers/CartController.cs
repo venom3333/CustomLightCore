@@ -24,19 +24,40 @@ namespace CustomLightCore.Controllers
         /// </returns>
         public async Task<IActionResult> Details()
         {
-            // Для тестов
-            var cart = CartViewModel.GetInstance(HttpContext);
-            cart.UpdateSpecifications(
-                new Specification
-                {
-                    Id = 2,
-                    Price = 120,
-                },
-            7);
-
             await CreateViewBag();
-            return View(cart);
+            return View(Cart);
         }
+
+        /// <summary>
+        /// The add to cart.
+        /// </summary>
+        /// <param name="specificationId">
+        /// The specification Id.
+        /// </param>
+        /// <param name="quantity">
+        /// The quantity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IActionResult"/>.
+        /// </returns>
+        [HttpPost]
+        public IActionResult AddToCart(int specificationId, int quantity)
+        {
+            if (quantity == 0)
+            {
+                return this.PartialView("~/Views/Shared/_CartIcon.cshtml", Cart);
+            }
+
+            var specification = this.db.Specifications.FirstOrDefault(sp => sp.Id == specificationId);
+
+            if (specification != null)
+            {
+                Cart = Cart.AddToCart(specification, quantity);
+            }
+            return PartialView("~/Views/Shared/_CartIcon.cshtml", Cart);
+        }
+
+
 
     }
 }

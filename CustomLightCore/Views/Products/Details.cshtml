@@ -73,17 +73,18 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var specification in Model.Specifications)
-                {
+                @for (int i = 0; i < Model.Specifications.Count; i++)
+            {
                     <tr>
-                        @foreach (var specificationVal in specification.SpecificationValues)
+                        @Html.HiddenFor(model => Model.Specifications.ToList()[i].Id)
+                        @foreach (var specificationVal in Model.Specifications.ToList()[i].SpecificationValues)
                         {
-                            <td>@specificationVal.Value</td>
+                            <td>@Html.DisplayFor(model => specificationVal.Value)</td>
                         }
-                        <td>@specification.Price</td>
+                        <td>@Html.DisplayFor(model => model.Specifications.ToList()[i].Price)</td>
                         <td>
-                            <input type="number" min="0" name="specificationQuantity_@specification.Id" id="specificationQuantity_@specification.Id" value="" />
-                            <i class="fa fa-cart-arrow-down" aria-hidden="true"></i>
+                            <input type="number" min="0" name="specificationQuantity_@Model.Specifications.ToList()[i].Id" id="specificationQuantity_@Model.Specifications.ToList()[i].Id" value="" />
+                            <i class="fa fa-cart-arrow-down add-to-cart" id="add-to-cart-@Model.Specifications.ToList()[i].Id" aria-hidden="true"></i>
                         </td>
                     </tr>
                 }
@@ -92,3 +93,32 @@
     </div>
 </div>
 <!--/Инфо о продукте-->
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+        $(function() {
+            $(document).ready(function() {
+                $(".add-to-cart").click(function() {
+                    var specificationId = parseInt(this.id.replace("add-to-cart-", ""));
+                    var quantity = $("#specificationQuantity_" + specificationId).val();
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("AddToCart", "Cart")",
+                        data: {
+                            specificationId: specificationId,
+                            quantity: quantity
+                        },
+                        success: function(html) {
+                            //console.log(html);
+                            $('#cart-icon').html(html);
+                        },
+                        error: function(msg) {
+                            console.log(msg);
+                        }
+                    });
+                });
+            });
+        });
+
+    </script>
+}

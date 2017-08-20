@@ -1,0 +1,42 @@
+﻿@model CustomLightCore.ViewModels.Mail.CallBackMailViewModel
+
+<div class="collapse navbar-collapse col-md-2 col-md-offset-10 col-sm-12" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav">
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b class="caret"></b>Заказать звонок<b class="caret"></b></a>
+            <ul class="dropdown-menu callback-wrapper">
+                <li>
+                    <form asp-controller="Mail" asp-action="CallBackMail" class="callback" id="callback">
+                        <div class="form-horizontal">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <div>
+                                    <input asp-for="Name" class="form-control" placeholder="Ваше имя" />
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div>
+                                    <input asp-for="Phone" class="form-control" placeholder="Ваш телефон" />
+                                    <span asp-validation-for="Phone" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div>
+                                    <textarea asp-for="Misc" class="form-control" placeholder="Примечание"></textarea>
+                                    <span asp-validation-for="Misc" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div>
+                                    <input type="submit" value="Заказать звонок" class="btn btn-default callback-mail-button" />
+                                    @Html.ValidationSummary()
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>

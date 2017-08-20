@@ -1,17 +1,18 @@
-﻿<div class="header">
+﻿@using CustomLightCore.ViewModels.Mail
+
+<div class="header">
 	<div class="col-md-2 logo">
 		<a href="/"><img src="@Url.Action("GetLogotype", "Essentials", new { LogoType = "normal" })" class="img-responsive" alt="Логотип"></a>
 	</div>
 	
 	<!-- Навбар -->
     <div class="col-lg-8 nav-line">
-        @Html.Partial("~/Views/Shared/_NavBar.cshtml")
+        @await Html.PartialAsync("~/Views/Shared/_NavBar.cshtml")
     </div>
 	<!-- /Навбар -->
 	<div class="col-md-2" id="cart-icon">
 	    <!--Виджет корзины-->
         @await Component.InvokeAsync("CartIcon")
-		@*@Html.Partial("~/Views/Shared/_CartIcon.cshtml")*@
 			<!--/Виджет корзины-->
 			<div class="h-line clearfix"></div>
 			<div class="phone-number">
@@ -23,7 +24,7 @@
 		<!--	Заказать звонок-->
 		<div class="line-block col-md-12">
 			<!-- Collect the nav links, forms, and other content for toggling -->
-			@*<? include_once APP . "/views/" . TEMPLATE . "/common/callback.tpl.php" ?>*@
+		    @await Html.PartialAsync("~/Views/Shared/_CallBackMail.cshtml", new CallBackMailViewModel())
 		</div>
 		<!--	/Заказать звонок-->
 

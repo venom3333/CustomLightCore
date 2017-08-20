@@ -168,7 +168,7 @@ namespace CustomLightCore.ViewModels.Cart
         {
             if (quantity <= 0)
             {
-                this.RemoveSpecification(specification);
+                this.RemoveSpecification(specification.Id);
                 return this;
             }
 
@@ -188,19 +188,35 @@ namespace CustomLightCore.ViewModels.Cart
         /// <summary>
         /// The remove specification (из просмотра корзины).
         /// </summary>
-        /// <param name="specification">
-        /// The specification.
+        /// <param name="specificationId">
+        /// Id удаляемой спецификации
         /// </param>
         /// <returns>
         /// The <see cref="CartViewModel"/>.
         /// </returns>
-        public CartViewModel RemoveSpecification(Specification specification)
+        public CartViewModel RemoveSpecification(int specificationId)
         {
-            this.Specifications.RemoveAll(sp => sp.Id == specification.Id);
-            this.SpecificationQuantities.Remove(specification.Id);
+            this.Specifications.RemoveAll(sp => sp.Id == specificationId);
+            this.SpecificationQuantities.Remove(specificationId);
             this.UpdateTotals();
             return this;
-        } 
+        }
+
+        /// <summary>
+        /// The clear cart.
+        /// </summary>
+        /// <param name="httpContext">
+        /// The http Context.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CartViewModel"/>.
+        /// </returns>
+        public CartViewModel ClearCart(HttpContext httpContext)
+        {
+            instance = null;
+            return GetInstance(httpContext);
+        }
+
 
         /// <summary>
         /// The update totals.

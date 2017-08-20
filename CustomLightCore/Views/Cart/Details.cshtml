@@ -17,43 +17,47 @@
 
                 <!--Товары-->
                 <tbody>
-                @*заголовки*@
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.Specifications[i].Product.Icon)</th>
-                    <th>@Html.DisplayNameFor(model => model.Specifications[i].Product.Name)</th>
-                    @foreach (var specificationValue in Model.Specifications[i].SpecificationValues)
-                    {
-                        <th>@specificationValue.SpecificationTitle.Name</th>
-                    }
-                    <th>Цена</th>
-                    <th>Количество</th>
-                    <th>Действия</th>
-                </tr>
-                @*спецификация*@
-                <tr>
-                    <td>
-                        <a asp-controller="Products" asp-action="Details" asp-route-id="@Model.Specifications[i].Product.Id"><img src="@Url.Action("GetProductIcon", "Products", new { Model.Specifications[i].Product.Id })" alt="Model.Specifications[i].Product.Name" class="list-preview-image" /></a>
-                    </td>
-                    <td>                        
-                        @Html.DisplayFor(model => model.Specifications[i].Product.Name)<br/>
-                        (@Html.DisplayFor(model => model.Specifications[i].Product.ProductType.Name))
-                    </td>
-                    @Html.HiddenFor(model => Model.Specifications.ToList()[i].Id)
-                    @foreach (var specificationValue in Model.Specifications[i].SpecificationValues)
-                    {
-                        <td>@Html.DisplayFor(model => specificationValue.Value)</td>
-                    }
-                    <td>@Html.DisplayFor(model => model.Specifications.ToList()[i].Price)</td>
-                    <td>
-                        @Html.EditorFor(model => model.SpecificationQuantities.FirstOrDefault(sq => sq.Key == Model.Specifications.ToList()[i].Id).Value)
-                        @*<input type="number" min="0" name="specificationQuantity_@Model.Specifications.ToList()[i].Id" id="specificationQuantity_@Model.Specifications.ToList()[i].Id" value=""/>*@
-                        @*<i class="fa fa-cart-arrow-down add-to-cart" id="add-to-cart-@Model.Specifications.ToList()[i].Id" aria-hidden="true"></i>*@
-                    </td>
-                    <td>
-                        <a href=""><i class="fa fa-repeat" aria-hidden="true"></i>Пересчитать</a> |
-                        <a href=""><i class="fa fa-times" aria-hidden="true"></i>Удалить</a>
-                    </td>
-                </tr>
+                    @*заголовки*@
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.Specifications[i].Product.Icon)</th>
+                        <th>@Html.DisplayNameFor(model => model.Specifications[i].Product.Name)</th>
+                        @foreach (var specificationValue in Model.Specifications[i].SpecificationValues)
+                        {
+                            <th>@specificationValue.SpecificationTitle.Name</th>
+                        }
+                        <th>Цена</th>
+                        <th>Количество</th>
+                        <th>Действия</th>
+                    </tr>
+                    @*спецификация*@
+                    <tr>
+                        <td>
+                            <a asp-controller="Products" asp-action="Details" asp-route-id="@Model.Specifications[i].Product.Id"><img src="@Url.Action("GetProductIcon", "Products", new { Model.Specifications[i].Product.Id })" alt="Model.Specifications[i].Product.Name" class="list-preview-image" /></a>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.Specifications[i].Product.Name)<br />
+                            (@Html.DisplayFor(model => model.Specifications[i].Product.ProductType.Name))
+                        </td>
+                        @Html.HiddenFor(model => Model.Specifications.ToList()[i].Id)
+                        @foreach (var specificationValue in Model.Specifications[i].SpecificationValues)
+                        {
+                            <td>@Html.DisplayFor(model => specificationValue.Value)</td>
+                        }
+                        <td>@Html.DisplayFor(model => model.Specifications.ToList()[i].Price)</td>
+                        <td>
+                            @Html.EditorFor(model => model.SpecificationQuantities.FirstOrDefault(sq => sq.Key == Model.Specifications.ToList()[i].Id).Value, new { htmlAttributes = new { min = 0, max = 10000, id = "specificationQuantity_" + Model.Specifications.ToList()[i].Id } })
+                            @*<input type="number" min="0" name="specificationQuantity_@Model.Specifications.ToList()[i].Id" id="specificationQuantity_@Model.Specifications.ToList()[i].Id" value=""/>*@
+                            @*<i class="fa fa-cart-arrow-down add-to-cart" id="add-to-cart-@Model.Specifications.ToList()[i].Id" aria-hidden="true"></i>*@
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button type="button" class="btn btn-primary cart-update" id="specificationId_@Model.Specifications[i].Id">
+                                    <i class='fa fa-repeat' aria-hidden='true'></i>Пересчитать
+                                </button>
+                                <a class="btn btn-danger" asp-controller="Cart" asp-action="RemoveFromCart" asp-route-id="@Model.Specifications[i].Id"><i class="fa fa-times" aria-hidden="true"></i>Удалить</a>
+                            </div>
+                        </td>
+                    </tr>
                 </tbody>
                 <!--/Товары-->
             </table>
@@ -61,15 +65,13 @@
         </div>
     }
 
-
-
     <p class="cart-grand-total">
-    <p>Общее количество: @Html.DisplayFor(m => m.TotalQuantity)</p>
+    <p><h4>Общее количество:</h4> @Html.DisplayFor(m => m.TotalQuantity)</p>
     <br />
-    <p>Стоимость: @Html.DisplayFor(m => m.TotalPrice)</p>
+    <p><h4>Стоимость:</h4> @Html.DisplayFor(m => m.TotalPrice)</p>
     </p>
 
-    <input type="button" class="cart-wipe-button" value="Очистить корзину!">
+    <a asp-action="ClearCart" class="btn btn-warning">Очистить корзину!</a>
 
     <h3>Информация по заказу:</h3>
     <form class="checkout" id="checkout">
@@ -116,4 +118,32 @@
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+    <script>
+        $(function() {
+            $(document).ready(function() {
+                $(".cart-update").click(function() {
+                    var specificationId = parseInt(this.id.replace("specificationId_", ""));
+                    var quantity = $("#specificationQuantity_" + specificationId).val();
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("UpdateSpecification", "Cart")",
+                        data: {
+                            specificationId: specificationId,
+                            quantity: quantity
+                        },
+                        success: function() {
+                            //console.log(html);
+                            //$('#cart-icon').html(html);
+                            location.reload();
+                        },
+                        error: function(msg) {
+                            console.log(msg);
+                        }
+                    });
+                });
+            });
+        });
+
+    </script>
 }

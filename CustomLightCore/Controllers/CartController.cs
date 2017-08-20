@@ -10,6 +10,7 @@ namespace CustomLightCore.Controllers
 
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
 
     /// <summary>
     /// The cart controller.
@@ -48,7 +49,11 @@ namespace CustomLightCore.Controllers
                 return this.PartialView("~/Views/Shared/_CartIcon.cshtml", Cart);
             }
 
-            var specification = this.db.Specifications.FirstOrDefault(sp => sp.Id == specificationId);
+            var specification = this.db.Specifications
+                .Include(sp => sp.Product)
+                .Include(sp => sp.SpecificationValues)
+                    .ThenInclude(sv => sv.SpecificationTitle)
+                .FirstOrDefault(sp => sp.Id == specificationId);
 
             if (specification != null)
             {
@@ -56,8 +61,5 @@ namespace CustomLightCore.Controllers
             }
             return PartialView("~/Views/Shared/_CartIcon.cshtml", Cart);
         }
-
-
-
     }
 }

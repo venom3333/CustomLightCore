@@ -133,6 +133,11 @@ namespace CustomLightCore.ViewModels.Cart
         /// </returns>
         public CartViewModel AddToCart(Specification specification, int quantity)
         {
+            if (quantity <= 0)
+            {
+                return this;
+            }
+
             if (!this.Specifications.Select(sp => sp.Id).Contains(specification.Id))
             {
                 this.Specifications.Add(specification);
@@ -161,6 +166,12 @@ namespace CustomLightCore.ViewModels.Cart
         /// </returns>
         public CartViewModel UpdateSpecifications(Specification specification, int quantity)
         {
+            if (quantity <= 0)
+            {
+                this.RemoveSpecification(specification);
+                return this;
+            }
+
             if (!this.Specifications.Select(sp => sp.Id).Contains(specification.Id))
             {
                 this.Specifications.Add(specification);
@@ -189,7 +200,7 @@ namespace CustomLightCore.ViewModels.Cart
             this.SpecificationQuantities.Remove(specification.Id);
             this.UpdateTotals();
             return this;
-        }
+        } 
 
         /// <summary>
         /// The update totals.

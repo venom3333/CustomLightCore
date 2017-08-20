@@ -25,7 +25,7 @@ namespace CustomLightCore.Models
         [DisplayName("Краткое описание")]
         public string ShortDescription { get; set; }
 
-        [DisplayName("Иконка")]
+        [DisplayName("Миниатюра")]
         public byte[] Icon { get; set; }
         public string IconMimeType { get; set; }
 

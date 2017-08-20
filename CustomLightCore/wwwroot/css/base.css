@@ -1231,3 +1231,6 @@ table td {
 .myCarousel img {
   max-width: 100%; }
 
+.list-preview-image {
+  max-height: 75px; }
+

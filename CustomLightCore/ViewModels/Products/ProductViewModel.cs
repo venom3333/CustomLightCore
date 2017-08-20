@@ -139,7 +139,7 @@ namespace CustomLightCore.ViewModels.Products
             result.IsPublished = item.IsPublished;
 
 
-            // Категории проекта
+            // Категории продукта
             if (item.CategoryProductId != null)
             {
                 var categoryProducts = new HashSet<CategoryProduct>();
@@ -227,6 +227,23 @@ namespace CustomLightCore.ViewModels.Products
 
                 db.Specifications.RemoveRange(existingProductSpecs);
                 db.SaveChanges();
+            }
+
+            // Для правильной записи SpecificationTitles
+            if (result.Specifications != null)
+            {
+                using (var db = new CustomLightContext())
+                {
+                    foreach (var spec in result.Specifications)
+                    {
+                        for (int i = 0; i < spec.SpecificationValues.Count; i++)
+                        {
+                            spec.SpecificationValues[i].SpecificationTitleId = db.SpecificationTitles.FirstOrDefault(title =>
+                                title.Id == db.ProductTypes.FirstOrDefault(pt => pt.Id == item.ProductTypeId)
+                                    .SpecificationTitles.ToList()[i].Id).Id;
+                        }
+                    }
+                }
             }
 
             return result;

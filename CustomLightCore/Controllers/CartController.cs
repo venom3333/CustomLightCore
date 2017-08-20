@@ -51,6 +51,7 @@ namespace CustomLightCore.Controllers
 
             var specification = this.db.Specifications
                 .Include(sp => sp.Product)
+                    .ThenInclude(p => p.ProductType)
                 .Include(sp => sp.SpecificationValues)
                     .ThenInclude(sv => sv.SpecificationTitle)
                 .FirstOrDefault(sp => sp.Id == specificationId);

@@ -1,10 +1,10 @@
 ﻿@model CustomLightCore.ViewModels.Cart.CartViewModel
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Корзина. Оформление заказа.";
     Layout = "~/Views/_Layouts/_Main.cshtml";
 }
 
-<div class="">
+<div class="col-md-10">
     <h1>Корзина.</h1>
     <h2>Оформление заказа.</h2>
 
@@ -35,7 +35,8 @@
                         <a asp-controller="Products" asp-action="Details" asp-route-id="@Model.Specifications[i].Product.Id"><img src="@Url.Action("GetProductIcon", "Products", new { Model.Specifications[i].Product.Id })" alt="Model.Specifications[i].Product.Name" class="list-preview-image" /></a>
                     </td>
                     <td>                        
-                        @Html.DisplayFor(model => model.Specifications[i].Product.Name)
+                        @Html.DisplayFor(model => model.Specifications[i].Product.Name)<br/>
+                        (@Html.DisplayFor(model => model.Specifications[i].Product.ProductType.Name))
                     </td>
                     @Html.HiddenFor(model => Model.Specifications.ToList()[i].Id)
                     @foreach (var specificationValue in Model.Specifications[i].SpecificationValues)

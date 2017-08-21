@@ -8,7 +8,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace CustomLightCore.ViewModels.Cart
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -66,6 +65,7 @@ namespace CustomLightCore.ViewModels.Cart
                 this.SpecificationQuantities = currentCart.SpecificationQuantities;
                 this.Specifications = currentCart.Specifications;
             }
+
             this.UpdateTotals();
         }
 
@@ -181,6 +181,7 @@ namespace CustomLightCore.ViewModels.Cart
             {
                 this.SpecificationQuantities[specification.Id] = quantity;
             }
+
             this.UpdateTotals();
             return this;
         }
@@ -216,7 +217,6 @@ namespace CustomLightCore.ViewModels.Cart
             instance = null;
             return GetInstance(httpContext);
         }
-
 
         /// <summary>
         /// The update totals.

@@ -70,7 +70,6 @@ namespace CustomLightCore.Controllers
         /// <returns>
         /// The <see cref="IActionResult"/>.
         /// </returns>
-        /// TODO: Переделать на AJAX
         [HttpPost]
         public IActionResult CallBackMail(CallBackMailViewModel callBackForm)
         {
@@ -122,6 +121,69 @@ namespace CustomLightCore.Controllers
                 }
             }
             return this.PartialView("_CallBackMail");
+        }
+
+        /// <summary>
+        /// The order mail.
+        /// </summary>
+        /// <param name="orderForm">
+        /// The order Form.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IActionResult"/>.
+        /// </returns>
+        /// TODO: Добавить инфу из Cart!
+        [HttpPost]
+        public IActionResult OrderMail(OrderMailViewModel orderForm)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    this.Subject = "Заказ!";
+
+                    this.BodyContent = $@"
+                    Заказ!
+                    ФИО: {orderForm.Name}
+                    Телефон: {orderForm.Phone}
+                    Email: {orderForm.Email}
+                    Адрес: {orderForm.Address}
+                    Тип доставки: {orderForm.DeliveryType}
+                    Примечания: {orderForm.Misc}";
+
+                    // Smtp Server 
+                    const string SmtpServer = "smtp.gmail.com";
+
+                    // Smtp Port Number 
+                    const int SmtpPortNumber = 587;
+
+                    var mimeMessage = new MimeMessage();
+
+                    mimeMessage.From.Add(new MailboxAddress(FromAdressTitle, FromAddress));
+                    mimeMessage.To.Add(new MailboxAddress(ToAdressTitle, ToAddress));
+                    mimeMessage.Subject = Subject;
+                    mimeMessage.Body = new TextPart("plain") { Text = BodyContent };
+
+                    using (var client = new SmtpClient())
+                    {
+
+                        client.Connect(SmtpServer, SmtpPortNumber, false);
+
+                        // Note: only needed if the SMTP server requires authentication 
+                        // Error 5.5.1 Authentication  
+                        client.Authenticate(FromAddress, "aeseJ1zZ");
+                        client.Send(mimeMessage);
+                        client.Disconnect(true);
+                    }
+
+                    return this.PartialView("~/Views/Cart/_OrderForm.cshtml");
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            return this.PartialView("~/Views/Cart/_OrderForm.cshtml");
         }
     }
 }

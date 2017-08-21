@@ -4,10 +4,44 @@ $('.carousel').carousel({
 });
 
 $(function() {
-    $(document).ready(function() {
+    $(document).ready(function () {
+        // Перезвоните мне
         callBackMail();
+
+        // Оформить заказ
+        orderMail();
     });
 });
+
+// Функция оформить заказ
+function orderMail() {
+    $(".order-mail-button").click(function () {
+        var name = $("#orderName").val();
+        var phone = $("#orderPhone").val();
+        if (name === "" || phone === "") {
+            alertify.error("Введите Имя и телефон!");
+            return;
+        }
+
+        var form = $("#orderForm");
+
+        var model = form.serialize();
+
+        $.ajax({
+            type: "POST",
+            url: "/Mail/OrderMail",
+            data: model,
+            success: function (html) {
+                //console.log(html);
+                $('#orderForm').html(html);
+                alertify.success("Ваш заказ отправлен. Скоро мы Вам перезвоним.");
+            },
+            error: function (msg) {
+                console.log(msg);
+            }
+        });
+    });
+}
 
 // Функция перезвоните мне
 function callBackMail() {

@@ -1,0 +1,59 @@
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@model CustomLightCore.ViewModels.Mail.OrderMailViewModel
+
+<h3>Информация по заказу:</h3>
+<legend class="h-line-reverse">Способ доставки:</legend>
+<form asp-controller="Mail" asp-action="OrderMail" class="orderForm" id="orderForm">
+    <div class="form-horizontal">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            @Html.RadioButtonFor(m => m.DeliveryType, "Самовывоз", new { Checked = "checked" }) Самовывоз <br>
+            @Html.RadioButtonFor(m => m.DeliveryType, "Доставка") Доставка
+        </div>
+        <div class="form-group">
+            <div>
+                @Html.LabelFor(m => m.Name)
+                <input asp-for="Name" class="form-control" placeholder="Ваше имя" id="orderName" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div>
+                @Html.LabelFor(m => m.Phone)
+                <input asp-for="Phone" class="form-control" placeholder="Ваш телефон" id="orderPhone"/>
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div>
+                @Html.LabelFor(m => m.Email)
+                <input asp-for="Email" class="form-control" placeholder="Email" id="orderEmail"/>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div>
+                @Html.LabelFor(m => m.Address)
+                <textarea asp-for="Address" class="form-control" placeholder="Адрес доставки (если не выбран 'Самовывоз')" id="orderAddress"></textarea>
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div>
+                @Html.LabelFor(m => m.Misc)
+                <textarea asp-for="Misc" class="form-control" placeholder="Примечания к заказу" id="orderMisc"></textarea>
+                <span asp-validation-for="Misc" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div>
+                <input type="button" value="Сделать заказ" class="btn btn-default order-mail-button" />
+                @Html.ValidationSummary()
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    orderMail();
+</script>

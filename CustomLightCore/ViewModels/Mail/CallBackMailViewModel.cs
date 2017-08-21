@@ -15,7 +15,7 @@
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = "Введите Имя!")]
         [DisplayName("Имя")]
         [DataType(DataType.Text)]
         public string Name { get; set; }
@@ -23,7 +23,7 @@
         /// <summary>
         /// Gets or sets the phone.
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = "Введите номер телефона!")]
         [DisplayName("Телефон")]
         [DataType(DataType.PhoneNumber)]
         public string Phone { get; set; }

@@ -114,7 +114,7 @@ namespace CustomLightCore.Controllers
                         client.Disconnect(true);
                     }
 
-                    return RedirectToAction("Index", "Categories");
+                    return this.PartialView("_CallBackMail");
                 }
                 catch (Exception ex)
                 {

@@ -1,14 +1,14 @@
 //colors
 $white: #ffffff;
 $color_oracle_approx: #2a7d6e;
-$black:  black;
+$black: black;
 $color_oracle_90_approx: rgba(42, 125, 110, .9);
 $black_100: rgba(0, 0, 0, 1);
 $color_oracle_10_approx: rgba(42, 125, 110, .1);
 $color_woodsmoke_approx: #0f0f0f;
 
 //fonts
-$font_0:  Helvetica;
+$font_0: Helvetica;
 $font_1: sans-serif;
 
 //urls
@@ -18,9 +18,9 @@ $background_image: url(/images/abstract-back-dark.svg);
 //original selectors
 //html, body
 %extend_base {
-  height: 100%;
-  background-image: $background_image;
-  background-size: 150%;
+    height: 100%;
+    background-image: $background_image;
+    background-size: 150%;
 }
 
 @import 'cart';
@@ -30,156 +30,189 @@ $background_image: url(/images/abstract-back-dark.svg);
 @import 'send';
 //@import $url_4;
 * {
-  //Instead of the line below you could use @include user-select($select)
-  user-select: none;
-  font-family: $font_0, $font_1;
-  //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
-  // transition: all .2s;
+    //Instead of the line below you could use @include user-select($select)
+    user-select: none;
+    font-family: $font_0, $font_1;
+    //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+    // transition: all .2s;
 }
+
 html {
-  @extend %extend_base;
+    @extend %extend_base;
 }
+
 body {
-  @extend %extend_base;
+    @extend %extend_base;
 }
+
 .container {
-  width: 90%;
+    width: 90%;
 }
+
 .h-line {
-  height: 2px;
-  width: 100%;
-  background: linear-gradient(to right, $white 25%, $color_oracle_approx 100%);
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(to right, $white 25%, $color_oracle_approx 100%);
 }
+
 .h-line-reverse {
-  height: 2px;
-  width: 100%;
-  background: linear-gradient(to left, $white 25%, $color_oracle_approx 100%);
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(to left, $white 25%, $color_oracle_approx 100%);
 }
+
 .vertical-center {
-  min-height: 25vh;
-  display: flex;
-  align-items: center;
+    min-height: 25vh;
+    display: flex;
+    align-items: center;
 }
+
 .clear {
-  clear: both;
+    clear: both;
 }
+
 .carousel {
-  height: 50%;
+    height: 50%;
 }
+
 .item {
-  height: 100%;
+    height: 100%;
 }
+
 .active {
-  height: 100%;
+    height: 100%;
 }
+
 .carousel-inner {
-  height: 100%;
+    height: 100%;
 }
+
 .fill {
-  width: 100%;
-  height: 300px;
-  background-position: center;
-  background-size: cover;
+    width: 100%;
+    height: 300px;
+    background-position: center;
+    background-size: cover;
 }
+
 .image-carousel-indicators {
-  .active {
-    width: 18%;
-    height: auto;
-    //Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-    box-shadow: 0 0 5px $black;
-    //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-    border-radius: 0;
-  }
-  li {
-    width: 18%;
-    height: auto;
-    text-indent: 0;
-    position: relative;
-    top: 140px;
-  }
+    .active {
+        width: 18%;
+        height: auto;
+        //Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+        box-shadow: 0 0 5px $black;
+        //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+        border-radius: 0;
+    }
+
+    li {
+        width: 18%;
+        height: auto;
+        text-indent: 0;
+        position: relative;
+        top: 140px;
+    }
 }
+
 .my-carousel {
-  margin-bottom: 130px;
-  padding: 0;
-  margin-right: 10px;
-  .carousel-indicators {
-    width: auto;
-    margin-left: -50%;
-    z-index: 0;
-  }
+    margin-bottom: 130px;
+    padding: 0;
+    margin-right: 10px;
+
+    .carousel-indicators {
+        width: auto;
+        margin-left: -50%;
+        z-index: 0;
+    }
 }
+
 .slider-shape {
-  position: relative;
-  z-index: 1;
-  width: 250px;
-  height: 100px;
-  top: 30%;
-  background: $white;
-  //Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-  box-shadow: 0 7px $color_oracle_90_approx;
-  padding: 10px;
-}
-.slider-shape-2 {
-  position: relative;
-  top: -27.7%;
-  left: 174px;
-  width: 0;
-  height: 0;
-  border-bottom: 146px solid $white;
-  border-left: 146px solid transparent;
-  //Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-  box-shadow: 5px 0 $color_oracle_90_approx;
-  //Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
-  transform: rotate(45deg);
-}
-.product-grid {
-  margin: 10px 0;
-  padding: 15px 2%;
-  height: 290px;
-  text-align: justify;
-  overflow: hidden;
-  //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
-  //transition: all .2s;
-  &:hover {
+    position: relative;
+    z-index: 1;
+    width: 250px;
+    height: 100px;
+    top: 30%;
+    background: $white;
     //Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-    box-shadow: 0 0 2px $black_100;
-    opacity: .8;
-    background: $color_oracle_10_approx;
-  }
-  h5 {
-    text-align: center;
-    font-size: 120%;
-  }
-  a {
-    text-decoration: none;
-    color: $color_woodsmoke_approx;
-    &:hover {
-      text-decoration: none;
-      color: $color_woodsmoke_approx;
-    }
-    &:visited {
-      text-decoration: none;
-      color: $color_woodsmoke_approx;
-    }
-    &:active {
-      text-decoration: none;
-      color: $color_woodsmoke_approx;
-    }
-  }
+    box-shadow: 0 7px $color_oracle_90_approx;
+    padding: 10px;
 }
+
+.slider-shape-2 {
+    position: relative;
+    top: -27.7%;
+    left: 174px;
+    width: 0;
+    height: 0;
+    border-bottom: 146px solid $white;
+    border-left: 146px solid transparent;
+    //Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+    box-shadow: 5px 0 $color_oracle_90_approx;
+    //Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+    transform: rotate(45deg);
+}
+
+.product-grid {
+    margin: 10px 0;
+    padding: 15px 2%;
+    height: 290px;
+    text-align: justify;
+    overflow: hidden;
+    //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+    //transition: all .2s;
+    &:hover {
+        //Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+        box-shadow: 0 0 2px $black_100;
+        opacity: .8;
+        background: $color_oracle_10_approx;
+    }
+
+    h5 {
+        text-align: center;
+        font-size: 120%;
+    }
+
+    a {
+        text-decoration: none;
+        color: $color_woodsmoke_approx;
+
+        &:hover {
+            text-decoration: none;
+            color: $color_woodsmoke_approx;
+        }
+
+        &:visited {
+            text-decoration: none;
+            color: $color_woodsmoke_approx;
+        }
+
+        &:active {
+            text-decoration: none;
+            color: $color_woodsmoke_approx;
+        }
+    }
+}
+
 .product-model-sec {
 }
+
 .about-main {
-  text-align: justify;
-  h3 {
-    text-align: center;
-  }
+    text-align: justify;
+
+    h3 {
+        text-align: center;
+    }
 }
+
 .myCarousel img {
-  max-width: 100%;
+    max-width: 100%;
 }
 
 // Иконки в корзине
 .list-preview-image {
     max-height: 75px;
+}
+
+// Перезвоните мне
+.callback * {
+    color:black;
 }

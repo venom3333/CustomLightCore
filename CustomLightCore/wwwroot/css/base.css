@@ -1234,3 +1234,6 @@ table td {
 .list-preview-image {
   max-height: 75px; }
 
+.callback * {
+  color: black; }
+

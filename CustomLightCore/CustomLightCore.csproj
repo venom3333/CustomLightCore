@@ -7,9 +7,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Interfaces\**" />
+    <Compile Remove="wwwroot\lib\alertify-js\**" />
     <Content Remove="Interfaces\**" />
+    <Content Remove="wwwroot\lib\alertify-js\**" />
     <EmbeddedResource Remove="Interfaces\**" />
+    <EmbeddedResource Remove="wwwroot\lib\alertify-js\**" />
     <None Remove="Interfaces\**" />
+    <None Remove="wwwroot\lib\alertify-js\**" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="wwwroot\css\admin.css" />

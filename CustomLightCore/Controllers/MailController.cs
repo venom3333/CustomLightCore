@@ -78,7 +78,6 @@ namespace CustomLightCore.Controllers
                 try
                 {
                     this.Subject = "Просьба перезвонить!";
-
                     this.BodyContent = string.Format(
                         @"
                     Просьба перезвонить!
@@ -94,16 +93,13 @@ namespace CustomLightCore.Controllers
 
                     // Smtp Port Number 
                     const int SmtpPortNumber = 587;
-
                     var mimeMessage = new MimeMessage();
                     mimeMessage.From.Add(new MailboxAddress(FromAdressTitle, FromAddress));
                     mimeMessage.To.Add(new MailboxAddress(ToAdressTitle, ToAddress));
                     mimeMessage.Subject = Subject;
                     mimeMessage.Body = new TextPart("plain") { Text = BodyContent };
-
                     using (var client = new SmtpClient())
                     {
-
                         client.Connect(SmtpServer, SmtpPortNumber, false);
 
                         // Note: only needed if the SMTP server requires authentication 
@@ -112,7 +108,6 @@ namespace CustomLightCore.Controllers
                         client.Send(mimeMessage);
                         client.Disconnect(true);
                     }
-
                     return this.PartialView("_CallBackMail");
                 }
                 catch (Exception ex)
@@ -140,6 +135,41 @@ namespace CustomLightCore.Controllers
             {
                 try
                 {
+                    // Собираем инфу из Cart
+                    var cartInfo = string.Empty;
+                    for (var i = 0; i < Cart.Specifications.Count; i++)
+                    {
+                        // Наименование
+                        cartInfo += $@"
+                            {i+1}. {Cart.Specifications[i].Product.Name}:";
+
+                        // Названия свойств и значения
+                        for (var j = 0; j < Cart.Specifications[i].SpecificationValues.Count; j++)
+                        {
+                            cartInfo += $@"
+                                {Cart.Specifications[i].SpecificationValues[j].SpecificationTitle.Name}: {Cart.Specifications[i].SpecificationValues[j].Value}";
+                        }
+
+                        // Цена
+                        cartInfo += $@"
+                            Цена: {Cart.Specifications[i].Price}";
+
+                        // Кол-во
+                        cartInfo += $@"
+                            Количество: {Cart.SpecificationQuantities[Cart.Specifications[i].Id]}";
+
+                        // Стоимость
+                        cartInfo += $@"
+                            Количество: {Cart.Specifications[i].Price * Cart.SpecificationQuantities[Cart.Specifications[i].Id]}";
+
+                        cartInfo += "\n";
+                    }
+
+                    cartInfo += $@"
+                        Всего шт.:  {Cart.TotalQuantity}
+                        На сумму:   {Cart.TotalPrice}
+                    ";
+
                     this.Subject = "Заказ!";
 
                     this.BodyContent = $@"
@@ -149,7 +179,10 @@ namespace CustomLightCore.Controllers
                     Email: {orderForm.Email}
                     Адрес: {orderForm.Address}
                     Тип доставки: {orderForm.DeliveryType}
-                    Примечания: {orderForm.Misc}";
+                    Примечания: {orderForm.Misc}
+                    
+                    Корзина заказа:
+                    {cartInfo}";
 
                     // Smtp Server 
                     const string SmtpServer = "smtp.gmail.com";

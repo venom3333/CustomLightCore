@@ -26,10 +26,23 @@
                     <td>
                         @Html.HiddenFor(m => m.Specifications[i].Id)
                     </td>
+
+                    @{
+                        int emptyTds = Model.ProductType.SpecificationTitles.Count - Model.Specifications.ToList()[i].SpecificationValues.Count;
+                    }
+
+            @if (emptyTds > 0) {
+                    @for (int k = 0; k < emptyTds; k++)
+                    {
+                        Model.Specifications.ToList()[i].SpecificationValues.Add(new CustomLightCore.Models.SpecificationValue());
+                    }
+            }
+
                     @for (var j = 0; j < Model.Specifications[i].SpecificationValues.Count; j++)
                     {
-                        @*@Html.TextBoxFor(sp => sp.Specifications[counter].SpecificationValues)*@
-                        <td>@Html.EditorFor(sp => Model.Specifications[i].SpecificationValues[j].Value)</td>    }
+                        <td>@Html.EditorFor(sp => Model.Specifications[i].SpecificationValues[j].Value)</td>
+                    }
+
                     <td>@Html.EditorFor(sp => sp.Specifications[i].Price)</td>
                     <td><i class="fa fa-times remove-specification" id="remove-specification-@i" aria-h aria-hidden="true"></i></td>
                 </tr>}

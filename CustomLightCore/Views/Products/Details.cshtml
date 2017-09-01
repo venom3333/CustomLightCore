@@ -10,7 +10,6 @@
 <!--Инфо о продукте-->
 <div class="col-md-10 product-model-sec">
     <h2 id="productName">@Model.Name</h2>
-
     <!--	Не отображается (нужно для корзины)-->
     @*<div id="productIcon" style="display: none;"><?= $product['icon'] ?></div>*@
     <div id="productId" style="display: none;">>@Model.Id</div>
@@ -74,13 +73,26 @@
             </thead>
             <tbody>
                 @for (int i = 0; i < Model.Specifications.Count; i++)
-            {
+                {
                     <tr>
                         @Html.HiddenFor(model => Model.Specifications.ToList()[i].Id)
-                        @foreach (var specificationVal in Model.Specifications.ToList()[i].SpecificationValues)
-                        {
-                            <td>@Html.DisplayFor(model => specificationVal.Value)</td>
+                        @{
+                            int emptyTds = Model.ProductType.SpecificationTitles.Count - Model.Specifications.ToList()[i].SpecificationValues.Count;
                         }
+
+                        @for (int j = 0; j < ((Model.Specifications.ToList()[i].SpecificationValues.Count < Model.ProductType.SpecificationTitles.Count) ? Model.Specifications.ToList()[i].SpecificationValues.Count : Model.ProductType.SpecificationTitles.Count); j++)
+                        {
+                            <td>@Html.DisplayFor(model => Model.Specifications.ToList()[i].SpecificationValues[j].Value)</td>
+                        }
+
+                        @if(emptyTds > 0)
+                        {
+                            for (int k = 0; k < emptyTds; k++)
+                            {
+                                <td></td>
+                            }
+                        }
+
                         <td>@Html.DisplayFor(model => model.Specifications.ToList()[i].Price)</td>
                         <td>
                             <input type="number" min="0" name="specificationQuantity_@Model.Specifications.ToList()[i].Id" id="specificationQuantity_@Model.Specifications.ToList()[i].Id" value="" />

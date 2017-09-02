@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CustomLightCore.ViewModels.Essentials
 {
-    public class EssentialEditViewModel
+    public class EssentialEditViewModel : BaseViewModel
     {
 		public int Id { get; set; }
 
@@ -76,7 +76,10 @@ namespace CustomLightCore.ViewModels.Essentials
 				MemoryStream ms = new MemoryStream();
 				item.LogoImageData.OpenReadStream().CopyTo(ms);
 
-				result.LogoImageData = ms.ToArray();
+                // обработка изображения
+                var processedImage = ImageProcess(ms.ToArray(), ImageType.Logo);
+
+                result.LogoImageData = processedImage;
 				result.LogoImageMimeType = item.LogoImageData.ContentType;
 			}
 
@@ -86,8 +89,11 @@ namespace CustomLightCore.ViewModels.Essentials
 				MemoryStream ms = new MemoryStream();
 				item.LogoImageInvertedData.OpenReadStream().CopyTo(ms);
 
-				result.LogoImageInvertedData = ms.ToArray();
-				result.LogoImageInvertedMimeType = item.LogoImageInvertedData.ContentType;
+                // обработка изображения
+                var processedImage = ImageProcess(ms.ToArray(), ImageType.Logo);
+
+                result.LogoImageInvertedData = processedImage;
+                result.LogoImageInvertedMimeType = item.LogoImageInvertedData.ContentType;
 			}
 
 			return result;

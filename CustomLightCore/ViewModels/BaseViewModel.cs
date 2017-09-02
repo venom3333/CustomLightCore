@@ -11,7 +11,8 @@ namespace CustomLightCore.ViewModels
     {
         Icon,
         Full,
-        Slider
+        Slide,
+        Logo
     }
 
     public class BaseViewModel
@@ -22,8 +23,11 @@ namespace CustomLightCore.ViewModels
         private const int FullImageHeight = 768;
         private const int FullImageWidth = 1024;
 
-        private const int SliderImageHeight = 300;
-        private const int SliderImageWidth = 1920;
+        private const int SlideImageHeight = 300;
+        private const int SlideImageWidth = 1920;
+
+        private const int LogoImageHeight = 80;
+        private const int LogoImageWidth = 400;
 
         private const int quality = 85;
 
@@ -46,9 +50,13 @@ namespace CustomLightCore.ViewModels
                     width = IconImageWidth;
                     height = IconImageHeight;
                     break;
-                case ImageType.Slider:
-                    width = SliderImageWidth;
-                    height = SliderImageHeight;
+                case ImageType.Logo:
+                    width = LogoImageWidth;
+                    height = LogoImageHeight;
+                    break;
+                case ImageType.Slide:
+                    width = SlideImageWidth;
+                    height = SlideImageHeight;
                     break;
                 case ImageType.Full:
                 default:
@@ -59,17 +67,20 @@ namespace CustomLightCore.ViewModels
 
             // Загрузка изображения
             var imgFormat = Image.DetectFormat(img);
+
+            if(imgFormat == null)
+            {
+                return img;
+            }
+
             var newImage = Image.Load(img);
 
             // Ресайз
             newImage = newImage.Resize(new ImageSharp.Processing.ResizeOptions
             {
-                Mode = ImageSharp.Processing.ResizeMode.Min,
+                Mode = ImageSharp.Processing.ResizeMode.Crop,
                 Size = new SixLabors.Primitives.Size(width, height)
             });
-
-            // Кроп
-            newImage = newImage.Crop(width, height);
 
             // Преобразование в byte[]
             MemoryStream ms = new MemoryStream();

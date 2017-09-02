@@ -13,7 +13,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
 
-    public class ProjectViewModel
+    public class ProjectViewModel : BaseViewModel
     {
         public int Id { get; set; }
 
@@ -136,7 +136,10 @@
                 MemoryStream ms = new MemoryStream();
                 item.Icon.OpenReadStream().CopyTo(ms);
 
-                result.Icon = ms.ToArray();
+                // обработка изображения
+                var processedImage = ImageProcess(ms.ToArray(), ImageType.Icon);
+
+                result.Icon = processedImage;
                 result.IconMimeType = item.Icon.ContentType;
             }
 
@@ -151,9 +154,12 @@
                         var ms = new MemoryStream();
                         projectImage.OpenReadStream().CopyTo(ms);
 
+                        // обработка изображения
+                        var processedImage = ImageProcess(ms.ToArray(), ImageType.Icon);
+
                         var image = new ProjectImage
                         {
-                            ImageData = ms.ToArray(),
+                            ImageData = processedImage,
                             ImageMimeType = projectImage.ContentType
                         };
                         projectImages.Add(image);

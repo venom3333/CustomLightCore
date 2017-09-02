@@ -185,9 +185,9 @@ namespace CustomLightCore.Controllers
         }
 
         [ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 60)]
-        public FileContentResult GetProjectImage(int? id)
+        public FileContentResult GetProjectImage(int? imageId)
         {
-            ProjectImage image = db.ProjectImages.FirstOrDefault(i => i.Id == id);
+            ProjectImage image = db.ProjectImages.FirstOrDefault(i => i.Id == imageId);
 
             if (image != null)
             {

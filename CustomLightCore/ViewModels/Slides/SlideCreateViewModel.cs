@@ -9,42 +9,45 @@ using System.IO;
 
 namespace CustomLightCore.ViewModels.Slides
 {
-    public class SlideCreateViewModel
+    public class SlideCreateViewModel : BaseViewModel
     {
-		[Required(ErrorMessage = "Выберите изображение!")]
-		[DataType(DataType.Upload)]
-		public IFormFile Image { get; set; }
+        [Required(ErrorMessage = "Выберите изображение!")]
+        [DataType(DataType.Upload)]
+        public IFormFile Image { get; set; }
 
-		[DataType(DataType.Text)]
-		public string Name { get; set; }
+        [DataType(DataType.Text)]
+        public string Name { get; set; }
 
-		[DataType(DataType.Text)]
-		public string Description { get; set; }
+        [DataType(DataType.Text)]
+        public string Description { get; set; }
 
-		public static explicit operator Slide(SlideCreateViewModel item)
-		{
+        public static explicit operator Slide(SlideCreateViewModel item)
+        {
 
-			Slide result = new Slide
-			{
-				Name = item.Name,
-				Description = item.Description,
-			};
+            Slide result = new Slide
+            {
+                Name = item.Name,
+                Description = item.Description,
+            };
 
-			// изображение
-			if (item.Image != null && item.Image.ContentType.ToLower().StartsWith("image/"))
-			{
-				MemoryStream ms = new MemoryStream();
-				item.Image.OpenReadStream().CopyTo(ms);
+            // изображение
+            if (item.Image != null && item.Image.ContentType.ToLower().StartsWith("image/"))
+            {
+                MemoryStream ms = new MemoryStream();
+                item.Image.OpenReadStream().CopyTo(ms);
 
-				result.ImageData = ms.ToArray();
-				result.ImageMimeType = item.Image.ContentType;
-			}
-			return result;
-		}
+                // обработка изображения
+                var processedImage = ImageProcess(ms.ToArray(), ImageType.Slide);
 
-		public Slide GetModelByViewModel()
-		{
-			return (Slide)this;
-		}
-	}
+                result.ImageData = processedImage;
+                result.ImageMimeType = item.Image.ContentType;
+            }
+            return result;
+        }
+
+        public Slide GetModelByViewModel()
+        {
+            return (Slide)this;
+        }
+    }
 }

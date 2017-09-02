@@ -15,7 +15,7 @@ namespace CustomLightCore.ViewModels.Products
     using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
 
-    public class ProductViewModel
+    public class ProductViewModel : BaseViewModel
     {
         public int Id { get; set; }
 
@@ -164,7 +164,10 @@ namespace CustomLightCore.ViewModels.Products
                 MemoryStream ms = new MemoryStream();
                 item.Icon.OpenReadStream().CopyTo(ms);
 
-                result.Icon = ms.ToArray();
+                // обработка изображения
+                var processedImage = ImageProcess(ms.ToArray(), ImageType.Icon);
+
+                result.Icon = processedImage;
                 result.IconMimeType = item.Icon.ContentType;
             }
 
@@ -179,9 +182,12 @@ namespace CustomLightCore.ViewModels.Products
                         var ms = new MemoryStream();
                         productImage.OpenReadStream().CopyTo(ms);
 
+                        // обработка изображения
+                        var processedImage = ImageProcess(ms.ToArray(), ImageType.Full);
+
                         var image = new ProductImage
                         {
-                            ImageData = ms.ToArray(),
+                            ImageData = processedImage,
                             ImageMimeType = productImage.ContentType
                         };
                         productImages.Add(image);
@@ -234,9 +240,10 @@ namespace CustomLightCore.ViewModels.Products
             {
                 using (var db = new CustomLightContext())
                 {
+                    var productType = db.ProductTypes.AsNoTracking().FirstOrDefault(pt => pt.Id == result.ProductTypeId);
                     foreach (var spec in result.Specifications)
                     {
-                        for (int i = 0; i < spec.SpecificationValues.Count; i++)
+                        for (int i = 0; i < productType.SpecificationTitles.Count; i++)
                         {
                             spec.SpecificationValues[i].SpecificationTitleId = db.SpecificationTitles.FirstOrDefault(title =>
                                 title.Id == db.ProductTypes.FirstOrDefault(pt => pt.Id == item.ProductTypeId)

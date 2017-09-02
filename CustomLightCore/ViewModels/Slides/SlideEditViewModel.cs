@@ -9,8 +9,8 @@ using System.IO;
 
 namespace CustomLightCore.ViewModels.Slides
 {
-	public class SlideEditViewModel
-	{
+	public class SlideEditViewModel : BaseViewModel
+    {
 		public int Id { get; set; }
 
 		[Required(ErrorMessage = "Выберите изображение!")]
@@ -42,7 +42,10 @@ namespace CustomLightCore.ViewModels.Slides
 				MemoryStream ms = new MemoryStream();
 				item.Image.OpenReadStream().CopyTo(ms);
 
-				result.ImageData = ms.ToArray();
+                // обработка изображения
+                var processedImage = ImageProcess(ms.ToArray(), ImageType.Slide);
+
+                result.ImageData = processedImage;
 				result.ImageMimeType = item.Image.ContentType;
 			}
 			return result;

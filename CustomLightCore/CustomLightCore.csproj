@@ -58,6 +58,7 @@
     <Content Include="wwwroot\sass\_send.scss" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="ImageSharp" Version="1.0.0-alpha9-00193" />
     <PackageReference Include="MailKit" Version="1.18.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />

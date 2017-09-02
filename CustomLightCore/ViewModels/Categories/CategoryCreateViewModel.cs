@@ -9,8 +9,8 @@ using System.IO;
 
 namespace CustomLightCore.ViewModels.Categories
 {
-	public class CategoryCreateViewModel
-	{
+	public class CategoryCreateViewModel : BaseViewModel
+    {
 		[Required(ErrorMessage = "Введите наименование!")]
 		[DataType(DataType.Text)]
 		public string Name { get; set; }
@@ -47,7 +47,10 @@ namespace CustomLightCore.ViewModels.Categories
 				MemoryStream ms = new MemoryStream();
 				item.Icon.OpenReadStream().CopyTo(ms);
 
-				result.Icon = ms.ToArray();
+                // обработка изображения
+                var processedImage = ImageProcess(ms.ToArray(), ImageType.Icon);
+
+                result.Icon = processedImage;
 				result.IconMimeType = item.Icon.ContentType;
 			}
 

@@ -9,7 +9,7 @@ using System.IO;
 
 namespace CustomLightCore.ViewModels.Categories
 {
-	public class CategoryEditViewModel
+	public class CategoryEditViewModel : BaseViewModel
 	{
 		public int Id { get; set; }
 
@@ -50,8 +50,11 @@ namespace CustomLightCore.ViewModels.Categories
 				MemoryStream ms = new MemoryStream();
 				item.Icon.OpenReadStream().CopyTo(ms);
 
-				result.Icon = ms.ToArray();
-				result.IconMimeType = item.Icon.ContentType;
+                // обработка изображения
+                var processedImage = ImageProcess(ms.ToArray(), ImageType.Icon);
+
+                result.Icon = processedImage;
+                result.IconMimeType = item.Icon.ContentType;
 			}
 
 			return result;

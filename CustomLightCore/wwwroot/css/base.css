@@ -1154,18 +1154,17 @@ table td {
   background-position: center;
   background-size: cover; }
 
-.image-carousel-indicators .active {
-  width: 18%;
-  height: auto;
-  box-shadow: 0 0 5px black;
-  border-radius: 0; }
-
-.image-carousel-indicators li {
-  width: 18%;
-  height: auto;
-  text-indent: 0;
-  position: relative;
-  top: 140px; }
+.image-carousel-indicators {
+  position: relative; }
+  .image-carousel-indicators .active {
+    width: 18%;
+    height: auto; }
+  .image-carousel-indicators li {
+    width: 18%;
+    height: auto;
+    text-indent: 0;
+    position: relative;
+    top: 30px; }
 
 .my-carousel {
   margin-bottom: 130px;
@@ -1200,7 +1199,6 @@ table td {
 .product-grid {
   margin: 10px 0;
   padding: 15px 2%;
-  height: 290px;
   text-align: justify;
   overflow: hidden; }
   .product-grid:hover {

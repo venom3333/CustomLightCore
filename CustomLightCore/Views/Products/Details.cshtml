@@ -15,20 +15,8 @@
     <div id="productId" style="display: none;">>@Model.Id</div>
     <!--	/Не отображается (нужно для корзины)-->
     <!--Галерея-->
-    <section>
+    <section class="col-lg-6">
         <div id="myCarousel" class="carousel slide" data-ride="carousel">
-            <!-- Indicators -->
-            <ol class="carousel-indicators image-carousel-indicators">
-                @{
-                    for (int i = 0; i < Model.ProductImages.Count; i++)
-                    {
-                        <li data-target="#myCarousel" data-slide-to="@i" class="@(i == 0 ? "active" : "")">
-                            <img src="@Url.Action("GetProductImage", "Products", new { Model.ProductImages.ToList()[i].Id })" class="img-responsive" alt="@Model.Name">
-                        </li>
-                    }
-                }
-            </ol>
-
             <!-- Wrapper for slides -->
             <div class="carousel-inner">
                 @{
@@ -51,6 +39,19 @@
                 <span class="sr-only">Next</span>
             </a>
         </div>
+
+        <!-- Indicators -->
+        <ol class="carousel-indicators image-carousel-indicators">
+            @{
+                for (int i = 0; i < Model.ProductImages.Count; i++)
+                {
+                    <li data-target="#myCarousel" data-slide-to="@i" class="@(i == 0 ? "active" : "")">
+                        <img src="@Url.Action("GetProductImage", "Products", new { Model.ProductImages.ToList()[i].Id })" class="img-responsive" alt="@Model.Name">
+                    </li>
+                }
+            }
+        </ol>
+
     </section>
     <!--/Галерея-->
 

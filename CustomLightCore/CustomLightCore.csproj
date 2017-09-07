@@ -16,6 +16,9 @@
     <None Remove="wwwroot\lib\alertify-js\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Properties\PublishProfiles\CustomProfile.pubxml" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="wwwroot\css\admin.css" />
     <Content Include="wwwroot\css\admin.min.css" />
     <Content Include="wwwroot\css\admin.scss" />
@@ -78,5 +81,8 @@
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 </Project>

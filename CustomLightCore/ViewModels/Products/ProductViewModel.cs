@@ -240,7 +240,9 @@ namespace CustomLightCore.ViewModels.Products
             {
                 using (var db = new CustomLightContext())
                 {
-                    var productType = db.ProductTypes.AsNoTracking().FirstOrDefault(pt => pt.Id == result.ProductTypeId);
+                    var productType = db.ProductTypes.AsNoTracking()
+                        .Include(pt => pt.SpecificationTitles)
+                        .FirstOrDefault(pt => pt.Id == result.ProductTypeId);
                     foreach (var spec in result.Specifications)
                     {
                         for (int i = 0; i < productType.SpecificationTitles.Count; i++)

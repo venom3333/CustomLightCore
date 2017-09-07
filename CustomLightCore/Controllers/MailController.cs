@@ -25,11 +25,25 @@ namespace CustomLightCore.Controllers
         /// </summary>
         public MailController()
         {
-            this.FromAddress = "sanitarium667@gmail.com";
+            //this.FromAddress = "sanitarium667@gmail.com";
+            //this.FromAdressTitle = "Перезвоните мне! (From Address)";
+            //this.ToAddress = "sanitarium667@gmail.com";
+            //this.ToAdressTitle = "Перезвоните мне! (To Address)";
+
+            this.FromAddress = "info@customlight.ru";
             this.FromAdressTitle = "Перезвоните мне! (From Address)";
-            this.ToAddress = "sanitarium667@gmail.com";
+            this.ToAddress = "info@customlight.ru";
             this.ToAdressTitle = "Перезвоните мне! (To Address)";
+
+            this.UserName = "u478888";
+            this.Password = "fbed1dfaazx";
         }
+
+        // Smtp Server 
+        const string SmtpServer = "smtp-18.1gb.ru";
+
+        // Smtp Port Number 
+        const int SmtpPortNumber = 25;
 
         /// <summary>
         /// Gets or sets the from address.
@@ -62,6 +76,16 @@ namespace CustomLightCore.Controllers
         private string BodyContent { get; set; }
 
         /// <summary>
+        /// Gets or sets the UserName.
+        /// </summary>
+        private string UserName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Password.
+        /// </summary>
+        private string Password { get; set; }
+
+        /// <summary>
         /// The call back mail.
         /// </summary>
         /// <param name="callBackForm">
@@ -88,11 +112,6 @@ namespace CustomLightCore.Controllers
                         callBackForm.Phone,
                         callBackForm.Misc);
 
-                    // Smtp Server 
-                    const string SmtpServer = "smtp.gmail.com";
-
-                    // Smtp Port Number 
-                    const int SmtpPortNumber = 587;
                     var mimeMessage = new MimeMessage();
                     mimeMessage.From.Add(new MailboxAddress(FromAdressTitle, FromAddress));
                     mimeMessage.To.Add(new MailboxAddress(ToAdressTitle, ToAddress));
@@ -104,7 +123,7 @@ namespace CustomLightCore.Controllers
 
                         // Note: only needed if the SMTP server requires authentication 
                         // Error 5.5.1 Authentication  
-                        client.Authenticate(FromAddress, "aeseJ1zZ");
+                        client.Authenticate(UserName, Password);
                         client.Send(mimeMessage);
                         client.Disconnect(true);
                     }
@@ -160,7 +179,7 @@ namespace CustomLightCore.Controllers
 
                         // Стоимость
                         cartInfo += $@"
-                            Количество: {Cart.Specifications[i].Price * Cart.SpecificationQuantities[Cart.Specifications[i].Id]}";
+                            Сумма: {Cart.Specifications[i].Price * Cart.SpecificationQuantities[Cart.Specifications[i].Id]}";
 
                         cartInfo += "\n";
                     }
@@ -184,12 +203,6 @@ namespace CustomLightCore.Controllers
                     Корзина заказа:
                     {cartInfo}";
 
-                    // Smtp Server 
-                    const string SmtpServer = "smtp.gmail.com";
-
-                    // Smtp Port Number 
-                    const int SmtpPortNumber = 587;
-
                     var mimeMessage = new MimeMessage();
 
                     mimeMessage.From.Add(new MailboxAddress(FromAdressTitle, FromAddress));
@@ -204,7 +217,7 @@ namespace CustomLightCore.Controllers
 
                         // Note: only needed if the SMTP server requires authentication 
                         // Error 5.5.1 Authentication  
-                        client.Authenticate(FromAddress, "aeseJ1zZ");
+                        client.Authenticate(UserName, Password);
                         client.Send(mimeMessage);
                         client.Disconnect(true);
                     }

@@ -8,6 +8,7 @@ using System.Security.Claims;
 using CustomLightCore.Models;
 using CustomLightCore.ViewModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CustomLightCore.Controllers
 {
@@ -57,7 +58,8 @@ namespace CustomLightCore.Controllers
 		}
 
 		[HttpPost]
-		[ValidateAntiForgeryToken]
+        [Authorize]
+        [ValidateAntiForgeryToken]
 		public IActionResult Register(RegisterModel model)
 		{
 			if (ModelState.IsValid)

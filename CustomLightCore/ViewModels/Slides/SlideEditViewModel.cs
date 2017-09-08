@@ -13,7 +13,6 @@ namespace CustomLightCore.ViewModels.Slides
     {
 		public int Id { get; set; }
 
-		[Required(ErrorMessage = "Выберите изображение!")]
 		[DataType(DataType.Upload)]
 		public IFormFile Image { get; set; }
 

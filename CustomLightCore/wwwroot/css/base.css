@@ -102,7 +102,7 @@ table td {
       color: black; }
 
 .nav-line {
-  top: 30px;
+  padding-top: 3em;
   z-index: 9999; }
 
 .navbar {
@@ -1181,8 +1181,8 @@ table td {
   width: 250px;
   height: 100px;
   top: 30%;
-  background: #ffffff;
-  box-shadow: 0 7px rgba(42, 125, 110, 0.9);
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 7px rgba(42, 125, 110, 0.5);
   padding: 10px; }
 
 .slider-shape-2 {
@@ -1191,9 +1191,9 @@ table td {
   left: 174px;
   width: 0;
   height: 0;
-  border-bottom: 146px solid #ffffff;
+  border-bottom: 146px solid rgba(255, 255, 255, 0.5);
   border-left: 146px solid transparent;
-  box-shadow: 5px 0 rgba(42, 125, 110, 0.9);
+  box-shadow: 5px 0 rgba(42, 125, 110, 0.5);
   transform: rotate(45deg); }
 
 .product-grid {

@@ -1,10 +1,12 @@
 //colors
 $white: #ffffff;
+$slider-shape: rgba(255,255,255,.5);
 $color_oracle_approx: #2a7d6e;
 $black: black;
-$color_oracle_90_approx: rgba(42, 125, 110, .9);
+$slider-box-shadow: rgba(42, 125, 110, .5);
 $black_100: rgba(0, 0, 0, 1);
 $color_oracle_10_approx: rgba(42, 125, 110, .1);
+$color_oracle_90_approx: rgba(42, 125, 110, .9);
 $color_woodsmoke_approx: #0f0f0f;
 
 //fonts
@@ -132,9 +134,9 @@ body {
     width: 250px;
     height: 100px;
     top: 30%;
-    background: $white;
+    background: $slider-shape;
     //Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-    box-shadow: 0 7px $color_oracle_90_approx;
+    box-shadow: 0 7px $slider-box-shadow;
     padding: 10px;
 }
 
@@ -144,10 +146,10 @@ body {
     left: 174px;
     width: 0;
     height: 0;
-    border-bottom: 146px solid $white;
+    border-bottom: 146px solid $slider-shape;
     border-left: 146px solid transparent;
     //Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-    box-shadow: 5px 0 $color_oracle_90_approx;
+    box-shadow: 5px 0 $slider-box-shadow;
     //Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
     transform: rotate(45deg);
 }

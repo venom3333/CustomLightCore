@@ -181,7 +181,13 @@ $black_20: rgba(0, 0, 0, 0.2);
     width: 100%;
 }
 
-.dropdown:hover .dropdown-menu {
+.callback-dropdown a {
+    background: $color_oracle_approx !important;
+    color: $white !important;
+}
+
+/*.dropdown:hover .dropdown-menu,*/
+.dropdown:focus .dropdown-menu {
     display: block;
 }
 

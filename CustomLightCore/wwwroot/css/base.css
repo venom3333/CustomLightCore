@@ -211,7 +211,12 @@ table td {
 .logo img {
   width: 100%; }
 
-.dropdown:hover .dropdown-menu {
+.callback-dropdown a {
+  background: #2a7d6e !important;
+  color: #ffffff !important; }
+
+/*.dropdown:hover .dropdown-menu,*/
+.dropdown:focus .dropdown-menu {
   display: block; }
 
 .nav-tabs .dropdown-menu {

@@ -25,6 +25,9 @@
 			<th>
 				Изменено
 			</th>
+            <th>
+                Номер
+            </th>
 			<th></th>
 		</tr>
 	</thead>
@@ -42,6 +45,9 @@
 				</td>
 				<td>
 					@Html.DisplayFor(modelItem => item.Updated)
+				</td>
+                <td>
+					@Html.DisplayFor(modelItem => item.Weight)
 				</td>
 				<td>
 					<a asp-controller="Pages" asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>Редактировать</a> |

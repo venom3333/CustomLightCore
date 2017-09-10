@@ -43,7 +43,7 @@ namespace CustomLightCore.Controllers
         {
             ViewBag.Categories = await db.Categories.ToListAsync();
             ViewBag.Projects = await db.Projects.ToListAsync();
-            ViewBag.Pages = await db.Pages.ToListAsync();
+            ViewBag.Pages = await db.Pages.OrderBy(p => p.Weight).ToListAsync();
             ViewBag.Slides = await db.Slides.ToListAsync();
             ViewBag.Essentials = await db.Essentials.FirstOrDefaultAsync();
 

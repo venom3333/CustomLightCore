@@ -9,6 +9,7 @@ namespace CustomLightCore.Models
         public string Alias { get; set; }
         public string Name { get; set; }
         public string PageContent { get; set; }
+        public int? Weight { get; set; }
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
     }

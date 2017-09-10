@@ -21,7 +21,11 @@ namespace CustomLightCore.ViewModels.Pages
 		[DataType(DataType.Text)]
 		public string Name { get; set; }
 
-		[DataType(DataType.MultilineText)]
+        [Required(ErrorMessage = "Укажите порядковый номер страницы!")]
+        //[DataType(DataType.Text)]
+        public string Weight { get; set; }
+
+        [DataType(DataType.MultilineText)]
 		public string PageContent { get; set; }
 
 		/// <summary>
@@ -39,6 +43,7 @@ namespace CustomLightCore.ViewModels.Pages
 				Alias = item.Alias,
 				Id = item.Id,
 				Name = item.Name,
+                Weight = item.Weight.ToString(),
 				PageContent = item.PageContent
 			};
 			return result;
@@ -55,8 +60,9 @@ namespace CustomLightCore.ViewModels.Pages
 				result = db.Pages.Find(item.Id);
 			}
 
-			result.Name = item.Name;
+            result.Name = item.Name;
 			result.Alias = item.Alias;
+            result.Weight = int.TryParse(item.Weight, out int weight) ? weight : 0;
 			result.PageContent = item.PageContent;
 			result.Updated = DateTime.Now;
 

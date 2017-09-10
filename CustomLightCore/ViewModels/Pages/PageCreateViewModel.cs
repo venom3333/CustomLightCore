@@ -16,8 +16,12 @@ namespace CustomLightCore.ViewModels.Pages
 		[Required(ErrorMessage = "Введите название страницы!")]
 		[DataType(DataType.Text)]
 		public string Name { get; set; }
-		
-		[DataType(DataType.MultilineText)]
+
+        [Required(ErrorMessage = "Укажите порядковый номер страницы!")]
+        //[DataType(DataType.Text)]
+        public string Weight { get; set; }
+
+        [DataType(DataType.MultilineText)]
 		public string PageContent { get; set; }
 
 		/// <summary>
@@ -32,6 +36,7 @@ namespace CustomLightCore.ViewModels.Pages
 				Name = item.Name,
 				Alias = item.Alias,
 				PageContent = item.PageContent,
+                Weight = int.TryParse(item.Weight, out int weight) ? weight : 0,
 				Created = now,
 				Updated = now
 			};

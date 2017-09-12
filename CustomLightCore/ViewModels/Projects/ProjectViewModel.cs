@@ -155,7 +155,7 @@
                         projectImage.OpenReadStream().CopyTo(ms);
 
                         // обработка изображения
-                        var processedImage = ImageProcess(ms.ToArray(), ImageType.Icon);
+                        var processedImage = ImageProcess(ms.ToArray(), ImageType.Full);
 
                         var image = new ProjectImage
                         {

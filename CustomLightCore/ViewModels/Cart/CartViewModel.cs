@@ -92,7 +92,7 @@ namespace CustomLightCore.ViewModels.Cart
         /// <summary>
         /// Gets or sets the total price.
         /// </summary>
-        public int TotalPrice { get; set; }
+        public decimal TotalPrice { get; set; }
 
         /// <summary>
         /// The get instance.

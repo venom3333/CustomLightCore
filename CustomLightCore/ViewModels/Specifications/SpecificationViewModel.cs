@@ -15,7 +15,9 @@
     public class SpecificationViewModel
     {
         public int Id { get; set; }
-        public int Price { get; set; }
+
+        [DataType(DataType.Currency)]
+        public decimal Price { get; set; }
         public List<SpecificationValue> SpecificationValues { get; set; }
     }
 }

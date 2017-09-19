@@ -1,6 +1,6 @@
 //colors
 $white: #ffffff;
-$slider-shape: rgba(255,255,255,.5);
+$slider-shape: rgba(255,255,255,1);
 $color_oracle_approx: #2a7d6e;
 $black: black;
 $slider-box-shadow: rgba(42, 125, 110, .5);
@@ -48,7 +48,7 @@ body {
 }
 
 .container {
-    width: 90%;
+    width: 100%;
 }
 
 .h-line {
@@ -98,6 +98,7 @@ body {
 
 .image-carousel-indicators {
     position: relative;
+
     .active {
         width: 18%;
         height: auto;
@@ -214,7 +215,13 @@ body {
     max-height: 75px;
 }
 
+// Иконка корзины
+.fa-cart-arrow-down {
+    font-size: 150% !important;
+    cursor: pointer;
+}
+
 // Перезвоните мне
 .callback * {
-    color:black;
+    color: black;
 }

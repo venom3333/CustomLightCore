@@ -73,12 +73,15 @@ table td {
 .contacts {
   text-align: right; }
 
-.footer-categories a:hover {
-  text-decoration: none;
-  color: black;
-  background: #ffffff; }
+.footer-categories a {
+  padding: 0 2em; }
+  .footer-categories a:hover {
+    text-decoration: none;
+    color: black;
+    background: #ffffff; }
 
 .footer-categories div {
+  text-align: center;
   padding: 0 5px; }
 
 .callback-mail-button {
@@ -1121,7 +1124,7 @@ table td {
   font-family: Helvetica, sans-serif; }
 
 .container {
-  width: 90%; }
+  width: 100%; }
 
 .h-line {
   height: 2px;
@@ -1186,7 +1189,7 @@ table td {
   width: 250px;
   height: 100px;
   top: 30%;
-  background: rgba(255, 255, 255, 0.5);
+  background: white;
   box-shadow: 0 7px rgba(42, 125, 110, 0.5);
   padding: 10px; }
 
@@ -1196,7 +1199,7 @@ table td {
   left: 174px;
   width: 0;
   height: 0;
-  border-bottom: 146px solid rgba(255, 255, 255, 0.5);
+  border-bottom: 146px solid white;
   border-left: 146px solid transparent;
   box-shadow: 5px 0 rgba(42, 125, 110, 0.5);
   transform: rotate(45deg); }
@@ -1236,6 +1239,10 @@ table td {
 
 .list-preview-image {
   max-height: 75px; }
+
+.fa-cart-arrow-down {
+  font-size: 150% !important;
+  cursor: pointer; }
 
 .callback * {
   color: black; }

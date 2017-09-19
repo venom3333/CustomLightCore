@@ -41,7 +41,7 @@
         </div>
 
         <!-- Indicators -->
-        <ol class="carousel-indicators image-carousel-indicators">
+        <ol class="carousel-indicators image-carousel-indicators hidden-xs hidden-sm">
             @{
                 for (int i = 0; i < Model.ProductImages.Count; i++)
                 {
@@ -86,7 +86,7 @@
                             <td>@Html.DisplayFor(model => Model.Specifications.ToList()[i].SpecificationValues[j].Value)</td>
                         }
 
-                        @if(emptyTds > 0)
+                        @if (emptyTds > 0)
                         {
                             for (int k = 0; k < emptyTds; k++)
                             {
@@ -100,7 +100,7 @@
                             <i class="fa fa-cart-arrow-down add-to-cart" id="add-to-cart-@Model.Specifications.ToList()[i].Id" aria-hidden="true"></i>
                         </td>
                     </tr>
-                }
+                            }
             </tbody>
         </table>
     </div>

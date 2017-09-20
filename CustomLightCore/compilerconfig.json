@@ -6,5 +6,9 @@
   {
     "outputFile": "wwwroot/css/admin.css",
     "inputFile": "wwwroot/css/admin.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/_footer.css",
+    "inputFile": "wwwroot/css/_footer.scss"
   }
 ]

@@ -2,6 +2,9 @@
 $color_woodsmoke_approx: #0f0f0f;
 $color_oracle_approx: #2a7d6e;
 $black_20: rgba(0, 0, 0, 0.2);
+$slider-shape: rgba(255,255,255,1);
+$slider-box-shadow: rgba(42, 125, 110, .5);
+
 
 .header {
     min-height: 80px;
@@ -19,8 +22,45 @@ $black_20: rgba(0, 0, 0, 0.2);
 }
 
 .nav-line {
-    padding-top: 3em;
+    padding-top: 3.3em;
     z-index: 9999;
+}
+
+.slider-shape {
+    position: relative;
+    z-index: 1;
+    width: 250px;
+    height: 100px;
+    top: 30%;
+    background: $slider-shape;
+    //Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+    box-shadow: 0 7px $slider-box-shadow;
+    padding: 10px;
+}
+
+.slider-shape-2 {
+    position: relative;
+    top: -27.7%;
+    left: 174px;
+    width: 0;
+    height: 0;
+    border-bottom: 146px solid $slider-shape;
+    border-left: 146px solid transparent;
+    //Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+    box-shadow: 5px 0 $slider-box-shadow;
+    //Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+    transform: rotate(45deg);
+}
+
+@media screen and (max-width: 768px) {
+    .nav-line {
+        padding-top: 0;
+    }
+
+    .slider-shape,
+    .slider-shape-2 {
+        visibility:hidden;
+    }
 }
 
 .navbar {

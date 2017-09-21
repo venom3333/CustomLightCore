@@ -17,6 +17,13 @@ $background_image: url(/images/abstract-back-dark.svg);
 //@extend-elements
 //original selectors
 //html, body
+
+@media screen and (max-width: 768px) {
+    #top {
+        width: 110%;
+    }
+}
+
 %extend_base {
     height: 100%;
     background-image: $background_image;

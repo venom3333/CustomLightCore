@@ -1,4 +1,8 @@
-﻿html, body {
+﻿@media screen and (max-width: 768px) {
+  #top {
+    width: 110%; } }
+
+html, body {
   height: 100%;
   background-image: url(/images/abstract-back-dark.svg);
   background-size: 150%; }

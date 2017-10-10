@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ImageSharp;
+using SixLabors.ImageSharp;
 using System.IO;
 
 namespace CustomLightCore.ViewModels
@@ -68,7 +68,7 @@ namespace CustomLightCore.ViewModels
             // Загрузка изображения
             var imgFormat = Image.DetectFormat(img);
 
-            if(imgFormat == null)
+            if (imgFormat == null)
             {
                 return img;
             }
@@ -76,11 +76,11 @@ namespace CustomLightCore.ViewModels
             var newImage = Image.Load(img);
 
             // Ресайз
-            newImage = newImage.Resize(new ImageSharp.Processing.ResizeOptions
+            newImage.Mutate(x => x.Resize(new SixLabors.ImageSharp.Processing.ResizeOptions
             {
-                Mode = ImageSharp.Processing.ResizeMode.Crop,
+                Mode = SixLabors.ImageSharp.Processing.ResizeMode.Crop,
                 Size = new SixLabors.Primitives.Size(width, height)
-            });
+            }));
 
             // Преобразование в byte[]
             MemoryStream ms = new MemoryStream();

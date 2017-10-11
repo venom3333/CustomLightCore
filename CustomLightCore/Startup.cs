@@ -28,7 +28,7 @@ namespace CustomLightCore
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
             if (env.IsDevelopment())
             {
-                builder.AddUserSecrets<Startup>();
+                //builder.AddUserSecrets<Startup>();
             }
 
             builder.AddEnvironmentVariables();

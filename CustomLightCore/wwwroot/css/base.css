@@ -110,7 +110,7 @@ table td {
 
 .nav-line {
   padding-top: 3.3em;
-  z-index: 9999; }
+  z-index: 9; }
 
 .slider-shape {
   position: relative;
@@ -278,7 +278,7 @@ table td {
 .notif-box {
   position: fixed;
   top: 0;
-  z-index: 99999;
+  z-index: 9;
   padding: 20px;
   width: 100%;
   line-height: 1.4;
@@ -1257,4 +1257,7 @@ table td {
 
 .callback * {
   color: black; }
+
+.gallery {
+  z-index: 0; }
 

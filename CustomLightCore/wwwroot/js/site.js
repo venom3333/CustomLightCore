@@ -3,7 +3,7 @@ $('.carousel').carousel({
     interval: 5000 //changes the speed
 });
 
-$(function() {
+$(function () {
     $(document).ready(function () {
         // Перезвоните мне
         callBackMail();
@@ -11,6 +11,12 @@ $(function() {
         // Оформить заказ
         orderMail();
     });
+
+    lightbox.option({
+        'resizeDuration': 200,
+        'wrapAround': true,
+        //'disableScrolling': true
+    })
 });
 
 // Функция оформить заказ

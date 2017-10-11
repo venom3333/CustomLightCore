@@ -7,13 +7,13 @@
 
 <!--Инфо о продукте-->
 <div class="col-md-10 Project-model-sec">
-	<h2 id="ProjectName">@Model.Name</h2>
+    <h2 id="ProjectName">@Model.Name</h2>
 
-	<!--	Не отображается (нужно для корзины)-->
-	@*<div id="ProjectIcon" style="display: none;"><?= $Project['icon'] ?></div>*@
-	<div id="ProjectId" style="display: none;">>@Model.Id</div>
-	<!--	/Не отображается (нужно для корзины)-->
-<!--Галерея-->
+    <!--	Не отображается (нужно для корзины)-->
+    @*<div id="ProjectIcon" style="display: none;"><?= $Project['icon'] ?></div>*@
+    <div id="ProjectId" style="display: none;">>@Model.Id</div>
+    <!--	/Не отображается (нужно для корзины)-->
+    <!--Галерея-->
     <section class="col-lg-6">
         <div id="myCarousel" class="carousel slide" data-ride="carousel">
             <!-- Wrapper for slides -->
@@ -22,7 +22,9 @@
                     for (int i = 0; i < Model.ProjectImages.Count; i++)
                     {
                         <div class="item @(i == 0 ? "active" : "")">
-                            <img src="@Url.Action("GetProjectImage", "Projects", new { imageId = Model.ProjectImages.ToList()[i].Id })" alt="@Model.Name">
+                            <a href="@Url.Action("GetProjectImage", "Projects", new { imageId = Model.ProjectImages.ToList()[i].Id })" data-lightbox="gallery">
+                                <img src="@Url.Action("GetProjectImage", "Projects", new { imageId = Model.ProjectImages.ToList()[i].Id })" alt="@Model.Name">
+                            </a>
                         </div>
                     }
                 }
@@ -50,12 +52,12 @@
             }
         </ol>
     </section>
-<!--/Галерея-->
-	
-	<section class="itemDescription">
-		<p>@Html.Raw(Model.Description)</p>
-	</section>
+    <!--/Галерея-->
 
-	<!--/Инфо о продукте-->
-	@*<script src="~/Content/js/cart.js"></script>*@
+    <section class="itemDescription">
+        <p>@Html.Raw(Model.Description)</p>
+    </section>
+
+    <!--/Инфо о продукте-->
+    @*<script src="~/Content/js/cart.js"></script>*@
 </div>

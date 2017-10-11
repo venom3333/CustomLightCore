@@ -15,7 +15,7 @@
     <div id="productId" style="display: none;">>@Model.Id</div>
     <!--	/Не отображается (нужно для корзины)-->
     <!--Галерея-->
-    <section class="col-lg-6">
+    <section class="col-lg-6 gallery">
         <div id="myCarousel" class="carousel slide" data-ride="carousel">
             <!-- Wrapper for slides -->
             <div class="carousel-inner">
@@ -23,7 +23,9 @@
                     for (int i = 0; i < Model.ProductImages.Count; i++)
                     {
                         <div class="item @(i == 0 ? "active" : "")">
-                            <img src="@Url.Action("GetProductImage", "Products", new { Model.ProductImages.ToList()[i].Id })" alt="@Model.Name">
+                            <a href="@Url.Action("GetProductImage", "Products", new { Model.ProductImages.ToList()[i].Id })" data-lightbox="gallery">
+                                <img src="@Url.Action("GetProductImage", "Products", new { Model.ProductImages.ToList()[i].Id })" alt="@Model.Name">
+                            </a>
                         </div>
                     }
                 }

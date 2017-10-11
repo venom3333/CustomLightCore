@@ -226,7 +226,7 @@ namespace CustomLightCore.Controllers
         // Удалить существующее изображение для формы редактирования
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> RemoveExistingImage(
+        public IActionResult RemoveExistingImage(
             ProjectViewModel project, int imageId)
         {
             if (project.ExistingProjectImageIds != null)

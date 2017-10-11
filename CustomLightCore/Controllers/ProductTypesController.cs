@@ -21,18 +21,18 @@ namespace CustomLightCore.Controllers
 			return View(productTypes);
 		}
 
-		// GET: ProductTypes/Create
-		[Authorize]
-		public async Task<IActionResult> Create()
-		{
-			return View();
-		}
+        // GET: ProductTypes/Create
+        [Authorize]
+        public IActionResult Create()
+        {
+            return View();
+        }
 
-		// POST: ProductTypes/Create
-		// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: ProductTypes/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
 
-		[HttpPost]
+        [HttpPost]
 		[ValidateAntiForgeryToken]
 		[Authorize]
 		public async Task<IActionResult> Create(

@@ -25,8 +25,13 @@ namespace CustomLightCore
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+            if (env.IsDevelopment())
+            {
+                builder.AddUserSecrets<Startup>();
+            }
+
+            builder.AddEnvironmentVariables();
             Configuration = builder.Build();
         }
 
@@ -50,7 +55,7 @@ namespace CustomLightCore
             services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddSession(options =>
                 {
-                    options.CookieName = ".CustomLight.Session";
+                    options.Cookie.Name = ".CustomLight.Session";
                     options.IdleTimeout = TimeSpan.FromSeconds(3600);
                 });
         }
@@ -77,7 +82,7 @@ namespace CustomLightCore
             app.UseSession();
 
             // Аутентификация
-            app.UseIdentity();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

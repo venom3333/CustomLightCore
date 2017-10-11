@@ -44,10 +44,10 @@
 					</ul>
 				</li>
 				@foreach (CustomLightCore.Models.Page page in ViewBag.Pages)
-				{
+                {
 					<li class="dropdown">
-						<a href="@Url.Action("Details", "Pages", new { Id = page.Id})">
-							@page.Name
+						<a href="@Url.Action("Details", "Pages", new { Id = page.Id })">
+							@Html.Raw(page.Name)
 						</a>
 					</li>
 				}

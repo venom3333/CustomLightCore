@@ -15,7 +15,18 @@
     <!--	/Не отображается (нужно для корзины)-->
     <!--Галерея-->
     <section class="col-lg-6">
-        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+        <div id="myCarousel" class="carousel slide lazy">
+
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                @{
+                    for (int i = 0; i < Model.ProjectImages.Count; i++)
+                    {
+                        <li data-target="#myCarousel" data-slide-to="@i" class="@(i == 0 ? "active" : "")"></li>
+                    }
+                }
+            </ol>
+
             <!-- Wrapper for slides -->
             <div class="carousel-inner">
                 @{
@@ -23,7 +34,7 @@
                     {
                         <div class="item @(i == 0 ? "active" : "")">
                             <a href="@Url.Action("GetProjectImage", "Projects", new { imageId = Model.ProjectImages.ToList()[i].Id })" data-lightbox="gallery">
-                                <img src="@Url.Action("GetProjectImage", "Projects", new { imageId = Model.ProjectImages.ToList()[i].Id })" alt="@Model.Name">
+                                <img @(i == 0 ? "" : "data-")src="@Url.Action("GetProjectImage", "Projects", new { imageId = Model.ProjectImages.ToList()[i].Id })">
                             </a>
                         </div>
                     }
@@ -40,17 +51,7 @@
                 <span class="sr-only">Next</span>
             </a>
         </div>
-        <!-- Indicators -->
-        <ol class="carousel-indicators image-carousel-indicators hidden-xs hidden-sm">
-            @{
-                for (int i = 0; i < Model.ProjectImages.Count; i++)
-                {
-                    <li data-target="#myCarousel" data-slide-to="@i" class="@(i == 0 ? "active" : "")">
-                        <img src="@Url.Action("GetProjectImage", "Projects", new { imageId = Model.ProjectImages.ToList()[i].Id })" class="img-responsive" alt="@Model.Name">
-                    </li>
-                }
-            }
-        </ol>
+
     </section>
     <!--/Галерея-->
 

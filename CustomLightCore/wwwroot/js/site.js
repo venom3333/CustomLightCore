@@ -1,10 +1,18 @@
-﻿// Запуск карусели
-$('.carousel').carousel({
-    interval: 5000 //changes the speed
-});
-
-$(function () {
+﻿$(function () {
     $(document).ready(function () {
+         //Отложенная загрузка картинок в карусели галереи
+        $(".carousel.lazy").on("slide.bs.carousel", function (ev) {
+            var lazy;
+            lazy = $(ev.relatedTarget).find("img[data-src]");
+            lazy.attr("src", lazy.data('src'));
+            lazy.removeAttr("data-src");
+        });
+
+        // Запуск карусели по интервалу
+        $('.carousel').carousel({
+            interval: 5000 //changes the speed
+        });
+
         // Перезвоните мне
         callBackMail();
 

@@ -1194,26 +1194,35 @@ table td {
   background-position: center;
   background-size: cover; }
 
-.image-carousel-indicators {
-  position: relative; }
-  .image-carousel-indicators .active {
-    width: 18%;
-    height: auto; }
-  .image-carousel-indicators li {
-    width: 18%;
-    height: auto;
-    text-indent: 0;
+/*.image-carousel-indicators {
     position: relative;
-    top: 30px; }
 
+    .active {
+        width: 18%;
+        height: auto;
+        //Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+        box-shadow: 0 0 5px $black;
+        //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+        border-radius: 0;
+    }
+
+    li {
+        width: 18%;
+        height: auto;
+        text-indent: 0;
+        position: relative;
+        top: 30px;
+    }
+}*/
 .my-carousel {
   margin-bottom: 130px;
   padding: 0;
-  margin-right: 10px; }
-  .my-carousel .carousel-indicators {
-    width: auto;
-    margin-left: -50%;
-    z-index: 0; }
+  margin-right: 10px;
+  /*.carousel-indicators {
+        width: auto;
+        margin-left: -50%;
+        z-index: 0;
+    }*/ }
 
 .product-grid {
   margin: 10px 0;

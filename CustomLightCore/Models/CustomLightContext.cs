@@ -33,9 +33,9 @@ namespace CustomLightCore.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-            //optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=CustomLight;Trusted_Connection=True;");
-            optionsBuilder.UseSqlServer(@"Server=ms-sql-9.in-solve.ru;Database=1gb_x_custobf7;User=1gb_customlight;Password=zaefa67b9a");
+            //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=CustomLight;Trusted_Connection=True;");
+            //optionsBuilder.UseSqlServer(@"Server=ms-sql-9.in-solve.ru;Database=1gb_x_custobf7;User=1gb_customlight;Password=zaefa67b9a");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

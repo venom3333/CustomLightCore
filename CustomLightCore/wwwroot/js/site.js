@@ -14,9 +14,9 @@ $(function () {
 
     lightbox.option({
         'resizeDuration': 200,
-        'wrapAround': true,
+        'wrapAround': true
         //'disableScrolling': true
-    })
+    });
 });
 
 // Функция оформить заказ
@@ -65,7 +65,7 @@ function callBackMail() {
             Name: name,
             Phone: phone,
             Misc: misc
-        }
+        };
 
         $.ajax({
             type: "POST",

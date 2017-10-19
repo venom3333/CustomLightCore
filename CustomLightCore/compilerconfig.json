@@ -10,5 +10,9 @@
   {
     "outputFile": "wwwroot/css/_footer.css",
     "inputFile": "wwwroot/css/_footer.scss"
+  },
+  {
+    "outputFile": "wwwroot/js/site.es5.js",
+    "inputFile": "wwwroot/js/site.js"
   }
 ]

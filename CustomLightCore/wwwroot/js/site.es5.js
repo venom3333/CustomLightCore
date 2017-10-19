@@ -2,7 +2,7 @@
 
 $(function () {
     $(document).ready(function () {
-         //Отложенная загрузка картинок в карусели галереи
+        //Отложенная загрузка картинок в карусели галереи
         $(".carousel.lazy").on("slide.bs.carousel", function (ev) {
             var lazy;
             lazy = $(ev.relatedTarget).find("img[data-src]");
@@ -41,12 +41,12 @@ function orderMail() {
             type: "POST",
             url: "/Mail/OrderMail",
             data: model,
-            success: function (html) {
+            success: function success(html) {
                 //console.log(html);
                 $('#orderForm').html(html);
                 alertify.success("Ваш заказ отправлен. Скоро мы Вам перезвоним.");
             },
-            error: function (msg) {
+            error: function error(msg) {
                 console.log(msg);
             }
         });
@@ -75,12 +75,12 @@ function callBackMail() {
             type: "POST",
             url: "/Mail/CallBackMail",
             data: model,
-            success: function (html) {
+            success: function success(html) {
                 //console.log(html);
                 $('#callBackMail').html(html);
                 alertify.success("Сообщение отправлено. Скоро мы Вам перезвоним.");
             },
-            error: function (msg) {
+            error: function error(msg) {
                 console.log(msg);
             }
         });
